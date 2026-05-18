@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_form_bim_apu_template" model="ir.ui.view">
+        <field name="name">view.form.bim.apu.template</field>
+        <field name="model">bim.apu.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar" options='{"preview_image": "image"}'/>
+                    <div class="o_address_format">
+                       <h1>
+                           <field name="name" required="1" class="oe_inline" colspan="1" readonly="1"/>
+                           <field name="desc" placeholder="Description" required="1" class="oe_inline" style="margin-left: 30px" colspan="3"/>
+                       </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <div class="oe_grey" colspan="4">
+                                <p><strong>- X :</strong> Base1 / Ratio</p>
+                                <p><strong>- Y :</strong> Base2 / Width</p>
+                                <p><strong>- Z :</strong> Height</p>
+                                <p><strong>Other Available Operators</strong></p>
+                                <p><strong>- X² :</strong> X**2 ó pow(x,2)</p>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="val_n" required="1"/>
+                            <field name="val_x" required="1"/>
+                            <field name="val_y" required="1"/>
+                            <field name="val_z" required="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Concepts List">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="type" required="1"/>
+                                    <field name="parent_id" optional="hide"/>
+                                    <field name="parent_code" invisible="type == 'chapter'"/>
+                                    <field name="apu_id" options="{'no_create': True}" invisible="type == 'chapter' or not type" required="type == 'apu'"/>
+                                    <field name="code" required="1"/>
+                                    <field name="name" required="1"/>
+                                    <field name="product_uom" options="{'no_create': True}"/>
+                                    <field name="formula" placeholder="Ej:(x+y)/z" required="type == 'apu'" invisible="type == 'chapter'"/>
+                                    <field name="qty_calc"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="variables" string="Parameters">
+                            <field name="variable_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="variable"/>
+                                    <field name="name"/>
+                                    <field name="product_uom" options="{'no_create': True}"/>
+                                    <field name="value"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <field name="obs" placeholder="Notes.."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_apu_template" model="ir.ui.view">
+        <field name="name">view.tree.bim.apu.template</field>
+        <field name="model">bim.apu.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="desc"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_apu_template" model="ir.actions.act_window">
+        <field name="name">APU Templates</field>
+        <field name="res_model">bim.apu.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Entry!
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

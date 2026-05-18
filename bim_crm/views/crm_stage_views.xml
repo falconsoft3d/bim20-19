@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="crm_stage_bim_form" model="ir.ui.view">
+            <field name="name">crm.stage.bim.form</field>
+            <field name="model">crm.stage</field>
+            <field name="inherit_id" ref="crm.crm_stage_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='fold']" position="after">
+                    <field name="bim_project_state_id"/>
+                </xpath>
+            </field>
+        </record>
+
+
+       <record id="crm_stage_bim_tree" model="ir.ui.view">
+            <field name="name">crm.stage.bim.tree</field>
+            <field name="model">crm.stage</field>
+            <field name="inherit_id" ref="crm.crm_stage_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='team_id']" position="after">
+                    <field name="bim_project_state_id"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>

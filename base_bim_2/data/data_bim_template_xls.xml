@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+        <record id="bim_template_xls_01" model="bim.template.xls">
+           <field name="name">Plantilla Neo</field>
+           <field name="code">[DEPARTURE,PARTIDA];[PARENT,PADRE];[TYPE,NAT];[UOM,UNIDAD];[NAME,DESCRIPCION DE PARTIDA];[QTY,MEDICION];[PRICE,PRECIO];[AMOUNT,IMPORTE]</field>
+           <field name="description">CREATE TABLE [dbo].[Odoo_InsumoCargado](
+	[Insumo_Neodata] [nvarchar](50) NULL,
+	[Descripcion_Neodata] [nvarchar](100) NULL,
+	[Nombre_Odoo] [nvarchar](100) NULL,
+	[RefInterna_Odoo] [nvarchar](100) NULL
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[Odoo_Insumos](
+	[Nombre] [nvarchar](200) NULL,
+	[RefInterna] [nvarchar](50) NULL,
+	[CodNeodata] [nvarchar](50) NULL,
+	[Comprar] [nvarchar](10) NULL,
+	[Vender] [nvarchar](10) NULL,
+	[TipoProd] [nvarchar](50) NULL,
+	[TipoRec] [nvarchar](50) NULL,
+	[UoM] [nvarchar](50) NULL,
+	[Categoria] [nvarchar](200) NULL,
+	[Kit] [nvarchar](10) NULL
+) ON [PRIMARY]
+
+SELECT P.PARTIDA,
+CASE LEN(RTRIM(P.Partida)) WHEN 1 THEN '' WHEN 3 THEN LEFT(P.Partida,1) WHEN 6 THEN LEFT(P.Partida,3) WHEN 10 THEN LEFT(P.Partida,6) WHEN 13 THEN LEFT(P.Partida,10) ELSE '' END AS PADRE,
+CASE Acepta_Mov WHEN 0 THEN 'CAPITULO' ELSE 'PARTIDA' END AS NAT,
+'' AS UNIDAD,
+Descripcion AS [DESCRIPCION DE PARTIDA], '' AS MEDICION, '' AS PRECIO, '' AS IMPORTE
+FROM AoPartidas AS P
+WHERE P.idProyecto=11 AND LEN(RTRIM(P.Partida)) IN (1,3,6,10,13)
+UNION (
+SELECT
+IC.RefInterna_Odoo COLLATE Latin1_General_CI_AI AS PARTIDA, P.Partida AS PADRE,
+CASE LEFT(OI.Categoria,3) WHEN 'MAT' THEN 'Materiales' WHEN 'EQU' THEN 'Equipos' WHEN 'SUB' THEN 'Mano de Obra' WHEN 'SER' THEN 'Administrativo' WHEN 'KIT' THEN 'Materiales' ELSE 'NO Asignada' END AS NAT,
+OI.UoM COLLATE Latin1_General_CI_AI AS UNIDAD, IC.Nombre_Odoo COLLATE Latin1_General_CI_AI AS DESCRIPCION, PC.CantidadOriginal AS MEDICION, PC.CostoGlobalActual AS PRECIO,
+PC.CantidadOriginal*PC.CostoGlobalActual AS IMPORTE
+FROM AoPartidas AS P
+INNER JOIN AoPresupuestoControl AS PC ON P.IdProyecto=PC.IdProyecto AND P.IdPartida=PC.IdPartida
+INNER JOIN AoCatConceptos AS C ON C.IdProyecto=P.IdProyecto AND PC.idConcepto=C.idConcepto
+INNER JOIN AcCatInsumos AS I ON I.idInsumo = C.idSubcontrato
+LEFT OUTER JOIN NEO_APPS.dbo.Odoo_InsumoCargado AS IC ON IC.Insumo_Neodata COLLATE Latin1_General_CI_AI =I.Insumo
+LEFT OUTER JOIN NEO_APPS.dbo.Odoo_Insumos AS OI ON OI.RefInterna=IC.RefInterna_Odoo
+WHERE P.idProyecto=11
+)
+ORDER BY PARTIDA
+           </field>
+        </record>
+  </data>
+</odoo>

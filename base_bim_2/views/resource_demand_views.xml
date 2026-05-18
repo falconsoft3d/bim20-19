@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_resource_demand" model="ir.ui.view">
+        <field name="name">view.form.resource.demand</field>
+        <field name="model">resource.demand</field>
+        <field name="arch" type="xml">
+            <form string="Resource Demand">
+                <header>
+                    <!--
+                    <button class="oe_highlight" invisible="state not in ('draft')"
+                            name="load_data" string="Load Data" type="object"/>
+
+                    <button name="clear_data" invisible="state not in ('draft')"
+                             string="Clear Data" type="object"/>
+
+                    <button name="to_done"
+                             class="oe_highlight"
+                             invisible="state not in ('loaded')"
+                             string="To Done" type="object"/>
+
+                    <button name="cancel"
+                            string="Cancel"
+                            invisible="state in ('canceled','done')"
+                            type="object"/>
+
+                    <button
+                            invisible="state in ('draft')"
+                            name="to_draft" string="Borrador" type="object"/>
+
+                <field name="state" widget="statusbar"/>
+                -->
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name" />
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+
+                            <field name="product_id"
+                                   options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="quantity_demanded"/>
+                            <field name="resource_origin"/>
+                            <field name="bim_project_ids" widget="many2many_tags"
+                                   options="{'no_create': True, 'no_edit': True}"/>
+
+                            <!--
+                             <field name="budget_id"
+                                   domain="[('project_id', '=', project_id)]"
+                                   options="{'no_create': True, 'no_edit': True}"/>
+                             <field name="type"/>
+                             <field name="concepts_ids"
+                                    domain="[('type', '=', 'chapter'),('budget_id', '=', budget_id)]"
+                                    widget="many2many_tags"/>
+                                    -->
+                        </group>
+                        <group>
+
+                            <field name="from_date" />
+                            <field name="to_date" />
+                            <!--
+                            <field name="material" />
+                            <field name="subcontract" />
+                            -->
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!--
+                        <page name="Lista" string="Lista">
+                            <field name="lines_ids">
+                                <list
+                                      decoration-danger="qty != new_qty"
+                                      editable="bottom" string="Lines">
+                                    <field name="bim_concepts_ids" optional="hide"
+                                      widget="many2many_tags"/>
+                                    <field name="product_id"
+                                           readonly="1"
+                                           optional="show"/>
+                                    <field name="qty" sum="sum"
+                                           readonly="1"
+                                           optional="show"/>
+                                    <field name="new_qty" sum="sum" optional="show"/>
+                                    <field name="coeficient" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        -->
+                        <page name="Others" string="Others">
+                            <group>
+                                <group>
+                                    <field name="user_id" options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="company_id" options="{'no_create': True, 'no_edit': True}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_resource_demand" model="ir.ui.view">
+        <field name="name">view.tree.resource.demand</field>
+        <field name="model">resource.demand</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="product_id" optional="show"/>
+                <field name="quantity_demanded" optional="show" sum="sum"/>
+                <field name="bim_project_ids" widget="many2many_tags" optional="show"/>
+                <field name="resource_origin" optional="show"/>
+                <field name="from_date" optional="show"/>
+                <field name="to_date" optional="show"/>
+
+                <!--
+                <field name="project_id" />
+                <field name="budget_id" />
+                -->
+                <field name="user_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <!--
+                <field name="state" />
+                -->
+            </list>
+        </field>
+    </record>
+
+    <!-- Vista Grafica en x las fechas en y la cantidad demandada -->
+    <record id="view_graph_resource_demand" model="ir.ui.view">
+        <field name="name">view.graph.resource.demand</field>
+        <field name="model">resource.demand</field>
+        <field name="arch" type="xml">
+            <graph string="Resource Demand" type="bar">
+                <field name="from_date" type="row"/>
+                <field name="quantity_demanded" type="measure"/>
+            </graph>
+        </field>
+     </record>
+
+
+    <record id="action_resource_demand" model="ir.actions.act_window">
+        <field name="name">Resource Demand</field>
+        <field name="res_model">resource.demand</field>
+        <field name="view_mode">list,form,graph</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Resource Analysis!
+            </p>
+        </field>
+    </record>
+
+    </data>
+</odoo>

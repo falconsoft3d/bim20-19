@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tree_bim_project_unit" model="ir.ui.view">
+        <field name="name">view.tree.bim.project.unit</field>
+        <field name="model">bim.project.unit</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="typology_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="product_id" options="{'no_create': True}"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_project_unit" model="ir.actions.act_window">
+        <field name="name">Project units</field>
+        <field name="res_model">bim.project.unit</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

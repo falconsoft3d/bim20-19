@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <template id="timesheet_summary_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="base_bim_2.bim_header_external_layout">
+                        <div class="page">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <table class="table table-sm table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-left">
+                                                        <strong>Customer</strong><br/>
+                                                        <span t-field="o.customer_id.name" />
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Factura</strong><br/>
+                                                        <span t-field="o.invoice_id.name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Total Hours</strong><br/>
+                                                        <span t-field="o.total_hours"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Total Cost</strong><br/>
+                                                        <span t-field="o.total_cost"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Total Price</strong><br/>
+                                                        <span t-field="o.total_price"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Date</strong><br/>
+                                                        <span t-field="o.date_create" t-options='{"format": "d - MMMM - y"}'/>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div><br/><br/>
+                                
+                                <div class="row">
+                                    <div class="col table-responsive">
+                                        <table class="table table-sm table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Timesheet</th>
+                                                    <th class="text-center">Project</th>
+                                                    <th class="text-center">Budget</th>
+                                                    <th class="text-left">Concept</th>
+                                                    <th class="text-left">Task</th>
+                                                    <th class="text-left">Estra Hour</th>
+                                                    <th class="text-left">Date</th>
+                                                    <th class="text-left">Total Hours</th>
+                                                    <th class="text-left">Total Cost</th>
+                                                    <th class="text-left">Total Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="o.timesheet_line_ids" t-as="line">
+                                                    <tr>
+                                                        <td class="text-left"><span t-field="line.bim_project_employee_timesheet.name"/></td>
+                                                        <td class="text-left"><span t-field="line.project_id.name"/></td>
+                                                        <td class="text-center"><span t-field="line.budget_id.name"/></td>
+                                                        <td class="text-center"><span t-field="line.concept_id.name"/></td>
+                                                        <td class="text-center"><span t-field="line.task_id.name"/></td>
+                                                        <td class="text-center"><span t-field="line.bim_extra_hour"/></td>
+                                                        <td class="text-center"><span t-field="line.date"/></td>
+                                                        <td class="text-center"><span t-field="line.total_hours"/></td>
+                                                        <td class="text-center"><span t-field="line.work_cost" t-options="{'widget': 'monetary', 'display_currency': line.budget_id.currency_id}"/></td>
+                                                        <td class="text-center"><span t-field="line.work_price" t-options="{'widget': 'monetary', 'display_currency': line.budget_id.currency_id}"/></td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

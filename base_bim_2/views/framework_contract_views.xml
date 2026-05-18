@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_framework_contract" model="ir.ui.view">
+         <field name="name">view.form.framework.contract</field>
+         <field name="model">framework.contract</field>
+         <field name="arch" type="xml">
+            <form>
+              <sheet>
+                  <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-list" name="action_view_bim_project"
+                                string="Projects" type="object">
+                            <field name="count_bim_projects" string="Projects" widget="statinfo"/>
+                        </button>
+                  </div>
+
+                  <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                   </div>
+                    <group>
+                        <group>
+                            <field name="title"/>
+                            <field name="partner_id"/>
+                            <field name="create_date"/>
+                            <field name="amount"/>
+                            <field name="total_projects"/>
+                            <field name="pending_contract"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+
+                  <notebook>
+                      <page string="Text">
+                           <field name="observation" placeholder="Observation..."/>
+                      </page>
+                  </notebook>
+
+               </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_framework_contract" model="ir.ui.view">
+         <field name="name">view.tree.framework.contract</field>
+         <field name="model">framework.contract</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="name"/>
+                 <field name="title"/>
+                 <field name="partner_id"/>
+                 <field name="create_date"/>
+                 <field name="user_id"/>
+                 <field name="company_id"/>
+                 <field name="amount" sum="sum"/>
+                 <field name="total_projects" sum="sum"/>
+                 <field name="pending_contract" sum="sum"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_framework_contract" model="ir.actions.act_window">
+        <field name="name">Framework Contract</field>
+        <field name="res_model">framework.contract</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_assets_form" model="ir.ui.view">
+        <field name="name">bim.assets.form</field>
+        <field name="model">bim.assets</field>
+        <field name="arch" type="xml">
+            <form string="Assets and Discounts">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="Code"/>
+                            <field name="desc"/>
+                            <field name="default_value"/>
+                        </group>
+                        <group>
+                            <field name="type"/>
+                            <field name="show_on_report"/>
+                            <field name="not_billable" invisible="type != '0'"/>
+                            <field name="sum_all"/>
+                        </group>
+                    </group>
+                    <field name="obs" placeholder="Observation"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_assets" model="ir.ui.view">
+        <field name="name">view.tree.bim.assets</field>
+        <field name="model">bim.assets</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" string="Code"/>
+                <field name="desc"/>
+                <field name="type"/>
+                <field name="default_value"/>
+                <field name="show_on_report"/>
+                <field name="not_billable"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="bim_assets_action" model="ir.actions.act_window">
+        <field name="name">Assets and Discounts</field>
+        <field name="res_model">bim.assets</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Plantillas de Haberes y Descuentos -->
+    <record id="bim_assets_template_form" model="ir.ui.view">
+        <field name="name">bim.assets.template.form</field>
+        <field name="model">bim.assets.template</field>
+        <field name="arch" type="xml">
+            <form string="Template Assets and Discounts">
+                <sheet>
+                    <label for="name" class="oe_edit_only"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="desc"/>
+                            <field name="asset_id"/>
+                            <field name="sale_ok" widget="boolean_toggle"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <separator string="Assets and Discounts"/>
+                    <field name="line_ids" context="{'default_template_id': id}" copy="True">
+                        <list editable="bottom">
+                            <field name="template_id" optional="hide"/>
+                            <field name="sequence" widget="handle"/>
+                            <field name="asset_id"/>
+                            <field name="type"/>
+                            <field name="affect_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('template_id', '=', template_id)]" />
+                            <field name="main_asset"/>
+                            <field name="value"/>
+                        </list>
+                        <form>
+                            <sheet>
+                                <label for="asset_id" class="oe_edit_only"/>
+                                <div class="oe_title">
+                                    <h1>
+                                        <field name="asset_id"/>
+                                    </h1>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="template_id" invisible="True"/>
+                                        <field name="affect_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('template_id', '=', template_id)]" />
+                                        <field name="type"/>
+                                    </group>
+                                    <group>
+                                        <field name="main_asset"/>
+                                        <field name="value"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="bim_assets_template_tree" model="ir.ui.view">
+        <field name="name">bim.assets.template.tree</field>
+        <field name="model">bim.assets.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="desc"/>
+                <field name="asset_id"/>
+                <field name="sale_ok"/>
+                <field name="line_ids"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="bim_assets_template_action" model="ir.actions.act_window">
+        <field name="name">Template Assets and Discounts</field>
+        <field name="res_model">bim.assets.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="bim_assets_template_tree"/>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_concept_template_copy_view_form" model="ir.ui.view">
+        <field name="name">bim.concept.template.copy.view.form</field>
+        <field name="model">bim.concept.template.copy</field>
+        <field name="arch" type="xml">
+            <form string="Copy APUs">
+                <group>
+                    <group>
+                        <field  name="concept_template_ids"
+                                readonly="1"
+                                widget="many2many_tags"
+                                invisible="not concept_template_ids"
+                        />
+
+                        <field  name="concept_bim_concept_ids"
+                                readonly="1"
+                                invisible="not concept_bim_concept_ids"
+                                widget="many2many_tags"/>
+
+                        <field  name="copy_bim_budget_ids"
+                                readonly="1"
+                                invisible="not copy_bim_budget_ids"
+                                widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field  name="user_id" readonly="1"/>
+                        <field  name="company_id" readonly="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-secondary" name="cancel"
+                            icon="fa-times"
+                            special="cancel" string="Cancel"/>
+                    <button class="btn-primary"
+                            icon="fa-copy"
+                            name="copy_concept" string="Copy" type="object"/>
+                </footer>
+            </form></field>
+    </record>
+
+
+    <record id="bim_concept_template_copy_action" model="ir.actions.act_window">
+        <field name="name">Copy (M)</field>
+        <field name="res_model">bim.concept.template.copy</field>
+        <field name="binding_model_id" ref="model_bim_concept_template"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+    <record id="bim_bim_concepts_copy_action" model="ir.actions.act_window">
+        <field name="name">Copy (M)</field>
+        <field name="res_model">bim.concept.template.copy</field>
+        <field name="binding_model_id" ref="model_bim_concepts"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+    <record id="bim_bim_budget_copy_action" model="ir.actions.act_window">
+        <field name="name">Copy (M)</field>
+        <field name="res_model">bim.concept.template.copy</field>
+        <field name="binding_model_id" ref="model_bim_budget"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+
+</odoo>

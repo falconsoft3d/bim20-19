@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sitemap_view.SitemapView" t-inherit="web.ListView" t-inherit-mode="primary">
+    </t>
+</templates>

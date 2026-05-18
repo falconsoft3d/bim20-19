@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_budget_history" model="ir.ui.view">
+        <field name="name">view.form.bim.budget.history</field>
+        <field name="model">bim.budget.history</field>
+        <field name="arch" type="xml">
+            <form string="Report" delete="0">
+                <header>
+                    <field name="line_count" invisible="True"/>
+                    <button name="%(base_bim_2.action_apply_bim_budget_history)d" type="action" string="Apply History"
+                        invisible="not active or not line_count"
+                    />
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                       <h5>
+                           <field name="name" readonly="1" force_save="1" class="pr-2"/>
+                           <field name="description"/>
+                       </h5>
+                    </div>
+                    <group>
+                        <group>
+                             <field name="date" force_save="1"/>
+                             <field name="budget_id" force_save="1"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="active" invisible="True"/>
+                            <field name="currency_id" invisible="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="concepts" string="Concepts History">
+                            <field name="history_line_ids" readonly="1">
+                                <list>
+                                    <field name="sequence" invisible="True"/>
+                                    <field name="concept_id" widget="many2one"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price" widget="monetary"/>
+                                    <field name="currency_id" invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group class="oe_right">
+                        <group class="oe_subtotal_footer">
+                            <field name="amount_total_labor" widget="monetary"/>
+                            <field name="amount_total_equip" widget="monetary"/>
+                            <field name="amount_total_material" widget="monetary"/>
+                            <field name="amount_total_other" widget="monetary"/>
+                            <field name="total_assets" widget="monetary"/>
+                            <field name="amount_certified" class="oe_subtotal_footer_separator" widget="monetary"/>
+                            <field name="balance" class="oe_subtotal_footer_separator" widget="monetary"/>
+                        </group>
+                    </group>
+                 </sheet>
+                 <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_budget_history" model="ir.ui.view">
+        <field name="name">view.tree.bim.budget.history</field>
+        <field name="model">bim.budget.history</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="budget_id" widget="many2one"/>
+                <field name="date"/>
+                <field name="amount_total_labor" widget="monetary"/>
+                <field name="amount_total_equip" widget="monetary"/>
+                <field name="amount_total_material" widget="monetary"/>
+                <field name="amount_total_other" widget="monetary"/>
+                <field name="amount_certified" widget="monetary"/>
+                <field name="balance" widget="monetary"/>
+                <field name="total_assets" widget="monetary"/>
+                <field name="currency_id" invisible="True"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_budget_history" model="ir.actions.act_window">
+        <field name="name">Budget History</field>
+        <field name="res_model">bim.budget.history</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Budget History!
+            </p>
+        </field>
+    </record>
+
+
+
+    </data>
+
+</odoo>

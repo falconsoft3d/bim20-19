@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="include_bim_stock_picking" model="ir.actions.server">
+                        <field name="name">Incluir o No en Bim</field>
+                        <field name="model_id" ref="picking_standard_price.model_stock_picking"/>
+                        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+                        <field name="binding_view_types">list,form</field>
+                        <field name="state">code</field>
+                        <field name="code">
+                        if records:
+                            res = records.action_include_bim()
+                        </field>
+        </record>
+
+    <record id="base_bim_2_quant_tree" model="ir.ui.view">
+        <field name="name">ipiola.base.quant.tree</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field invisible="True" name="resource_type"/></field></field>
+    </record>
+
+
+    <record id="base_bim_view_picking_form" model="ir.ui.view">
+        <field name="name">base.bim.view.picking-form</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='product_id']" position="after">
+                    <field optional="hide" name="concept_phase_id" />
+                    <field optional="show" name="bim_project_id" options='{"no_create": 1, "no_open": 1}' />
+                    <field optional="hide" name="bim_budget_id"  options='{"no_create": 1, "no_open": 1}'/>
+                    <field optional="show" name="concept_id" options='{"no_create": 1, "no_open": 1}' />
+            </xpath>
+
+            <xpath expr="//button[@name='action_cancel']" position="before">
+                <button string="Create Invoice"
+                        invisible="bim_purchase_id == False or account_move_id != False"
+                        groups="base_bim_2.group_bim_invoice_from_picking"
+                        name="bim_create_invoice" type="object" />
+            </xpath>
+
+            <field name="origin" position="after">
+                 <field name="account_move_id"
+                        invisible="account_move_id == False"
+                        groups="base_bim_2.group_bim_invoice_from_picking" />
+                 <field name="external_reference"/>
+            </field>
+
+            <field name="partner_id" position="after">
+                 <field name="place_of_delivery_id"/>
+            </field>
+            <xpath expr="//group[@name='other_infos']" position="after">
+                <group name="bim_stock" string="BIM Information">
+
+                    <field name="bim_requisition_id"/>
+                    <field name="bim_project_id"/>
+                    <field name="bim_budget_id" options='{"no_create": 1, "no_open": 1}'/>
+                    <field invisible="True" name="bim_budget_id"/>
+                    <field name="bim_concept_id" options='{"no_create": 1, "no_open": 1}'/>
+                    <field invisible="True" name="bim_concept_id"/>
+                    <field name="bim_space_id"/>
+                    <field name="bim_object_id"/>
+                    <field name="include_for_bim"/>
+                    <field name="bim_purchase_id"/>
+                </group>
+            </xpath>
+            <field name="origin" position="after">
+            <field invisible="picking_type_code == 'outgoing'" name="invoice_guide_number"/></field>
+            <xpath expr="//field[@name='move_ids_without_package']/list/field[@name='product_id']" position="after">
+                     <field name="supplier_id" optional="hide" options='{"no_create": 1, "no_open": 1}'/>
+            </xpath>
+            </field>
+    </record>
+
+    <record id="base_bim_view_picking_tree" model="ir.ui.view">
+        <field name="name">base.bim.view.picking.tree</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="bim_project_id"
+                       optional="hide"/>
+                <field invisible="True"
+                       name="company_id"/>
+                <field groups="base_bim_2.group_budget_concept_documents"
+                       optional="hide"
+                       name="bim_budget_id" options='{"no_create": 1, "no_open": 1}'/>
+                <field invisible="True"
+                       optional="hide"
+                       name="bim_budget_id"/>
+
+                <field groups="base_bim_2.group_budget_concept_documents"
+                       name="bim_concept_id"
+                       optional="hide"
+                       options='{"no_create": 1, "no_open": 1}'/>
+
+                <field optional="hide" name="bim_concept_id"/>
+
+                <field optional="hide" groups="base_bim_2.group_bim_invoice_from_picking" name="account_move_id"/>
+
+                <field optional="show"  sum="Total"  name="total_cost"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="stock_picking_hr_deliver_products" model="ir.ui.view">
+        <field name="name">stock.picking.hr.deliver.products</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field invisible="motive_id == False" name="motive_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

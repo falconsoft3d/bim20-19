@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="invoice_from_picking_mass_view_form" model="ir.ui.view">
+            <field name="name">invoice.from.picking.mass.view.form</field>
+            <field name="model">invoice.from.picking.mass</field>
+            <field name="arch" type="xml">
+                <form>
+                   <header>
+                       <button name="make_invoice_picking" type="object" string="Facturar" invisible="state != 'draft'" class="oe_highlight"/>
+                       <button name="approve_invoice_picking" type="object" string="Publicar Facturas" invisible="state != 'process'" class="oe_highlight"/>
+                       <button name="convert_to_draft" type="object" string="Volver a Borrador" invisible="state != 'process'"/>
+                       <field name="state" widget="statusbar"/>
+                   </header>
+                   <sheet>
+                       <div name="button_box" class="oe_button_box">
+                           <button name="action_view_in_invoices" type="object" class="oe_stat_button" icon="fa-file-text" invisible="count_in_invoices == 0">
+                               <field name="count_in_invoices" string="Facturas Entrada" widget="statinfo"/>
+                           </button>
+                           <button name="action_view_out_invoices" type="object" class="oe_stat_button" icon="fa-file-text" invisible="count_out_invoices == 0">
+                               <field name="count_out_invoices" string="Facturas Salida" widget="statinfo"/>
+                           </button>
+                       </div>
+                       <div class="oe_title">
+                           <h1>
+                               <field name="name" readonly="1"/>
+
+                           </h1>
+                       </div>
+                       <group string="Factura">
+                           <group>
+                                <field name="date_to_invoice" readonly="state != 'draft'"/>
+                           </group>
+                           <group>
+                               <field name="type" invisible="1"/>
+                           </group>
+                       </group>
+                       <notebook>
+                           <page name="pickings" string="Albaranes">
+                               <field name="invoicefrompicking_line_ids" readonly="state != 'draft'">
+                                   <list editable="bottom" create="0">
+                                       <field name="picking_id"
+                                              widget="many2one"
+                                              options="{'no_create': True}"/>
+                                       <field name="date"/>
+                                       <field name="partner_id" options="{'no_create': True, 'no_open': True}"/>
+                                       <field name="origin"/>
+                                       <field name="state_invoice" />
+                                   </list>
+                               </field>
+                           </page>
+                           <page name="pickings" string="Otros Albaranes">
+                               <group>
+                                   <group>
+                                       <button name="add_picking"
+                                       class="oe_highlight"
+                                       type="object"
+                                       invisible="add_invoice == True"
+                                       string="Añadir Albaran"/>
+
+                                        <button name="delete_picking"
+                                       invisible="add_invoice == False"
+                                       type="object" string="Eliminar Albaran"/>
+
+                                   </group>
+                                   <group>
+                                       <field name="add_account_move_id" />
+                                   </group>
+                               </group>
+
+                               <field name="invoice_from_picking_mass_line_add_ids">
+                                   <list editable="bottom">
+                                       <field name="picking_id"
+                                              widget="many2one"
+                                              domain="[('state_invoice', '=', 'to_invoice'), ('state', 'in', ('assigned', 'done'))]"
+                                              options="{'no_create': True}" optional="show"/>
+                                       <field name="date" optional="show"/>
+                                       <field name="partner_id" options="{'no_create': True, 'no_open': True}" optional="show"/>
+                                       <field name="origin" optional="show"/>
+                                       <field name="account_move_line_ids"
+                                              widget="many2many_tags"
+                                              optional="hide"/>
+                                       <field name="state_invoice" optional="show"/>
+                                   </list>
+                               </field>
+
+
+                           </page>
+                           <page name="info" string="Información Adicional">
+                               <group>
+                                   <group>
+                                       <field name="user_id" string="Creado por" options="{'no_create': True, 'no_open': True}" readonly="1"/>
+                                   </group>
+                                   <group>
+                                       <field name="create_date" string="Creado en" readonly="1"/>
+                                       <field name="add_invoice" />
+                                   </group>
+                               </group>
+                           </page>
+
+                       </notebook>
+                   </sheet>
+                   <chatter/>
+               </form>
+            </field>
+        </record>
+
+
+        <record id="invoice_from_picking_mass_view_list" model="ir.ui.view">
+            <field name="name">invoice.from.picking.mass.view.list</field>
+            <field name="model">invoice.from.picking.mass</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="user_id" string="Creado por"/>
+                    <field name="create_date" string="Creado en"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="invoice_from_picking_mass_action" model="ir.actions.act_window">
+            <field name="name">Facturar Albaranes</field>
+            <field name="res_model">invoice.from.picking.mass</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new register!
+              </p>
+            </field>
+        </record>
+
+
+        <record id="sale_invoice_from_pick_mass_action" model="ir.actions.act_window">
+            <field name="name">Albaranes Salida</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">invoice.from.picking.mass</field>
+            <field name="context">{'default_type': 'sale'}</field>
+            <field name="domain">[('type', '=', 'sale')]</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="purchase_invoice_from_pick_mass_action" model="ir.actions.act_window">
+            <field name="name">Albaranes Entrada</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">invoice.from.picking.mass</field>
+            <field name="context">{'default_type': 'purchase'}</field>
+            <field name="domain">[('type', '=', 'purchase')]</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="sale_ifpm_cat" name="Facturar Albaranes" parent="account.menu_finance_receivables" sequence="-1"/>
+        <menuitem id="purchase_ifpm_cat" name="Facturar Albaranes" parent="account.menu_finance_payables" sequence="-1"/>
+
+        <menuitem id="sale_ifpm_act" name="Alabranes de Salida" parent="sale_ifpm_cat" action="sale_invoice_from_pick_mass_action" sequence="1"/>
+        <menuitem id="purchase_ifpm_act" name="Albaranes de Entrada" parent="purchase_ifpm_cat" action="purchase_invoice_from_pick_mass_action" sequence="1"/>
+    </data>
+</odoo>

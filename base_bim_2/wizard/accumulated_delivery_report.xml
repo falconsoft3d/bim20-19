@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+      <template id="accumulated_delivery_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="base_bim_2.bim_header_external_layout">
+                        <div class="page">
+
+
+                    <style>
+                        .fixed-width-coste {
+                            width: 100px; /* Ajusta este valor según necesites */
+                        }
+
+                        .page {
+                            font-size: 9pt;
+                        }
+                    </style>
+
+                    <div class="row text-center">
+                        <h2>INFORME GASTOS ACUMULADOS</h2>
+                    </div>
+                    <br/>
+                    <br/>
+
+
+                    <div class="row">
+                        <div class="col-6">
+                            <p>Proyecto: <span t-esc="doc.project_id.name"/></p>
+                            <p>Fecha informe: <span t-esc="doc.create_date"/></p>
+                        </div>
+                        <div class="col-6">
+                            <p>Emitido por: <span t-esc="doc.user_id.name"/></p>
+                            <p>Rango de fechas: <span t-esc="doc.date_beg"/> - <span t-esc="doc.date_end"/></p>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+
+
+                    <t t-set="_catagory" t-value=""/>
+                    <t t-set="full_total" t-value="0"/>
+
+
+                    <t t-set="array_categories" t-value="[]"/>
+
+                     <t t-set="sorted_lines" t-value="sorted(doc.bim_stock_report_wizard_category, key=lambda l: l.category_id.name)"/>
+
+                     <t t-foreach="sorted_lines" t-as="line">
+
+                     <t t-if="_catagory != line.category_id.name and line.category_id.name not in array_categories">
+                        <div class="row">
+                          <h4>Categoría: <span t-esc="line.category_id.name"/> </h4>
+                        </div>
+                        <t t-set="_catagory" t-value="line.category_id.name"/>
+                     <div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center fixed-width-coste">Coste</th>
+                                    <th class="text-center fixed-width-coste">Total</th>
+                                </tr>
+                            </thead>
+
+                             <tbody>
+                                   <!-- buscamos todas las lineas de la categoria -->
+                                    <t t-set="total_stock_picking" t-value="0"/>
+                                    <t t-set="total_standard_price" t-value="0"/>
+                                    <t t-set="total_amount" t-value="0"/>
+
+                                   <!-- Mostramo la categoria -->
+                                   <t t-foreach="doc.bim_stock_report_wizard_category" t-as="line2">
+                                        <t t-if="line2.category_id.name == _catagory">
+
+                                            <tr>
+                                                <td class="text-left"><span t-esc="line2.name.default_code"/></td>
+                                                <td class="text-left"><span t-esc="line2.name.name"/></td>
+                                                <td class="text-center"><span t-esc="line2.stock_picking"/> </td> <t t-set="total_stock_picking" t-value="total_stock_picking + line2.stock_picking"/>
+
+                                                <!-- Calculamos el precio promedio de la categoria -->
+                                                <t t-set="__precio_promedio" t-value="0"/>
+                                                <t t-set="__subtotal" t-value="0"/>
+                                                <t t-set="__qty" t-value="0"/>
+                                                <t t-foreach="doc.bim_stock_report_wizard_category" t-as="line3">
+                                                        <t t-if="line3.name == line2.name">
+                                                               <t t-set="__subtotal" t-value="__subtotal + line3.total_amount"/>
+                                                               <t t-set="__qty" t-value="__qty + line3.stock_picking"/>
+                                                        </t>
+                                                </t>
+
+                                                <t t-if="__qty != 0">
+                                                    <t t-set="__precio_promedio" t-value="round(__subtotal/__qty,2)"/>
+                                                 </t>
+
+                                                 <t t-if="__qty == 0">
+                                                    <t t-set="__precio_promedio" t-value="0"/>
+                                                 </t>
+
+                                                <!--  x -->
+
+
+                                                <td class="text-center"><span t-esc="__precio_promedio"/> <span t-esc="doc.currency_id.symbol"/> </td>
+                                                <td class="text-center"><span t-esc="round(line2.total_amount,2)" />  <span t-esc="doc.currency_id.symbol"/> </td>
+                                                <t t-set="total_amount" t-value="total_amount + line2.total_amount"/>
+
+                                            </tr>
+
+                                        </t>
+                                    </t>
+
+                                <tr>
+                                    <th class="text-center" colspan="2"><strong>Subtotal Categoría <span t-esc="line.category_id.name"/></strong></th>
+                                    <th class="text-center"><span t-esc="round(total_stock_picking,2)"/></th>
+
+                                    <t t-if="total_stock_picking != 0">
+                                        <t t-set="total_standard_price" t-value="round(total_amount/total_stock_picking,2)"/>
+                                    </t>
+                                    <t t-if="total_stock_picking == 0">
+                                        <t t-set="total_standard_price" t-value="0"/>
+                                    </t>
+
+                                    <th class="text-center"><span t-esc="round(total_standard_price,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                    <th class="text-center"><span t-esc="round(total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                    <t t-set="full_total" t-value="round(full_total + total_amount,2)"/>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    </t>
+                    <br/>
+                    <br/>
+                    <t t-set="array_categories" t-value="array_categories + [line.category_id.name]"/>
+
+                    </t>
+
+
+
+                    <!-- VIAJES BEGIN -->
+                    <t t-set="len_obj" t-value="len(doc.general_data_report_wizard.filtered(lambda x: x.type == 'TRANSPORTE'))"/>
+                    <t t-if="len_obj > 0">
+                    <div class="row">
+                          <h4>Categoría: Transporte </h4>
+                    </div>
+
+                    <div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center fixed-width-coste">Coste</th>
+                                    <th class="text-center fixed-width-coste">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="__trasnp_qty" t-value="0"/>
+                                <t t-set="__trasnp_total_amount" t-value="0"/>
+
+                                 <t t-foreach="doc.general_data_report_wizard" t-as="line_transport">
+                                       <t t-if="line_transport.type == 'TRANSPORTE'">
+                                            <t t-set="__trasnp_qty" t-value="line_transport.qty + __trasnp_qty"/>
+                                            <t t-set="__trasnp_total_amount" t-value="line_transport.total_amount + __trasnp_total_amount"/>
+                                        </t> <!-- <t t-if="line_transport.type == 'TRANSPORTE'"> -->
+                                </t>
+
+                                <!-- Ponemos una sola linea -->
+                                <tr>
+                                    <th class="text-center">KM</th>
+                                    <th class="text-center">TRANSPORTE</th>
+                                    <th class="text-center"><span t-esc="round(__trasnp_qty,2)"/></th>
+                                        <t t-if="__trasnp_qty != 0">
+                                            <th class="text-center"><span t-esc="round(__trasnp_total_amount/__trasnp_qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                        </t>
+                                        <t t-if="__trasnp_qty == 0">
+                                            <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                        </t>
+                                    <th class="text-center"><span t-esc="round(__trasnp_total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                </tr>
+
+                                <!-- Ponemos el pie -->
+                                <tr>
+                                        <th class="text-center" colspan="2"><strong>Subtotal Categoría Transporte</strong></th>
+                                        <th class="text-center"><span t-esc="round(__trasnp_qty,2)"/></th>
+                                        <t t-if="__trasnp_qty != 0">
+                                            <th class="text-center"><span t-esc="round(__trasnp_total_amount/__trasnp_qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                        </t>
+                                        <t t-if="__trasnp_qty == 0">
+                                            <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                        </t>
+                                        <th class="text-center"><span t-esc="round(__trasnp_total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                        <t t-set="full_total" t-value="round(full_total + __trasnp_total_amount,2)"/>
+                                  </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </t>
+                    <!--  VIAJES END -->
+
+
+
+                    <!-- OTROS GASTOS BEGIN -->
+                    <t t-set="len_obj" t-value="len(doc.general_data_report_wizard.filtered(lambda x: x.type == 'OTHER-ACC'))"/>
+                    <t t-if="len_obj > 0">
+                    <div class="row">
+                          <h4>Categoría: Otros Gastos </h4>
+                    </div>
+
+                    <div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center fixed-width-coste">Coste</th>
+                                    <th class="text-center fixed-width-coste">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <t t-set="__otros_qty" t-value="0"/>
+                                <t t-set="__otros_total_amount" t-value="0"/>
+
+
+                                <t t-foreach="doc.general_data_report_wizard" t-as="line_other">
+
+
+
+                                   <t t-if="line_other.type == 'OTHER-ACC'">
+                                        <t t-set="__otros_qty" t-value="line_other.qty + __otros_qty"/>
+                                        <t t-set="__otros_total_amount" t-value="line_other.total_amount + __otros_total_amount"/>
+
+                                        <tr>
+                                            <th class="text-center"><span t-esc="line_other.product_code"/></th>
+                                            <th class="text-center"><span t-esc="line_other.description"/></th>
+                                            <th class="text-center"><span t-esc="round(line_other.qty,2)"/></th>
+                                            <t t-if="line_other.qty != 0">
+                                                <th class="text-center"><span t-esc="round(line_other.total_amount/line_other.qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <t t-if="line_other.qty == 0">
+                                                <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <th class="text-center"><span t-esc="round(line_other.total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+
+                                        </tr>
+                                    </t>
+                                </t>
+
+                                    <tr>
+                                            <th class="text-center" colspan="2"><strong>Subtotal Otros Gastos</strong></th>
+
+                                            <th class="text-center"><span t-esc="round(__otros_qty,2)"/></th>
+                                            <t t-if="__otros_qty != 0">
+                                                <th class="text-center"><span t-esc="round(__otros_total_amount/__otros_qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <t t-if="__otros_qty == 0">
+                                                <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+
+                                            <th class="text-center"><span t-esc="round(__otros_total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+
+                                            <t t-set="full_total" t-value="round(full_total + __otros_total_amount,2)"/>
+                                    </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    </t>
+                    <!--  OTROS GASTOS END -->
+
+
+                    <!-- DIETA BEGIN -->
+                    <t t-set="len_obj" t-value="len(doc.general_data_report_wizard.filtered(lambda x: x.type == 'LABOR-ACC-MOD'))"/>
+                    <t t-if="len_obj > 0">
+                    <div class="row">
+                          <h4>Categoría: Dietas y Desplazamiento</h4>
+                    </div>
+
+                    <div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center fixed-width-coste">Coste</th>
+                                    <th class="text-center fixed-width-coste">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <t t-set="__dietas_qty" t-value="0"/>
+                                <t t-set="__dietas_total_amount" t-value="0"/>
+
+                                <t t-foreach="doc.general_data_report_wizard" t-as="line_dietas">
+                                   <t t-if="line_dietas.type == 'LABOR-ACC-MOD'">
+                                        <t t-set="__dietas_qty" t-value="line_dietas.qty + __dietas_qty"/>
+                                        <t t-set="__dietas_total_amount" t-value="line_dietas.total_amount + __dietas_total_amount"/>
+
+                                      <t t-if="line_dietas.qty != 0">
+                                       <tr>
+                                            <th class="text-center">MOD</th>
+                                            <th class="text-center">MOD</th>
+                                            <th class="text-center"><span t-esc="round(line_dietas.qty,2)"/></th>
+                                            <t t-if="line_dietas.qty != 0">
+                                                <th class="text-center"><span t-esc="round(line_dietas.total_amount/line_dietas.qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <t t-if="line_dietas.qty == 0">
+                                                <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <th class="text-center"><span t-esc="round(line_dietas.total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+
+                                     </tr>
+                                     </t>
+                                   </t>
+
+                                    <t t-if="line_dietas.type == 'LABOR-ACC-DIETAS'">
+                                        <t t-set="__dietas_qty" t-value="line_dietas.qty + __dietas_qty"/>
+                                        <t t-set="__dietas_total_amount" t-value="line_dietas.total_amount + __dietas_total_amount"/>
+
+                                     <tr>
+                                            <th class="text-center">DIETAS</th>
+                                            <th class="text-center">DIETAS</th>
+                                            <th class="text-center"><span t-esc="round(line_dietas.qty,2)"/></th>
+                                            <t t-if="line_dietas.qty != 0">
+                                                <th class="text-center"><span t-esc="round(line_dietas.total_amount/line_dietas.qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <t t-if="line_dietas.qty == 0">
+                                                <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <th class="text-center"><span t-esc="round(line_dietas.total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+
+                                     </tr>
+                                   </t>
+                                </t>
+
+                                <tr>
+                                    <th class="text-center" colspan="2"><strong>Subtotal Dietas</strong></th>
+                                    <th class="text-center"><span t-esc="round(__dietas_qty,2)"/></th>
+                                    <th class="text-center">
+
+                                                <span t-if="__dietas_qty != 0" t-esc="round(__dietas_total_amount/__dietas_qty,2)"/>
+                                                <span t-if="__dietas_qty == 0">0</span>
+
+                                        <span t-esc="doc.currency_id.symbol"/></th>
+                                    <th class="text-center"><span t-esc="round(__dietas_total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                    <t t-set="full_total" t-value="round(full_total + __dietas_total_amount,2)"/>
+                                 </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    </t>
+                    <!--  DIETA END -->
+
+
+
+                    <!-- MANO DE OBRA BEGIN -->
+                    <t t-set="len_obj" t-value="len(doc.general_data_report_wizard.filtered(lambda x: x.type == 'LABOR-ACC-MOD'))"/>
+                    <t t-if="len_obj > 0">
+                    <div class="row">
+                          <h4>Categoría: Mano de Obra </h4>
+                    </div>
+
+                    <div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center fixed-width-coste">Coste</th>
+                                    <th class="text-center fixed-width-coste">Total</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-set="__manoobra_qty" t-value="0"/>
+                                <t t-set="__manoobra_total_amount" t-value="0"/>
+
+                                <t t-foreach="doc.general_data_report_wizard" t-as="line_manoobra">
+                                   <t t-if="line_manoobra.type == 'LABOR-ACC-MO'">
+                                        <t t-set="__manoobra_qty" t-value="line_manoobra.qty + __manoobra_qty"/>
+                                        <t t-set="__manoobra_total_amount" t-value="line_manoobra.total_amount + __manoobra_total_amount"/>
+                                     <tr>
+                                            <th class="text-center">MO</th>
+                                            <th class="text-center">MO</th>
+                                            <th class="text-center"><span t-esc="round(line_manoobra.qty,2)"/></th>
+                                            <t t-if="line_manoobra.qty != 0">
+                                                <th class="text-center"><span t-esc="round(line_manoobra.total_amount/line_manoobra.qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <t t-if="line_manoobra.qty == 0">
+                                                <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <th class="text-center"><span t-esc="round(line_manoobra.total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+
+                                     </tr>
+                                   </t>
+
+                                    <t t-if="line_manoobra.type == 'LABOR-ACC-MOE'">
+                                        <t t-set="__manoobra_qty" t-value="line_manoobra.qty + __manoobra_qty"/>
+                                        <t t-set="__manoobra_total_amount" t-value="line_manoobra.total_amount + __manoobra_total_amount"/>
+
+                                     <tr>
+                                            <th class="text-center">MOE</th>
+                                            <th class="text-center">MOE</th>
+                                            <th class="text-center"><span t-esc="round(line_manoobra.qty,2)"/></th>
+                                            <t t-if="line_manoobra.qty != 0">
+                                                <th class="text-center"><span t-esc="round(line_manoobra.total_amount/line_manoobra.qty,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <t t-if="line_manoobra.qty == 0">
+                                                <th class="text-center">0 <span t-esc="doc.currency_id.symbol"/></th>
+                                            </t>
+                                            <th class="text-center"><span t-esc="round(line_manoobra.total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                     </tr>
+                                   </t>
+
+
+                                </t>
+
+                                <tr>
+                                    <th class="text-center" colspan="2"><strong>Subtotal Mano de Obra</strong></th>
+
+                                    <th class="text-center"><span t-esc="round(__manoobra_qty,2)"/></th>
+                                    <th class="text-center">
+                                        <span t-if="__manoobra_qty != 0" t-esc="round(__manoobra_total_amount/__manoobra_qty,2)"/>
+                                        <span t-if="__manoobra_qty == 0" >0</span>
+
+                                        <span t-esc="doc.currency_id.symbol"/></th>
+                                    <th class="text-center"><span t-esc="round(__manoobra_total_amount,2)"/> <span t-esc="doc.currency_id.symbol"/></th>
+                                    <t t-set="full_total" t-value="round(full_total + __manoobra_total_amount,2)"/>
+                                 </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    </t>
+                    <!--  MANO DE OBRA END -->
+
+
+
+
+                    <div class="row">
+                           <div class="col-8">
+                           </div>
+
+                            <div class="col-4">
+                                <h4>Total:  <span t-esc="round(full_total,2)"/> <span t-esc="doc.currency_id.symbol"/> </h4>
+                            </div>
+                   </div>
+
+
+                      </div>
+                    </t>
+                </t>
+            </t>
+      </template>
+
+
+    <record id="acc_accumulated_delivery_report" model="ir.actions.report">
+        <field name="name">Accumulated Delivery Report</field>
+        <field name="model">bim.stock.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.accumulated_delivery_report</field>
+        <field name="report_file">base_bim_2.accumulated_delivery_report</field>
+        <field name="binding_model_id" ref="model_bim_stock_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+</odoo>

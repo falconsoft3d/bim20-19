@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_invoice_from_picking_mass,invoice.from.picking.mass,model_invoice_from_picking_mass,base.group_user,1,1,1,1
+access_invoice_from_picking_mass_line,invoice.from.picking.mass.line,model_invoice_from_picking_mass_line,base.group_user,1,1,1,1
+access_invoice_from_picking_mass_wzd,invoice.from.picking.mass.wzd,model_invoice_from_picking_mass_wzd,base.group_user,1,1,1,1
+access_invoice_from_picking_mass_line_add,invoice.from.picking.mass.line.add,model_invoice_from_picking_mass_line_add,base.group_user,1,1,1,1

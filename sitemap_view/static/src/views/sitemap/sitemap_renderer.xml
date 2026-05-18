@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sitemap_view.SitemapRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+        <div t-ref="root" position="before">
+            <div t-ref="sidePanel" class="o_sitemap_panel">
+                <SitemapSidebar
+                    items="this.itemState.items"
+                    parentsSelected="this.parentsSelected"
+                    resModel="this.env.model.root.resModel"/>
+            </div>
+        </div>
+    </t>
+</templates>

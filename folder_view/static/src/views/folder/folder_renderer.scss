@@ -1,0 +1,13 @@
+.o_list_renderer {
+    .o_folder_view & {
+        --ListRenderer-thead-padding-y: #{$table-cell-padding-y-sm};
+        --ListRenderer-table-padding-x: #{$o-horizontal-padding};
+    }
+
+}
+
+.o_folder_view .o_list_buttons {
+    > * {
+        margin: auto 0;
+    }
+}

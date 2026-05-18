@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tree_bim_budget_sample" model="ir.ui.view">
+        <field name="name">view.tree.bim.budget.sample</field>
+        <field name="model">bim.budget.sample</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="city" optional="hide"/>
+                <field name="amount_total" widget="monetary"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_form_bim_budget_sample" model="ir.ui.view">
+        <field name="name">view.form.bim.budget.sample</field>
+        <field name="model">bim.budget.sample</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_done" string="Action done" type="object" class="oe_highlight" invisible="state != 'confirm'"
+                            confirm="New sale quotation with project unit will be created. Are you sure?"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn btn-secondary" invisible="state != 'confirm'"/>
+                    <button name="action_back_to_draft" string="Back to draft" type="object" class="btn btn-secondary" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+                           invisible="orders_count == 0">
+                               <div class="o_field_widget o_stat_info">
+                                   <span class="o_stat_value"><field name="orders_count" widget="statinfo" nolabel="1"/></span>
+                                   <span class="o_stat_text">Orders</span>
+                               </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h3><field name="name" force_save="1"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            <field name="opportunity_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="city" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Budget lines">
+                            <field name="line_ids" nolabel="1" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <control>
+                                        <create string="Add line"/>
+                                    </control>
+                                    <field name="allow_typologies_count" optional="hide"/>
+                                    <field name="allow_typologies" optional="hide"/>
+                                    <field name="unit_id"/>
+                                    <field name="typology_id" required="allow_typologies_count != 0"/>
+                                    <field name="extra_ids" widget="many2many_tags"/>
+                                    <field name="surface"/>
+                                    <field name="price" force_save="1" widget="monetary"/>
+                                    <field name="amount" widget="monetary"/>
+                                </list>
+                            </field>
+                            <group name="totals" col="6" class="mt-2 mt-md-0">
+                                <group colspan="4"/>
+                                 <group class="oe_subtotal_footer oe_right" colspan="2" name="total">
+                                    <field name="amount_total" widget="monetary" colspan="2" readonly="1"/>
+                                </group>
+                            </group>
+
+                        </page>
+                    </notebook>
+                    <chatter/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_bim_budget_sample" model="ir.actions.act_window">
+        <field name="name">Budget samples</field>
+        <field name="res_model">bim.budget.sample</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Crete a new budget sample!
+            </p>
+        </field>
+    </record>
+
+</odoo>

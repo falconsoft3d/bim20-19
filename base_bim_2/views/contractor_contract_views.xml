@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_contractor_contract" model="ir.ui.view">
+        <field name="name">view.form.contractor.contract</field>
+        <field name="model">contractor.contract</field>
+        <field name="arch" type="xml">
+            <form string="Contractor Contract" delete="0" >
+                <header>
+                        <button class="oe_highlight" invisible="state not in ['loaded']" name="to_done" string="Done" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['draft']" name="to_approved" string="Approve" type="object"/>
+                        <button invisible="state not in ['done']" name="to_draft" string="Draft" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="partner_id"
+                                    string="Contacto"
+                                    readonly="state not in ['draft']"/>
+                             <field name="date_start"
+                                    readonly="state not in ['draft']"/>
+                             <field name="date_end"
+                                    readonly="state not in ['draft']"/>
+                             <field name="create_purchase"/>
+                        </group>
+                        <group>
+                            <field name="total" readonly="1"/>
+                            <field name="currency_id" readonly="state not in ['draft']"/>
+                            <field name="company_id" readonly="state not in ['draft']"/>
+                            <field name="user_id" readonly="state not in ['draft']"/>
+                        </group>
+                    </group>
+
+
+                    <notebook>
+                        <page name="line_ids" string="Lines">
+                            <field name="line_ids" widget="one2many_list" readonly="state not in ['draft']">
+                                <list editable="bottom">
+                                    <field name="project_id" widget="many2onebutton"/>
+                                    <field name="budget_id"
+                                           widget="many2onebutton"
+                                           options='{"no_create": true}'
+                                           domain="[('project_id', '=', project_id)]" />
+                                    <field name="concept_id"
+                                           widget="many2onebutton"
+                                           options='{"no_create": true}'
+                                           domain="[
+                                                    ('budget_id', '=', budget_id),
+                                                    ('type', '=', 'departure'),
+                                           ]" />
+                                     <field name="qty" sum="sum" optional="show"/>
+                                    <field name="price_unit" />
+                                    <field name="currency_id" optional="hide"/>
+                                    <field name="amount"
+                                           sum="sum"/>
+                                    <button  name="to_move"
+                                             string="Move"
+                                             type="object"/>
+                                    <field widget="many2onebutton"
+                                            name="stock_picking_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_contractor_contract" model="ir.ui.view">
+        <field name="name">view.tree.contractor.contract</field>
+        <field name="model">contractor.contract</field>
+        <field name="arch" type="xml">
+            <list
+                decoration-info="state == 'draft'"
+            >
+                <field name="name"/>
+                <field name="partner_id"  string="Contacto" optional="show"/>
+                <field name="date_start" optional="show"/>
+                <field name="date_end" optional="show"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+                <field name="user_id" optional="hide"/>
+                <field name="total" sum="sum"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_contractor_contract" model="ir.actions.act_window">
+        <field name="name">Contractor Contract</field>
+        <field name="res_model">contractor.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Contractor Contract!
+            </p>
+        </field>
+    </record>
+    </data>
+</odoo>

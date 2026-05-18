@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_bim_task" model="ir.ui.view">
+            <field name="name">view.form.bim.task</field>
+            <field name="model">bim.task</field>
+            <field name="arch" type="xml">
+                <form delete="0" string="Task">
+                    <header>
+                        <button name="action_cancel" string="Cancel" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'draft'" name="action_work" string="Set to Working" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'work'" name="action_end" string="Set to Done" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="desc" required="1"/>
+                                <field name="project_id" options='{"no_create": 1, "no_open": 1}'/>
+                                <field name="budget_id" options='{"no_create": 1, "no_open": True}'/>
+                                <field domain="[('budget_id','=',budget_id),('type','=','departure')]" name="concept_id" options='{"no_create": 1, "no_open": True}'/>
+                                <field name="load_work"/>
+                            </group>
+                            <group>
+                                <field name="user_resp_id" required="1"/>
+                                <field name="prog_declarada" required="1"/>
+                                <field name="prog_calculada"/>
+                                <field name="budget_auto_create"/>
+                                <field name="project_auto_create"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Timesheets">
+                                <field name="bim_timesheet_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="employee_id" required="1"/>
+                                        <field name="project_id" optional="show"/>
+                                        <field name="state" readonly="1"/>
+                                        <field invisible="True" name="company_id"/>
+                                        <field name="date" optional="show"/>
+                                        <field name="bim_extra_hour" optional="show"/>
+                                        <field name="total_hours" optional="show" sum="Total"/>
+                                        <!-- <field name="total_extra_hours" sum="Total"/> -->
+                                        <field groups="base_bim_2.group_manager_bim,base_bim_2.group_see_cost_bim" name="work_cost" optional="show" sum="Total"/>
+                                    </list></field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" groups="base_bim_2.group_manager_bim,base_bim_2.group_see_cost_bim" name="task_total">
+                                    <field name="amount_total"/>
+                                    <field name="dif_total"/>
+                                    <field name="cost_mo_total"/>
+                                </group>
+                            </page>
+                            <page string="Notes">
+                                <field name="obs" nolabel="1" widget="html"/>
+                            </page>
+                            <page string="Other">
+                                <group>
+                                    <group>
+                                        <field name="user_id" required="1"/>
+                                        <field name="company_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_tree_bim_task" model="ir.ui.view">
+            <field name="name">view.tree.bim.task</field>
+            <field name="model">bim.task</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'draft'" decoration-muted="state == 'cancel'" decoration-primary="state=='work'">
+                    <field name="name"/>
+                    <field name="desc" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="user_resp_id" optional="show"/>
+                    <field name="load_work" optional="show" sum="sum"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id" optional="show"/>
+                    <field name="concept_id" optional="show"/>
+                    <field name="load_work" optional="show"/>
+                    <field name="amount_total" optional="show" sum="sum"/>
+                    <field name="dif_total" optional="show" sum="sum"/>
+                    <field name="prog_declarada" optional="show"/>
+                    <field name="prog_calculada" optional="show"/>
+                    <field groups="base_bim_2.group_manager_bim,base_bim_2.group_see_cost_bim" name="cost_mo_total" optional="show" sum="sum"/>
+
+                    <field name="budget_auto_create" optional="hide"/>
+                    <field name="project_auto_create" optional="hide"/>
+                    <field name="state" optional="show"/>
+                </list></field>
+        </record>
+        <!-- Kanban View -->
+        <record id="view_kanban_bim_task" model="ir.ui.view">
+            <field name="name">Task</field>
+            <field name="model">bim.task</field>
+            <field name="arch" type="xml">
+                <kanban archivable="false" class="o_kanban_small_column o_opportunity_kanban" default_group_by="state" on_create="quick_create" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="desc"/>
+                    <field name="user_id"/>
+                    <field name="project_id"/>
+                    <!--
+                <field name="state"/>
+-->
+                    <templates>
+                        <t t-name="card">
+                            <div>
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a aria-label="Dropdown menu" class="dropdown-toggle o-no-caret btn" data-display="static" data-toggle="dropdown" href="#" role="button" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable">
+                                            <a class="dropdown-item" role="menuitem" type="edit">
+                                                Edit
+                                            </a>
+                                        </t>
+                                        <t t-if="widget.deletable">
+                                            <a class="dropdown-item" role="menuitem" type="delete">
+                                                Delete
+                                            </a>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong>
+                                        <field name="name"/>
+                                    </strong>
+                                    <ul>
+                                        <li>
+                                            <strong>
+                                                Name:
+                                            </strong>
+                                            <field name="name"/>
+                                        </li>
+                                        <li>
+                                            <strong>
+                                                Proyecto:
+                                            </strong>
+                                            <field name="project_id"/>
+                                        </li>
+                                        <li>
+                                            <strong>
+                                                Supervisor:
+                                            </strong>
+                                            <field name="user_id"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban></field>
+        </record>
+        <record id="action_bim_task" model="ir.actions.act_window">
+            <field name="name">Tasks</field>
+            <field name="res_model">bim.task</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new BIM Task!
+                </p></field>
+        </record>
+
+    </data>
+</odoo>

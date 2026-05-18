@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="resource_requisition_wizard_view_form" model="ir.ui.view">
+        <field name="name">resource.requisition.wizard.form</field>
+        <field name="model">resource.requisition.wzd</field>
+        <field name="arch" type="xml">
+            <form>
+                <div class="alert alert-info" invisible="type != 'wo_stock'" role="alert">
+                    <span aria-hidden="true" class="fa fa-exclamation-triangle">
+                        Aviso
+                    </span>
+                    <p>
+                        Compra descontando el Stock en las ubicaciones que selecciones. Ejemplo si seleccionas una Ubicación que tiene stock de ese producto, esa cantidad en stock no se tomará en cuenta para la compra.
+                    </p>
+                </div>
+                <div class="alert alert-warning" invisible="type != 'wi_stock'" role="alert">
+                    <span aria-hidden="true" class="fa fa-exclamation-triangle">
+                        Aviso
+                    </span>
+                    <p>
+                        Compra sin tener en cuenta el Stock Actual. Todo producto del presupuesto se comprará sin importar si hay stock o no.
+                    </p>
+                </div>
+                <group name="bim_req">
+                    <group>
+                        <field invisible="True" name="project_id"/>
+                        <field name="type" widget="radio"/>
+                        <field invisible="type != 'wo_stock'" name="location_type" required="type == 'wo_stock'" widget="radio"/>
+                        <field domain="[                                            ('budget_id', 'in', budget_ids),                                            ('type', '=', 'departure'),                                         ]" name="concept_ids" options='{"no_create": 1, "no_open": 1, "no_quick_create": 1, "no_create_edit": 1}' placeholder="Concepts" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field domain="[('project_id', '=', project_id)]" name="budget_ids" widget="many2many_checkboxes"/>
+                        <field name="categ_id" options="{'no_quick_create':True,'no_create_edit':True,'no_open':True}"/>
+                        <field name="tools"/>
+                        <field name="all_rec"/>
+                        <field name="by_date"/>
+                        <field invisible="by_date == False" name="date_from"/>
+                        <field invisible="by_date == False" name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-primary" name="load_resources" string="Load" type="object"/>
+                    <button class="btn-default" special="cancel" string="Cancel"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="act_resource_requisition_wizard" model="ir.actions.act_window">
+        <field name="name">Load Resources Request</field>
+        <field name="res_model">resource.requisition.wzd</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="resource_requisition_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

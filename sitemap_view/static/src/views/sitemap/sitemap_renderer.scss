@@ -1,0 +1,31 @@
+.o_sitemap_view {
+
+    .o_content {
+        display: flex;
+
+        .o_sitemap_panel {
+            flex: 1 0 20%;
+            padding: 10px;
+            border-right: 2px solid #555;
+            background: #fff;
+            user-select: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            ul {
+                text-wrap: nowrap;
+
+                li {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .o_list_renderer {
+            --ListRenderer-thead-padding-y: #{$table-cell-padding-y-sm};
+            --ListRenderer-table-padding-x: #{$o-horizontal-padding};
+            flex: 0 1 auto;
+            position: relative;
+        }
+    }
+}

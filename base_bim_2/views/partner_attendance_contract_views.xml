@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_form_partner_attendance_contract'" model="ir.ui.view">
+        <field name="name">view.form.partner.attendance.contract</field>
+        <field name="model">partner.attendance.contract</field>
+        <field name="arch" type="xml">
+            <form string="order">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+
+                <sheet>
+
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name" class="oe_inline" colspan="1"/>
+                       </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="partner_id"
+                                   readonly="state not in ['draft', 'cancel']"
+                                   options="{'no_create': True}"/>
+
+                            <field name="project_id"
+                                   readonly="state not in ['draft', 'cancel']"
+                                   options="{'no_create': True}"/>
+
+
+
+                            <field name="hourly_rate"
+                                   readonly="state not in ['draft', 'cancel']"/>
+                            <field name="date_start"
+                                   readonly="state not in ['draft', 'cancel']"
+                                   />
+                            <field name="date_end"
+                                   readonly="state not in ['draft', 'cancel']"
+                                   />
+                        </group>
+                        <group>
+                            <field name="hours_of_rest" readonly="state not in ['draft', 'cancel']"/>
+                            <field name="fixed_cost" readonly="state not in ['draft', 'cancel']"/>
+                        </group>
+                    </group>
+
+
+                    <notebook>
+                        <page name="Lista" string="Lista">
+                            <field name="lines_ids" readonly="state not in ['draft', 'cancel']">
+                                <list editable="bottom" decoration-muted="hourly_rate == 0" >
+                                    <field name="parent_id"
+                                           string="Partner Employee"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="hide"/>
+
+                                    <field name="partner_id"
+                                           domain="[('parent_id', '=', parent_id)]"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="show"/>
+
+                                    <field name="hourly_rate" sum="sum" optional="show"/>
+                                    <field name="state" optional="hide"/>
+                                    <field name="currency_id" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="other" string="Other">
+                        <group>
+                            <group>
+                                <field name="currency_id"/>
+                                <field name="company_id"/>
+                                <field name="user_id"/>
+                            </group>
+                        </group>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_partner_attendance_contract'" model="ir.ui.view">
+        <field name="name">view.tree.partner.attendance.contract</field>
+        <field name="model">partner.attendance.contract</field>
+        <field name="arch" type="xml">
+            <list delete="1"
+                    decoration-muted="state == 'done'"
+                    decoration-danger="state == 'draft'">
+                <field name="name"/>
+                <field name="partner_id" optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="hourly_rate" optional="show"/>
+                <field name="date_start" optional="show"/>
+                <field name="date_end" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="currency_id" optional="show"/>
+                <field name="hours_of_rest" optional="hide"/>
+                <field name="fixed_cost" optional="hide"/>
+                <field name="state" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_partner_attendance_contract'" model="ir.actions.act_window">
+        <field name="name">Partner Attendance Contract</field>
+        <field name="res_model">partner.attendance.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Measurement capture
+            </p>
+        </field>
+    </record>
+
+
+
+</odoo>

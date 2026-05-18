@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_bim_massive_chapter_certification_form" model="ir.ui.view">
+            <field name="name">view.bim.massive.chapter.certification.form</field>
+            <field name="model">bim.massive.chapter.certification</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button class="oe_highlight" invisible="state not in ['draft']" name="action_load_lines" string="Load" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['ready']" name="action_load_consume" string="Load Consume" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['cancelled']" name="action_convert_to_draft" string="Set to Draft" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['ready']" name="action_massive_certification" string="Certify" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['ready','draft']" name="action_cancel" string="Cancel" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'done' or paid_state_id != False" name="action_fix" string="Undo" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'done' or paid_state_id != False" name="action_create_paid_state" string="Create Paid State" type="object"/>
+                        <field name="state" statusbar_visible="draft,ready,done,cancelled" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <widget bg_color="bg-success" invisible="invoice_state == 'pending'" name="web_ribbon" title="Invoiced"/>
+                        <widget bg_color="bg-warning" invisible="invoice_state == 'invoiced'" name="web_ribbon" title="Pending"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="project_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                                <field name="budget_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                                <field name="type" readonly="state != 'draft'"/>
+                                <field name="greater_than_100" readonly="state != 'draft'"/>
+                                <field invisible="paid_state_id == False" name="paid_state_id" readonly="1"/>
+                                <field invisible="True" name="invoice_state"/>
+                            </group>
+                            <group>
+                                <field name="creation_date"/>
+                                <field invisible="state in ['draft', 'ready']" name="certification_date"/>
+                                <field name="user_id" options="{'no_create': True}"/>
+                                <field groups="base.group_multi_company" name="company_id"/>
+                                <field invisible="True" name="company_id"/>
+                                <field name="certif_percent_mass" readonly="state not in ['draft', 'ready']"/>
+                                <field name="acc_certif_percent_mass" readonly="state not in ['draft', 'ready']"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page invisible="type != 'current_stage'" string="Certification by Stages">
+                                <field name="certification_stage_ids" readonly="state in ['done', 'cancelled']">
+                                    <list create="0" decoration-danger="percent_acc > 100" decoration-success="percent_acc == 100" editable="bottom" excel_export="1">
+                                        <field name="parent_id" options="{'no_create': True}" readonly="True" style="background-color:#F5F5F4;"/>
+                                        <field force_save="1" name="stage_id" options="{'no_create': True}" readonly="True" style="background-color:#F5F5F4;"/>
+                                        <field force_save="1" invisible="True" name="certification_line_ids" readonly="True" style="background-color:#F5F5F4;" widget="many2many_tags"/>
+                                        <field force_save="1" name="concept_ids" optional="hide" readonly="True" style="background-color:#F5F5F4;" widget="many2many_tags"/>
+                                        <field name="budget_qty" readonly="True" style="background-color:#F5F5F4;"/>
+                                        <field name="percent_acc" readonly="True" style="background-color:#F5F5F4;"/>
+                                        <field name="certif_percent" readonly="False" style="background-color:white;"/>
+                                        <field name="acc_certif" readonly="False" style="background-color:white;"/>
+                                        <field name="amount_budget" readonly="True" style="background-color:#F5F5F4;" sum="Total"/>
+                                        <field force_save="1" name="amount_certif" readonly="True" style="background-color:#F5F5F4;" sum="Total"/>
+                                    </list></field>
+                            </page>
+                            <page invisible="type != 'fixed'" string="Manual Certification">
+                                <field name="concept_ids" readonly="state in ['done', 'cancelled']">
+                                    <list create="0" decoration-danger="percent_acc > 100" decoration-success="percent_acc == 100" editable="bottom" excel_export="1">
+                                        <field name="parent_id" options="{'no_create': True}" readonly="True" style="background-color:#F5F5F4;"/>
+                                        <field force_save="1" name="certifiable_child_ids" optional="hide" readonly="True" style="background-color:#F5F5F4;" widget="many2many_tags"/>
+                                        <field name="budget_qty" readonly="True" style="background-color:#F5F5F4;"/>
+                                        <field name="percent_acc" readonly="True" style="background-color:#F5F5F4;"/>
+                                        <field name="certif_percent" readonly="False" style="background-color:white;"/>
+                                        <field name="acc_certif" readonly="False" style="background-color:white;"/>
+                                        <field name="amount_budget" readonly="True" style="background-color:#F5F5F4;" sum="Total"/>
+                                        <field force_save="1" name="amount_certif" readonly="True" style="background-color:#F5F5F4;" sum="Total"/>
+                                    </list></field>
+                            </page>
+                            <page invisible="type != 'current_stage'" string="Notes">
+                                <field name="note" placeholder="Add certification note..."/>
+                            </page>
+                            <page invisible="type != 'fixed'" string="Notes">
+                                <field name="note" placeholder="Add certification note..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_bim_massive_chapter_certification_tree" model="ir.ui.view">
+            <field name="name">view.bim.massive.chapter.certification.tree</field>
+            <field name="model">bim.massive.chapter.certification</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <list string="Massive Certification">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="budget_id"/>
+                    <field name="creation_date"/>
+                    <field name="certification_date"/>
+                    <field name="type"/>
+                    <field name="state"/>
+                    <field groups="base.group_multi_company" name="company_id" optional="hide"/>
+                    <field name="total_certif" sum="Total"/>
+                    <field name="percent_certif"/>
+                    <field name="paid_state_id" optional="show"/>
+                    <field decoration-success="invoice_state == 'invoiced'" decoration-warning="invoice_state == 'pending'" name="invoice_state" optional="show" widget="badge"/>
+                </list></field>
+        </record>
+        <record id="bim_massive_chapter_certification_action" model="ir.actions.act_window">
+            <field name="name">Massive Chapter Certification</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.massive.chapter.certification</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Certify the first Budget!
+                </p></field>
+        </record>
+        <menuitem action="bim_massive_chapter_certification_action" groups="base_bim_2.group_certify_chapters" id="bim_massive_chapter_certification_submenu" name="Massive Chapter Certification" parent="submenu_bim_certification" sequence="11"/>
+    </data>
+</odoo>

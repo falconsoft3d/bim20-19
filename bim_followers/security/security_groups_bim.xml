@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+        <!-- bim.expense -->
+        <record id="bim_follower_category" model="ir.module.category">
+            <field name="name">Bim Follower</field>
+            <field name="description">Bim Follower</field>
+            <field name="sequence" eval="90"/>
+        </record>
+
+        <record id="group_bim_follower" model="res.groups">
+            <field name="name">Bim Only Follower</field>
+            <field name="category_id" ref="bim_follower_category"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_bim_follower_all" model="res.groups">
+            <field name="name">Bim All Follower</field>
+            <field name="category_id" ref="bim_follower_category"/>
+        </record>
+
+
+        <!-- Solo seguidores o creador -->
+        <!-- para bim.project -->
+        <record id="rule_bim_project_followers_only" model="ir.rule">
+            <field name="name">bim.project - ver solo si soy seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_project"/>
+            <field name="domain_force">
+                ['|', ('message_partner_ids', 'in', [user.partner_id.id]), ('create_uid', '=', user.id)]
+            </field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower'))]"/>
+            <!-- que todos los usuarios lo agreguen a sus grupos de seguridad -->
+
+        </record>
+
+        <!-- Todos los seguidores -->
+        <record id="rule_bim_project_followers_all" model="ir.rule">
+            <field name="name">bim.project - ver todos sin importar que sea seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_project"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower_all'))]"/>
+        </record>
+
+
+
+        <!-- bim.budget -->
+        <!-- Solo seguidores o creador -->
+        <record id="rule_bim_budget_followers_only" model="ir.rule">
+            <field name="name">bim.budget - ver solo si soy seguidor o creador</field>
+            <field name="model_id" ref="base_bim_2.model_bim_budget"/>
+            <field name="domain_force">
+                 ['|', ('project_id.message_partner_ids', 'in', [user.partner_id.id]), ('create_uid', '=', user.id)]
+            </field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower'))]"/>
+        </record>
+
+        <!-- Todos los seguidores -->
+        <record id="rule_bim_budget_followers_all" model="ir.rule">
+            <field name="name">bim.budget - ver si soy seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_budget"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower_all'))]"/>
+        </record>
+
+        <!-- bim.massive.certification.by.line -->
+        <!-- Solo seguidores o creador -->
+        <record id="rule_bim_massive_certification_by_line_followers_only" model="ir.rule">
+            <field name="name">bim.massive.certification.by.line - ver solo si soy seguidor o creador</field>
+            <field name="model_id" ref="base_bim_2.model_bim_massive_certification_by_line"/>
+            <field name="domain_force">
+                ['|', ('project_id.message_partner_ids', 'in', [user.partner_id.id]), ('create_uid', '=', user.id)]
+            </field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower'))]"/>
+        </record>
+
+        <!-- Todos los seguidores -->
+        <record id="rule_bim_massive_certification_by_line_followers_all" model="ir.rule">
+            <field name="name">bim.massive.certification.by.line - ver todos sin importar que sea seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_massive_certification_by_line"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower_all'))]"/>
+        </record>
+
+        <!-- bim.purchase.requisition -->
+        <!-- Solo seguidores o creador -->
+        <record id="rule_bim_purchase_requisition_followers_only" model="ir.rule">
+            <field name="name">bim.purchase.requisition - ver solo si soy seguidor o creador</field>
+            <field name="model_id" ref="base_bim_2.model_bim_purchase_requisition"/>
+            <field name="domain_force">
+              ['|', ('project_id.message_partner_ids', 'in', [user.partner_id.id]), ('create_uid', '=', user.id)]
+            </field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower'))]"/>
+        </record>
+
+        <!-- Todos los seguidores -->
+        <record id="rule_bim_purchase_requisition_followers_all" model="ir.rule">
+            <field name="name">bim.purchase.requisition - ver todos sin importar que sea seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_purchase_requisition"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower_all'))]"/>
+        </record>
+
+
+        <!-- bim.purchase.services -->
+        <!-- Solo seguidores o creador -->
+        <record id="rule_bim_purchase_services_followers_only" model="ir.rule">
+            <field name="name">bim.purchase.services - ver solo si soy seguidor o creador</field>
+            <field name="model_id" ref="base_bim_2.model_bim_purchase_services"/>
+            <field name="domain_force">
+               ['|', ('project_id.message_partner_ids', 'in', [user.partner_id.id]), ('create_uid', '=', user.id)]
+            </field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower'))]"/>
+        </record>
+
+
+
+        <!-- bim.concepts -->
+        <!-- Todos los seguidores -->
+        <record id="rule_bim_purchase_services_followers_all" model="ir.rule">
+            <field name="name">bim.purchase.services - ver todos sin importar que sea seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_purchase_services"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower_all'))]"/>
+        </record>
+
+        <!-- Solo seguidores o creador -->
+
+        <record id="rule_bim_concepts_followers_only" model="ir.rule">
+            <field name="name">bim.concepts - ver solo si soy seguidor o creador</field>
+            <field name="model_id" ref="base_bim_2.model_bim_concepts"/>
+            <field name="domain_force">
+                ['|', ('budget_id.project_id.message_partner_ids', 'in', [user.partner_id.id]), ('create_uid', '=', user.id)]
+            </field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower'))]"/>
+        </record>
+
+        <!-- Todos los seguidores -->
+        <record id="rule_bim_concepts_followers_all" model="ir.rule">
+            <field name="name">bim.concepts - ver todos sin importar que sea seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_concepts"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower_all'))]"/>
+        </record>
+
+
+        <!-- bim.paidstate -->
+        <!-- Solo seguidores o creador -->
+        <record id="rule_bim_paidstate_followers_only" model="ir.rule">
+            <field name="name">bim.paidstate - ver solo si soy seguidor o creador</field>
+            <field name="model_id" ref="base_bim_2.model_bim_paidstate"/>
+            <field name="domain_force">
+                ['|', ('project_id.message_partner_ids', 'in', [user.partner_id.id]), ('create_uid', '=', user.id)]
+            </field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower'))]"/>
+        </record>
+
+        <!-- Todos los seguidores -->
+        <record id="rule_bim_paidstate_followers_all" model="ir.rule">
+            <field name="name">bim.paidstate - ver todos sin importar que sea seguidor</field>
+            <field name="model_id" ref="base_bim_2.model_bim_paidstate"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <!-- limita a usuarios normales; ajusta el grupo a tu caso -->
+            <field name="groups" eval="[(4, ref('bim_followers.group_bim_follower_all'))]"/>
+        </record>
+
+
+
+
+
+
+        <record id="base_bim_2.rule_see_all_projects" model="ir.rule">
+            <field name="active" eval="False"/>
+        </record>
+
+       <record id="base_bim_2.rule_see_owner_project" model="ir.rule">
+            <field name="active" eval="False"/>
+        </record>
+
+       <record id="base_bim_2.rule_see_owner_budget" model="ir.rule">
+            <field name="active" eval="False"/>
+       </record>
+
+      <record id="base_bim_2.rule_see_all_budgets" model="ir.rule">
+            <field name="active" eval="False"/>
+      </record>
+
+
+
+
+</odoo>

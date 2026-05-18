@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- bim.file.import form view -->
+    <record id="bim_file_import_view_form" model="ir.ui.view">
+        <field name="name">bim.file.import.view.form</field>
+        <field name="model">bim.file.import</field>
+        <field name="arch" type="xml">
+            <form string="Import BIM File">
+                <group>
+                    <group>
+                        <field invisible="True" name="filename"/>
+                        <field filename="filename" name="bim_file"/>
+                        <field name="bim_type" widget="radio"/>
+                        <field invisible="from_action == True" name="project_id" required="from_action == False"/>
+                    </group>
+                    <group>
+                        <field invisible="bim_type in ['exjson']" name="import_type" readonly="from_action == True" widget="radio"/>
+                        <field invisible="import_type == 'update' or from_action == True" name="budget_name" required="import_type == 'create'"/>
+                        <field invisible="import_type == 'create' or from_action == True" name="budget_id" required="import_type == 'update'"/>
+                        <field invisible="bim_type in ['revit_en', 'revit_es', 'exjson']" name="boq_template_id" required="bim_type == 'boq'"/>
+                        <field invisible="True" name="from_action"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-secondary" name="cancel" special="cancel" string="Cancel"/>
+                    <button class="btn-primary" name="import_bim_file" string="Import" type="object"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_import_file_action" model="ir.actions.act_window">
+        <field name="name">Import BIM files</field>
+        <field name="res_model">bim.file.import</field>
+        <field name="binding_model_id" ref="model_bim_budget"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">form</field>
+        <field name="context">{'default_budget_id': active_id, 'default_from_action': True}</field>
+    </record>
+    <record id="bim_import_file_menu_action" model="ir.actions.act_window">
+        <field name="name">Import BIM files</field>
+        <field name="res_model">bim.file.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">form</field>
+    </record>
+    <menuitem action="bim_import_file_menu_action" id="menu_bim_revit_import" name="Import Bim File" parent="menu_bim_import_bim" sequence="119"/>
+</odoo>

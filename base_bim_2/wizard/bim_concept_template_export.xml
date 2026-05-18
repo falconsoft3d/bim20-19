@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_concept_template_export_view_form" model="ir.ui.view">
+        <field name="name">bim.concept.template.export.view.form</field>
+        <field name="model">bim.concept.template.export</field>
+        <field name="arch" type="xml">
+            <form string="Bim Concept Template Export">
+                <group>
+                    <field invisible="True" name="company_id"/>
+                    <field invisible="True" name="concept_template_ids"/>
+                </group>
+                <group>
+                    <group>
+                        <field force_save="1" name="export_type"/>
+                    </group>
+                    <group>
+                        <field invisible="export_type != 'product'" name="price_type" required="export_type == 'product'"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-secondary" name="cancel" special="cancel" string="Cancel"/>
+                    <button class="btn-primary" name="export_csv_from_url" string="Export" type="object"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_concept_template_export_action" model="ir.actions.act_window">
+        <field name="name">Bim Concept Template Export</field>
+        <field name="res_model">bim.concept.template.export</field>
+        <field name="binding_model_id" ref="model_bim_concept_template"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+    <record id="bim_budget_export_action" model="ir.actions.act_window">
+        <field name="name">Bim Budget Export</field>
+        <field name="res_model">bim.concept.template.export</field>
+        <field name="binding_model_id" ref="model_bim_budget"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">form</field>
+    </record>
+    <record id="bim_product_csv_export_action" model="ir.actions.act_window">
+        <field name="name">Bim Products Csv Export</field>
+        <field name="res_model">bim.concept.template.export</field>
+        <field name="binding_model_id" ref="model_product_template"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
+</odoo>

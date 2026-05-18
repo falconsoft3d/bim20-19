@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_certification_report_wizard_form" model="ir.ui.view">
+        <field name="name">bim.certification.report.wizard.form</field>
+        <field name="model">bim.certification.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget">
+                <group>
+                    <group>
+                        <field invisible="True" name="budget_id"/>
+                        <field name="display_type" required="1" widget="radio"/>
+                    </group>
+                    <group>
+                        <field invisible="display_type in ['percentage', 'quantity']" name="text"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-primary" invisible="display_type in ['_percentage_', '_amount_']" name="check_report" string="Print" type="object"/>
+                    <button class="btn-primary" name="check_report_xls" string="Print Excel" type="object"/>
+                    <button class="btn-default" special="cancel" string="Cancel"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_certification_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Certification Report</field>
+        <field name="res_model">bim.certification.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

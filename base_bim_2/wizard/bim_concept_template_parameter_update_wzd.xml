@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_concept_template_parameter_update_wizard_form" model="ir.ui.view">
+        <field name="name">bim.concept.template.parameter.update.wizard.form</field>
+        <field name="model">bim.concept.template.parameter.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Concept Parameters Update">
+                <group name="main">
+                    <group name="left">
+                        <field name="concept_id" force_save="1"/>
+                    </group>
+                </group>
+                <separator string="Parameters"/>
+                <field name="attribute_line_ids" nolabel="1" options="{'no_create': True}">
+                    <list editable="bottom" create="0" delete="0">
+                        <field name="parameter_id" options="{'no_create': True}"/>
+                        <field name="parameter_value_id" options="{'no_create': True}" readonly="0"/>
+                    </list>
+                </field>
+                <footer>
+                    <button string="Continue" name="action_apply_changes"  type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="bim_wizard_concept_template_parameter_update_action" model="ir.actions.act_window">
+        <field name="name">Update Concept Parameters</field>
+        <field name="res_model">bim.concept.template.parameter.update.wizard</field>
+        <field name="view_mode">form</field>
+       <field name="target">new</field>
+    </record>
+
+</odoo>

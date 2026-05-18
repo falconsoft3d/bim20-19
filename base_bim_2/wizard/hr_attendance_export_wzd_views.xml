@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_attendance_export_wzd_form" model="ir.ui.view">
+            <field name="name">hr.attendance.export.wzd.form</field>
+            <field name="model">hr.attendance.export.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Exportar Asistencias">
+                    <group>
+                        <field name="type"
+                               required="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_export"
+                                string="Exportar"
+                                type="object"
+                                class="btn-primary"
+                                />
+                        <button string="Cerrar"
+                                class="btn-secondary"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción para abrir el wizard desde las asistencias -->
+        <record id="action_hr_attendance_export_wzd" model="ir.actions.act_window">
+            <field name="name">Exportar a Excel</field>
+            <field name="res_model">hr.attendance.export.wzd</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="binding_view_types">list</field>
+        </record>
+    </data>
+</odoo>

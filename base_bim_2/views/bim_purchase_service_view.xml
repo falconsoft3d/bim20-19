@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_bim_purchase_services" model="ir.ui.view">
+            <field name="name">view.form.bim.purchase.services</field>
+            <field name="model">bim.purchase.services</field>
+            <field name="arch" type="xml">
+                <form string="Service Request">
+                    <header>
+                        <button class="oe_highlight" confirm="Are you sure to approve this request?"
+                                invisible="state not in ['nuevo','finalizado']"
+                                name="action_approve"
+                                string="Approve" type="object"/>
+
+                        <button context="{'default_service_id': id}"
+                                invisible="state not in ['nuevo']" name="%(action_purchase_service_wizard)d"
+                                string="Load Services" type="action"/>
+
+
+
+                        <button confirm="Are you sure to set to New?" invisible="state not in ['cancelado']"
+                                name="action_draft" string="Set to New" type="object"/>
+
+                        <button invisible="state not in ['aprobado']"
+                                class="btn-primary"
+                                name="%(base_bim_2.action_create_purchase_wizard)d" string="Purchase" type="action"/>
+
+                        <button confirm="Are you sure to finish this request?"
+                                invisible="state not in ['aprobado']"
+                                name="action_done" string="Finish" type="object"/>
+
+                        <button name="action_export_xls" string="Export XLS" type="object"/>
+                        <button confirm="Are you sure to cancel?" invisible="state not in ['aprobado']" name="action_cancel" string="Cancel" type="object"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-shopping-basket" invisible="purchase_count == 0" name="action_view_purchases" type="object">
+                                <field name="purchase_count" string="Purchases" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-copy" invisible="agree_count == 0" name="action_view_agreement" type="object">
+                                <field name="agree_count" string="Purchase Agreements" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="user_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in ['nuevo', 'aprobado']" required="1"/>
+                                <field invisible="context.get('purchase') == True" name="project_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in ['nuevo', 'aprobado']" required="context.get('purchase') == False"/>
+                                <field name="analytic_id" readonly="state not in ['nuevo', 'aprobado']"/>
+                                <field groups="base.group_multi_company" name="company_id" readonly="state not in ['nuevo', 'aprobado']"/>
+                                <field invisible="True" name="company_id"/>
+                                <field name="separate" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="date_begin" readonly="state not in ['nuevo', 'aprobado']" required="1"/>
+                                <field name="date_prevista" readonly="state not in ['nuevo', 'aprobado']" required="1"/>
+                                <field name="buy_more" readonly="1"/>
+                                <field name="amount_total"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="listado_servicios" string="Service List">
+                                <field name="product_ids" readonly="state not in ['nuevo', 'aprobado']">
+                                    <list editable="bottom">
+                                        <field name="project_id" optional="hide" widget="many2one"/>
+                                        <field name="budget_id" optional="hide"
+                                               domain="[('project_id', '=', project_id)]"
+                                               options="{'no_create_edit': True}" />
+                                        <field name="bim_concepts_id" optional="hide"/>
+                                        <field domain="[('type','=','service'),('purchase_ok', '=', True)]"
+                                               name="product_id" optional="show"
+                                               options="{'no_create_edit': True}" required="1"/>
+                                        <field name="um_id" options="{'no_create_edit': True}" readonly="solo_lectura == True"/>
+                                        <field name="partner_ids" options='{"no_create": 1, "no_open": 1}' widget="many2many_tags"/>
+                                        <field name="analytic_id" optional="hide" />
+                                        <field name="quant" readonly="solo_lectura == True" required="1" sum="qty"/>
+                                        <field name="cost"/>
+                                        <field name="subtotal" sum="subt"/>
+                                        <field force_save="1" optional="hide" name="qty_done"/>
+                                        <field name="qty_to_process" optional="hide"/>
+                                        <field optional="hide" name="qty_purchase"/>
+                                        <field optional="hide" name="sent_to_production"/>
+                                        <field name="obs" optional="hide" />
+                                        <field name="done" optional="hide"/>
+                                        <field optional="hide" name="solo_lectura"/>
+                                        <field optional="hide" name="company_id"/>
+                                    </list></field>
+                            </page>
+                        </notebook>
+                        <field name="obs" placeholder="Notes.." readonly="state not in ['nuevo', 'aprobado']"/>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_tree_bim_purchase_service" model="ir.ui.view">
+            <field name="name">view.tree.bim.purchase.services</field>
+            <field name="model">bim.purchase.services</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state=='nuevo'" decoration-muted="state=='cancelled'" delete="0">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="date_begin"/>
+                    <field name="date_prevista"/>
+                    <field name="user_id"/>
+                    <field name="amount_total"/>
+                    <field name="state"/>
+                </list></field>
+        </record>
+        <record id="action_bim_purchase_services" model="ir.actions.act_window">
+            <field name="name">Service Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.purchase.services</field>
+            <field name="view_mode">list,form</field>
+            <!--<field name="view_id" ref="view_tree_bim_purchase_requisition"/>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new Service Request!
+                </p></field>
+        </record>
+        <!-- Lines -->
+        <record id="view_tree_product_serv_list_req" model="ir.ui.view">
+            <field name="name">view.tree.product.serv.list.req</field>
+            <field name="model">service.list</field>
+            <field name="arch" type="xml">
+                <list
+                        decoration-danger="state=='nuevo'"
+                        create="0" delete="0" edit="0">
+                    <field name="project_id" optional="show" widget="many2one"/>
+                    <field name="budget_id"  optional="show" widget="many2one"/>
+                    <field name="service_id" optional="show" widget="many2one"/>
+                    <field name="bim_concepts_id" optional="show" widget="many2one"/>
+                    <field name="product_id" optional="show" options="{'no_create_edit': True}" widget="many2one"/>
+                    <field name="um_id" optional="show"/>
+                    <field name="partner_ids" optional="show" widget="many2many_tags"/>
+                    <field name="analytic_id" optional="hide"/>
+                    <field name="quant" optional="show" sum="qty"/>
+                    <field name="cost" optional="show"/>
+                    <field name="subtotal" optional="show" sum="subt"/>
+                    <field name="qty_to_process" optional="show"/>
+                    <field name="obs" optional="show"/>
+                    <field name="done" optional="hide"/>
+                    <field name="company_id" optional="hide" widget="many2one"/>
+                    <field name="state" optional="show"/>
+                </list></field>
+        </record>
+        <record id="action_tree_product_serv_list_req" model="ir.actions.act_window">
+            <field name="name">Service Request lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.list</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_tree_product_serv_list_req"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new Service Request!
+                </p></field>
+        </record>
+        <!-- Lines -->
+        <record id="view_tree_service_list" model="ir.ui.view">
+            <field name="name">view.tree.bim.service.product.list</field>
+            <field name="model">service.list</field>
+            <field name="arch" type="xml">
+                <list create="0" decoration-muted="done == True" delete="0" edit="0">
+                    <field name="product_id"/>
+                    <field name="um_id"/>
+                    <field name="quant"/>
+                    <field name="project_id"/>
+                    <field name="service_id"/>
+                    <field name="done"/>
+                </list></field>
+        </record>
+        <record id="view_service_list_search" model="ir.ui.view">
+            <field name="name">view.service.list.search</field>
+            <field name="model">service.list</field>
+            <field name="arch" type="xml">
+                <search string="Search Services">
+                    <field name="project_id"/>
+                    <field name="service_id"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by': 'project_id'}" name="group_project" string="Project"/>
+                        <filter context="{'group_by': 'service_id'}" name="group_requisition" string="Service Request"/>
+                    </group>
+                </search></field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="employee_discipline_view_tree" model="ir.ui.view">
+            <field name="name">employee.discipline.view.tree</field>
+            <field name="model">employee.discipline</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="employee_discipline_view_form" model="ir.ui.view">
+            <field name="name">employee.discipline.view.form</field>
+            <field name="model">employee.discipline</field>
+            <field name="arch" type="xml">
+                <form string="Employee Discipline">
+                    <sheet>
+                     <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                     </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="employee_discipline_action" model="ir.actions.act_window">
+            <field name="name">Employee discipline</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.discipline</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+         <menuitem action="employee_discipline_action"
+                   id="submenu_employee_discipline" name="Employee Disciplines"
+                   parent="menu_employee" sequence="1"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_form" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!-- <field name="payment_term_id" position="after">
+                    <field name="bim_project_id" options='{"no_create": 1, "no_open": 1}'/>
+                    <field name="budget_id" options='{"no_create": 1, "no_open": 1}' groups="base_bim_2.group_budget_concept_documents"/>
+                    <field name="concept_id" options='{"no_create": 1, "no_open": 1}' groups="base_bim_2.group_budget_concept_documents"/></field>-->
+                <div name="button_box" position="inside">
+                    <button class="oe_stat_button" groups="base_bim_2.group_user_bim" icon="fa-money" invisible="budget_count == 0" name="action_view_budgets" string="Budgets" type="object">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="budget_count" nolabel="1" widget="statinfo"/>
+                            </span>
+                            <span class="o_stat_text">
+                                Budgets
+                            </span>
+                        </div>
+                    </button>
+                </div></field>
+        </record>
+        <!--
+        <record id="sale_order_tree" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="bim_project_id"/>
+                    <field name="budget_id" groups="base_bim_2.group_budget_concept_documents"/>
+                    <field name="concept_id" groups="base_bim_2.group_budget_concept_documents"/></field></field>
+        </record>
+-->
+        <!--        <record id="sale_order_tree2" model="ir.ui.view">
+            <field name="name">sale.order.tree2</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="bim_project_id"/>
+                    <field name="budget_id" groups="base_bim_2.group_budget_concept_documents"/>
+                    <field name="concept_id" groups="base_bim_2.group_budget_concept_documents"/></field></field>
+        </record>-->
+    </data>
+</odoo>

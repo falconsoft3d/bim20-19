@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- uom.uom inherit form view -->
+    <record id="product_uom_form_view" model="ir.ui.view">
+        <field name="name">uom.uom.inherit.view.form</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="alt_names" placeholder="M,m,mtr,Mtr"/>
+                <field name="default_bim_unit" />
+            </field>
+        </field>
+    </record>
+
+    <record id="product_uom_tree_view" model="ir.ui.view">
+        <field name="name">uom.uom.tree</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="alt_names" placeholder="M,m,mtr,Mtr"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_uom_categ_form_view" model="ir.ui.view">
+        <field name="name">uom.category.form</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='uom_ids']/list/field[@name='name']" position="after">
+               <field name="alt_names" placeholder="M,m,mtr,Mtr"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

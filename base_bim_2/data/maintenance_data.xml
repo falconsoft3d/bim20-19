@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="maintenance_type_task_preventivo" model="maintenance.type.task">
+            <field name="name">Preventivo</field>
+        </record>
+
+        <record id="maintenance_type_task_correctivo" model="maintenance.type.task">
+            <field name="name">Correctivo</field>
+        </record>
+
+        <record id="maintenance_type_task_predictivo" model="maintenance.type.task">
+            <field name="name">Predictivo</field>
+        </record>
+
+        <record id="maintenance_type_task_mejora" model="maintenance.type.task">
+            <field name="name">Mejora</field>
+        </record>
+
+        <record id="maintenance_category" model="maintenance.category">
+            <field name="name">Todos</field>
+        </record>
+
+         <record id="maintenance_location" model="maintenance.location">
+            <field name="name">General</field>
+        </record>
+
+        <record id="maintenance_part_general" model="maintenance.part">
+            <field name="name">General</field>
+        </record>
+
+    </data>
+</odoo>

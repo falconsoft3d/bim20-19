@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_other_expense" model="ir.ui.view">
+        <field name="name">view.form.other.expense</field>
+        <field name="model">other.expense</field>
+        <field name="arch" type="xml">
+            <form delete="0" string="Report">
+                <header>
+                    <button invisible="state not in ['draft', 'cancel']"
+                             class="oe_highlight"
+                            name="action_to_done" string="To Done" type="object"/>
+
+                    <button invisible="state not in ['done']"
+                             class="oe_highlight"
+                            name="action_to_draft" string="To Draft" type="object"/>
+
+                    <button invisible="state not in ['draft']"
+                            name="action_to_cancel" string="To Cancel" type="object"/>
+
+                    <field name="state" widget="statusbar"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partnerp_id"
+                                   readonly="state not in ['draft']"
+                                   options="{'no_open': True, 'no_create': True}"/>
+                            <field name="date"
+                                   readonly="state not in ['draft']"
+                            />
+
+                        </group>
+                        <group>
+                            <field name="user_id"
+                                   readonly="state not in ['draft']"
+                                   options="{'no_open': True, 'no_create': True}"/>
+                            <field name="company_id"
+                                   options="{'no_open': True, 'no_create': True}"
+                                   readonly="state not in ['draft']" />
+                        </group>
+                    </group>
+
+                    <field name="line_ids" nolabel="1" readonly="state not in ['draft']">
+                        <list editable="bottom">
+                            <field name="product_id"
+
+                                   options="{'no_open': True, 'no_create': True}"/>
+
+                            <field name="name" optional="show"/>
+                            <field name="project_id"  options="{'no_open': True, 'no_create': True}"/>
+                            <field name="budget_id"  options="{'no_open': True, 'no_create': True}"/>
+                            <field name="concept_id"  options="{'no_open': True, 'no_create': True}"/>
+
+                            <field name="currency_id"
+                                   optional="hide"
+                            />
+
+                            <field name="date"
+                                   optional="hide"
+                            />
+
+                            <field name="qty"
+                                   sum="sum"/>
+                            <field name="price_unit"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"
+                            />
+                            <field name="total"
+                                   widget="monetary" options="{'currency_field': 'currency_id'}"
+                                   sum="sum"/>
+                        </list>
+                    </field>
+
+                </sheet>
+                <chatter/>
+            </form></field>
+    </record>
+
+    <record id="view_tree_other_expense" model="ir.ui.view">
+        <field name="name">view.tree.other.expense</field>
+        <field name="model">other.expense</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'draft'"
+                  decoration-muted="state == 'cancel'"
+                  decoration-primary="state=='done'">
+                <field name="name"/>
+                <field name="partnerp_id"/>
+                <field name="user_id"/>
+                <field name="company_id"/>
+                <field name="currency_id" optional="show"/>
+                <field name="date"/>
+                <field name="total"
+                       sum="Total"
+                       widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="state"/>
+            </list></field>
+    </record>
+
+    <record id="action_other_expense" model="ir.actions.act_window">
+        <field name="name">Other Expense</field>
+        <field name="res_model">other.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new attendance massive summary!
+            </p></field>
+    </record>
+</odoo>

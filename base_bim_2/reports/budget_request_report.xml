@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+         <template id="base_bim_2.budget_request_report">
+            <t t-call="web.html_container">
+              <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                  <div class="page">
+                    <style  type="text/css">
+                      th, td {
+                        vertical-align: middle !important;
+                      }
+                    </style>
+                    <h3 class="text-center">SOLCITUD DE PRESUPUESTO</h3>
+
+
+
+                    <table class="table table-sm" style="width:100%;">
+                        <tr>
+                            <th class="text-center" style="border:1px solid black;width:40%;">CÓDIGO</th>
+                            <th class="text-center text-uppercase" style="border:1px solid black;width:40%;">PROYECTO</th>
+                            <th class="text-center" style="border:1px solid black;width:20%;">FECHA IMPRESIÓN</th>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><span t-field="o.name"/></td>
+                            <td class="text-center"><span t-field="o.project_id.name"/></td>
+                            <td class="text-center"><span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/></td>
+                        </tr>
+                    </table>
+
+
+                   <div>
+                        <t t-raw="o.obs"/>
+                    </div>
+
+
+                    <div class="row">
+                        <table class="table table-sm main_table" style="font-size:10px;width:100%;">
+                            <thead>
+                                <tr>
+                                    <th style="width:15%;">CÓDIGO</th>
+                                    <th>DESCRIPCIÓN</th>
+                                    <th class="text-center">CANTIDAD</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            <t t-set="total" t-value="0"/>
+                                <t t-set="lines" t-value="o.lines_apu_ids"/>
+                                <t t-foreach="lines" t-as="line" class="active">
+                                        <tr class="parent_row">
+                                            <td class="text-left"><span t-field="line.bim_concept_template_id.code"/></td>
+                                            <td class="text-left"><span t-field="line.bim_concept_template_id.name"/></td>
+                                             <td class="text-left"><span t-field="line.quantity"/></td>
+                                        </tr>
+                                </t>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!-- firma del usuario y del responsable de la empresa -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-center">
+                                <!-- buscamos el signature del usuario -->
+                                <t t-set="signature" t-value="o.user_id.signature"/>
+                                <p>_____________________________</p>
+                                <p><span t-esc="o.user_id.name"/></p>
+                                <p>Firma del solicitante</p>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="text-center">
+                                <t t-set="signature" t-value="o.a_user_id.signature"/>
+                                <p>_____________________________</p>
+                                <p><span t-esc="o.a_user_id.name"/></p>
+                                <p>Firma del responsable</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </t>
+          </t>
+        </t>
+    </template>
+    </data>
+</odoo>

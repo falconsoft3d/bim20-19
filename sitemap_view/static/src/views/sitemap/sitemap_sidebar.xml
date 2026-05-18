@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sitemap_view.Sidebar">
+        <ul class="list-group list-group-flush">
+            <t t-foreach="items" t-as="item" t-key="item_index">
+                <SitemapSidebarItem
+                    item="item"
+                    padding="padding"
+                    parent="this.props.parent"
+                    parentsSelected="this.props.parentsSelected"
+                    container="this"
+                    resModel="this.props.resModel"/>
+            </t>
+        </ul>
+    </t>
+
+    <t t-name="sitemap_view.Sidebar.Item">
+        <li t-attf-class="list-group-item {{this.state.selected ? 'active': ''}}" t-attf-style="padding-left: #{padding}rem;" t-on-click.stop="toggleSelect">
+            <i t-if="children &amp;&amp; !(this.state.selected || this.state.child_selected)" class="fa fa-fw fa-caret-right"/>
+            <i t-elif="children &amp;&amp; (this.state.selected || this.state.child_selected)" class="fa fa-fw fa-caret-down"/>
+            <i t-else="" class="fa fa-fw"/>
+            <t t-out="item.name"/>
+        </li>
+        <SitemapSidebar t-if="children &amp;&amp; (this.state.selected || this.state.child_selected)"
+            resModel="this.props.resModel"
+            items="children"
+            parent="this"
+            parentsSelected="this.props.parentsSelected"
+            padding="padding + 1"/>
+    </t>
+</templates>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_inherit_hr_employee_form" model="ir.ui.view">
+        <field name="name">view.inherit.hr.employee_form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="projects" string="Projects">
+                    <field name="hr_employee_project_ids">
+                        <list editable="bottom">
+                                <field name="project_id" options='{"no_create": 1, "no_open": 1}' required="1"/>
+                                <field name="site_code" required="1"/>
+                            </list>
+                    </field>
+                </page>
+                <page name="Costs" string="Costs">
+                    <field name="hr_employee_project_cost_ids">
+                        <list editable="bottom">
+                                <field name="begin_date"/>
+                                <field name="end_date"/>
+                                <field name="cost" sum="sum"/>
+                            </list>
+                    </field>
+                </page>
+                <page name="Bim">
+                    <group>
+                        <group>
+                            <field name="include_for_bim"/>
+                            <field name="hour_cost"/>
+                            <field name="code_bim"/>
+                            <field name="main_code"/>
+                            <field name="employee_category_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="employee_specialty_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="bim_pcp_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="employee_location_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="employee_bim_payroll_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="level_study_id" options="{'no_open': True, 'no_create': True}"/>
+
+                        </group>
+                        <group>
+                            <field name="default_bim_project" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="bim_resource_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="type_d" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="epi_location_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="bim_resource_template_id"/>
+                            <field name="employee_dcategory_id" options="{'no_open': True}"/>
+                        </group>
+                    </group>
+                </page>
+                <page name="Size">
+                    <group>
+                        <group>
+                            <field name="pant_size" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="shirt_size" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="shoes_size" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="jacket_size" options="{'no_open': True, 'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="gloves_size" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="vest_size" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="tshirt_size" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="polo_size" options="{'no_open': True, 'no_create': True}"/>
+                        </group>
+                    </group>
+                </page>
+                <page name="bim-portal" string="BIM Portal">
+                    <group>
+                        <group>
+                            <field name="bim_user" />
+                            <field name="bim_password" />
+                        </group>
+                        <group>
+                            <field name="bim_portal_access" />
+                        </group>
+                    </group>
+                </page>
+
+
+            </notebook></field>
+    </record>
+    <record id="view_inherit_hr_employee_tree" model="ir.ui.view">
+        <field name="name">view.inherit.hr.employee_tree</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="code_bim" optional="show"/>
+                <field name="main_code" optional="hide"/>
+                <field name="employee_category_id" optional="hide"/>
+                <field name="employee_specialty_id" optional="hide"/>
+                <field name="bim_pcp_id" optional="hide"/>
+                <field name="employee_location_id" optional="hide"/>
+                <field name="employee_bim_payroll_id" optional="hide"/>
+
+                <field name="user_partner_id" optional="hide"/>
+                <field name="level_study_id" optional="hide"/>
+                <field name="pant_size" optional="hide"/>
+                <field name="bim_resource_id" optional="hide"/>
+                <field name="type_d" optional="hide"/>
+                <field name="shirt_size" optional="hide"/>
+                <field name="shoes_size" optional="hide"/>
+                <field name="gloves_size" optional="hide"/>
+                <field name="vest_size" optional="hide"/>
+                <field name="tshirt_size" optional="hide"/>
+                <field name="polo_size" optional="hide"/>
+                <field name="jacket_size" optional="hide"/>
+                <field name="bim_resource_template_id" optional="hide"/>
+                <field name="hour_cost" optional="show"/></field></field>
+    </record>
+
+
+    <record id="view_hr_deliver_products_employee" model="ir.ui.view">
+        <field name="name">view.hr.deliver.products.employee</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <!-- employee_documentation_ids -->
+                <button class="oe_stat_button" icon="fa-tasks" name="action_view_employee_documentation" type="object">
+                    <div class="o_stat_info">
+                        <field class="o_stat_value" name="employee_documentation_count"/>
+                        <span class="o_stat_text">
+                            Employee documentation
+                        </span>
+                    </div>
+                </button>
+
+
+
+                <button class="oe_stat_button" icon="fa-tasks" name="action_view_deliveries" type="object">
+                    <div class="o_stat_info">
+                        <field class="o_stat_value" name="deliveries_count"/>
+                        <span class="o_stat_text">
+                            Current deliveries
+                        </span>
+                    </div>
+                </button>
+
+                <!--
+
+                <button class="oe_stat_button" icon="fa-tasks" name="action_view_deliver" type="object">
+                    <div class="o_stat_info">
+                        <field class="o_stat_value" name="deliver_cost"/>
+                        <span class="o_stat_text">
+                            Delivery cost
+                        </span>
+                    </div>
+                </button>
+
+
+                <button class="oe_stat_button" icon="fa-tasks" name="action_view_retry" type="object">
+                    <div class="o_stat_info">
+                        <field class="o_stat_value" name="retry_count"/>
+                        <span class="o_stat_text">
+                            Withdrawal cost
+                        </span>
+                    </div>
+                </button>
+                -->
+
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button class="oe_highlight" invisible="deliveries_count == False" name="%(action_wizard_deliver_products)d" string="Retiro de Productos" type="action"/>
+                </header>
+            </xpath>
+
+            <!--
+            <xpath expr="//field[@name='user_partner_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            -->
+
+        </field>
+
+    </record>
+</odoo>

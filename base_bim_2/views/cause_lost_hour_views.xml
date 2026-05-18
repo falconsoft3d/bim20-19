@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="cause_lost_hour_view_tree" model="ir.ui.view">
+            <field name="name">cause.lost.hour.view.tree</field>
+            <field name="model">cause.lost.hour</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="cause_lost_hour_view_form" model="ir.ui.view">
+            <field name="name">cause.lost.hour.view.form</field>
+            <field name="model">cause.lost.hour</field>
+            <field name="arch" type="xml">
+                <form string="Employee Bim Payroll">
+                    <sheet>
+                     <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                     </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="cause_lost_hour_action" model="ir.actions.act_window">
+            <field name="name">Cause Lost Hour</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cause.lost.hour</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem action="cause_lost_hour_action"
+                   id="submenu_cause_lost_hour" name="Cause Lost Hour"
+                   parent="menu_employee" sequence="2"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_bim_boq" model="ir.ui.view">
+         <field name="name">view.form.bim.boq</field>
+         <field name="model">bim.boq</field>
+         <field name="arch" type="xml">
+            <form>
+                <header>
+                        <button class="oe_highlight"
+                            name="to_working" string="To Working" type="object" invisible="state != 'draft'"/>
+
+                        <button class="oe_highlight"
+                            name="submit_review" string="Submit Review" type="object" invisible="state != 'working'"/>
+
+                        <button class="oe_highlight"
+                            name="review_1" string="Review 1" type="object" invisible="state != 'submitted_review'"/>
+
+                        <button class="oe_highlight"
+                            name="send_to_client" string="Send to Client" type="object" invisible="state != 'rev1'"/>
+
+                        <button class="oe_highlight"
+                            name="review_2" string="Review 2" type="object" invisible="state != 'sent_to_customer'"/>
+
+                        <button class="oe_highlight"
+                            name="to_done" string="To Done" type="object" invisible="state != 'rev2'"/>
+
+                        <button
+                            name="to_draft" string="To Draft" type="object" invisible="state == 'draft'"/>
+
+                        <button name="import_boq"
+                                icon="fa-upload"
+                                string="Import BoQ"
+                                type="object"/>
+                        <button name="export_boq"
+                                icon="fa-download"
+                                string="Export BoQ"
+                                type="object"/>
+                        <button name="clear_lines"
+                                icon="fa-trash"
+                                string="Clear Lines"
+                                type="object"/>
+                        <field name="state" widget="statusbar"/>
+                 </header>
+              <sheet>
+                  <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                   </div>
+                    <group>
+                        <group>
+                            <field name="project_id"
+                                   widget="many2one"
+                            />
+                            <field name="budget_id"
+                                   widget="many2one"
+                            />
+                            <field name="internal_approval_state"/>
+                            <field name="external_approval_state"/>
+                            <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="file" filename="name"/>
+                            <field name="bim_boq_id"/>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                            <field name="currency_id"/>
+                            <field name="amount"/>
+                        </group>
+                    </group>
+
+
+                  <notebook>
+                      <page name="lines_ids" string="Lines">
+                            <field name="lines_ids" widget="one2many_list">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="uom" optional="hide"/>
+
+                                    <field name="qty" sum="sum" optional="show"/>
+                                    <field name="price" optional="show"/>
+                                    <field name="amount" optional="show" sum="sum"/>
+
+                                    <field name="bim_concept_template_id"
+                                           widget="many2one"
+                                           optional="hide"/>
+                                    <field name="bim_apu_template_id"
+                                           widget="many2one"
+                                           optional="hide"/>
+                                    <field name="bim_concepts_id"
+                                           widget="many2one"
+                                           optional="hide"/>
+
+                                    <field name="concept_amount"
+                                           optional="hide" sum="sum"/>
+
+                                    <field name="hh_plan" optional="hide" sum="sum"/>
+                                    <field name="hh_real" optional="hide" sum="sum"/>
+                                    <field name="qty_exec" optional="hide" sum="sum"/>
+                                    <field name="hh_win" optional="hide" sum="sum"/>
+                                </list>
+                            </field>
+                        </page>
+
+
+                      <page string="Text">
+                           <field name="observation" placeholder="Observation..."/>
+                      </page>
+                      <page string="Budget">
+                          <group>
+                              <group>
+                                  <field name="manual_prices" />
+                                  <button name="create_budget"
+                                          class="oe_highlight"
+                                          string="Create" type="object"/>
+                              </group>
+                              <group>
+
+                                  <button name="update_budget"
+                                          string="Update"
+                                          type="object"/>
+
+                              </group>
+                          </group>
+                      </page>
+                  </notebook>
+               </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_boq" model="ir.ui.view">
+         <field name="name">view.tree.bim.boq</field>
+         <field name="model">bim.boq</field>
+         <field name="arch" type="xml">
+             <list
+                decoration-info="state == 'draft'"
+                decoration-warning="state == 'working'"
+                decoration-danger="state == 'submitted_review'"
+                decoration-muted="state == 'done'">
+                 <field name="name" optional="show"/>
+                 <field name="type" optional="show"/>
+                 <field name="project_id" optional="show"/>
+                 <field name="budget_id" optional="show"/>
+                 <field name="bim_boq_id" optional="show"/>
+                 <field name="internal_approval_state" optional="show"/>
+                 <field name="external_approval_state" optional="show"/>
+                 <field name="user_id" optional="show"/>
+                 <field name="company_id" optional="show"/>
+                 <field name="amount" optional="show" sum="sum"/>
+                 <field name="currency_id" optional="show"/>
+                 <field name="manual_prices" optional="hide"/>
+                 <field name="state" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_boq" model="ir.actions.act_window">
+        <field name="name">Bim Boq</field>
+        <field name="res_model">bim.boq</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

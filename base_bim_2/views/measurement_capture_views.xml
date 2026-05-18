@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_form_measurement_capture" model="ir.ui.view">
+        <field name="name">view.form.measurement.capture</field>
+        <field name="model">measurement.capture</field>
+        <field name="arch" type="xml">
+            <form string="order">
+                <header>
+                        <button name="action_load"
+                                invisible="state not in ['draft']"
+                                class="oe_highlight"
+                                icon="fa-plus"
+                                string="Load" type="object"/>
+
+                        <button name="action_clear"
+                                invisible="state not in ['draft']"
+                               icon="fa-trash"
+                                string="Clear" type="object"/>
+
+                        <button name="action_to_load"
+                                invisible="state not in ['draft']"
+                                string="Load" type="object"/>
+
+                        <button name="action_import"
+                                invisible="state not in ['draft']"
+                                icon="fa-download"
+                                string="Import" type="object"/>
+
+                        <button name="action_to_done"
+                                invisible="state not in ['loaded']"
+                                class="oe_highlight"
+                                string="To Done" type="object"/>
+
+                       <button name="action_to_draft"
+                                invisible="state in ['draft']"
+                                string="To Draft" type="object"/>
+
+
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name" class="oe_inline" colspan="1"/>
+                       </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="measurement_origin_id"
+                                   readonly="state in ['done']"
+                                   options="{'no_create': True}"/>
+                            <field name="project_id"
+                                   readonly="state in ['done']"
+                                   options="{'no_create': True}"/>
+                            <field name="budget_id"
+                                   readonly="state in ['done']"
+                                   domain="[('project_id', '=', project_id)]"
+                                   options="{'no_create': True}"/>
+
+
+
+                            <field name="bim_budget_stage_id"
+                                   readonly="state in ['done']"
+                                   domain="[('budget_id', '=', budget_id)]"
+                                   options="{'no_create': True}"/>
+
+                            <field name="done_date"  readonly="state in ['done']"/>
+
+                        </group>
+                        <group>
+                            <field name="partner_id"
+                                   readonly="state in ['done']"
+                                   options="{'no_create': True}"/>
+                            <field name="origin" readonly="state in ['done']"/>
+                            <field name="currency_id" readonly="state in ['done']"/>
+
+                            <field name="file" readonly="state in ['done']"/>
+                            <field name="bim_massive_certification_by_line_id" invisible="bim_massive_certification_by_line_id == False"/>
+                        </group>
+                    </group>
+
+
+                    <notebook>
+                        <page name="Lista" string="Lista">
+                            <field name="lines_ids" readonly="state in ['done']">
+                                <list
+                                editable="bottom"
+                                decoration-muted="qty == 0"
+                                >
+
+                                     <field name="budget_id"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="hide"/>
+
+                                    <field name="concept_id"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           domain="[('budget_id', '=', budget_id),( 'type', '=', 'departure')]"
+                                           optional="show"/>
+                                    <field name="qty_budget"
+                                           sum="Sum"
+                                           optional="show"/>
+
+                                    <field name="price_unit"
+                                           readonly="1"
+                                           optional="show"/>
+
+                                    <field name="qty_last"
+                                           readonly="1"
+                                           sum="Sum"
+                                           optional="show"/>
+
+                                    <field name="qty"
+                                           sum="Sum"
+                                           optional="show"/>
+
+                                    <field name="qty_o"
+                                           sum="Sum"
+                                           optional="show"/>
+
+                                    <field name="qty_accumulated"
+                                           sum="Sum"
+                                           optional="show"/>
+
+                                    <field name="amount"
+                                           sum="Sum"
+                                           optional="show"/>
+
+                                    <field name="amount_acc"
+                                           sum="Sum"
+                                           optional="show"/>
+
+                                    <field name="currency_id" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="Others" string="Others">
+                            <group>
+                                <group>
+                                    <field name="user_id"
+                                           readonly="state in ['done']"
+                                           options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="company_id"
+                                           readonly="state in ['done']"
+                                           options="{'no_create': True, 'no_edit': True}"/>
+                                </group>
+
+                                 <group>
+                                        <field name="date" readonly="1"/>
+                                 </group>
+
+                                <group>
+
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" widget="html"/>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_measurement_capture" model="ir.ui.view">
+        <field name="name">view.tree.measurement.capture</field>
+        <field name="model">measurement.capture</field>
+        <field name="arch" type="xml">
+            <list delete="1"
+                    decoration-muted="state == 'done'"
+                    decoration-danger="state == 'draft'">
+                <field name="name"/>
+                <field name="measurement_origin_id" optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="budget_id" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="bim_budget_stage_id" optional="show"/>
+                <field name="date" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="currency_id" optional="show"/>
+                <field name="amount_total" sum="sum" optional="show"/>
+                <field name="amount_total_acc" sum="sum" optional="show"/>
+                <field name="bim_massive_certification_by_line_id" optional="hide"/>
+                <field name="done_date" optional="show"/>
+                <field name="origin" optional="show"/>
+                <field name="state" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_measurement_capture" model="ir.actions.act_window">
+        <field name="name">Measurement Capture</field>
+        <field name="res_model">measurement.capture</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Measurement capture
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="action_measurement_capture" id="measurement_capture" name="Measurement Capture"
+              parent="submenu_bim_certification" sequence="92"/>
+
+</odoo>

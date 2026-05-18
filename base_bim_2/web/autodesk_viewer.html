@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{model_name}} | Odoo BIM 2.0 | Autodesk Viewer</title>
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+</head>
+<body>
+    <div id="forgeViewer" style="width: 100%; height: 100%;"></div>
+
+    <script>
+        var viewerApp;
+        var options = {
+            env: 'AutodeskProduction',
+            getAccessToken: function(onGetAccessToken) {
+                var accessToken = "{{token}}";
+                console.log('>> token:'+ accessToken);
+                var expireTimeSeconds = 3600;  // Duración del token
+                onGetAccessToken(accessToken, expireTimeSeconds);
+            }
+        };
+
+        Autodesk.Viewing.Initializer(options, function() {
+            var urn = '{{urn}}';
+            var documentId = 'urn:' + urn;
+
+            console.log('>> model_name:' +  "{{model_name}}" );
+            console.log('>> URN:' + urn);
+
+
+            var viewerDiv = document.getElementById('forgeViewer');
+            var viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv);
+            Autodesk.Viewing.Document.load(documentId, function(doc) {
+                var viewables = doc.getRoot().getDefaultGeometry();
+                viewer.start();
+                viewer.loadDocumentNode(doc, viewables);
+            }, function(errorMsg) {
+                console.error('>> Error loading document: ' + errorMsg);
+            });
+        });
+    </script>
+</body>
+</html>

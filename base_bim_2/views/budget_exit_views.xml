@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <data>
+    <record id="view_form_budget_exit" model="ir.ui.view">
+         <field name="name">view.form.budget.exit</field>
+         <field name="model">budget.exit</field>
+         <field name="arch" type="xml">
+            <form string="Budget Exit">
+              <header>
+                   <button name="action_validate" string="Validate" type="object" invisible="state != 'draft'"/>
+                   <button name="action_draft" string="To Draft" type="object" invisible="state == 'draft'"/>
+                  <field name="state" widget="statusbar" />
+              </header>
+              <sheet>
+                  <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                  </div>
+                  <group>
+                      <group>
+                          <field name="project_id" required="1" readonly="state != 'draft'"/>
+                          <field name="budget_id" required="1"  readonly="state != 'draft'"/>
+                       </group>
+                      <group>
+                          <field name="user_id"  readonly="state != 'draft'" />
+                          <field name="create_date" readonly="state != 'draft'"/>
+                          <field name="company_id" readonly="state != 'draft'"/>
+                       </group>
+                  </group>
+
+                  <notebook>
+                            <page name="lines" string="Lines">
+                                <field name="lines_ids" nolabel="1" readonly="state != 'draft'">
+                                    <list editable="bottom">
+                                        <field name="budget_id" optional="show"  widget="many2one" />
+                                        <!-- type departure  -->
+                                        <field name="departure_id" optional="show"  widget="many2one" domain="[('budget_id', '=', budget_id), ('type', '=', 'departure')]"/>
+                                        <field name="concept_id" optional="show"  widget="many2one"  domain="[('budget_id', '=', budget_id),
+                                                                                                                                                                           ('type', 'in', ['material']),
+                                                                                                                                                                           ('parent_id', '=', departure_id),
+                                                                                                                                                                           ]"/>
+                                        <field name="qty" optional="show"  sum="sum"/>
+                                         <field name="date" optional="show"  />
+                                        <field name="stock_picking_id"
+                                               widget="many2one"
+                                               readonly="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                  </notebook>
+
+               </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+        <record id="view_tree_budget_exit" model="ir.ui.view">
+         <field name="name">view.tree.budget.exit</field>
+         <field name="model">budget.exit</field>
+         <field name="arch" type="xml">
+            <list delete="0">
+                <field name="name" optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="budget_id" optional="show"/>
+            </list>
+        </field>
+        </record>
+
+        <record id="action_budget_exit" model="ir.actions.act_window">
+            <field name="name">Budget Exit</field>
+            <field name="res_model">budget.exit</field>
+            <field name="view_id" ref="view_tree_budget_exit"/>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Create a new Budget Exit!
+              </p>
+           </field>
+        </record>
+
+     </data>
+</odoo>

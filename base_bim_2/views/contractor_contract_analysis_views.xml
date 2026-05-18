@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_contractor_contract_analysis" model="ir.ui.view">
+        <field name="name">view.form.contractor.contract.analysis</field>
+        <field name="model">contractor.contract.analysis</field>
+        <field name="arch" type="xml">
+            <form string="Contractor Contract Analysis" delete="0" >
+                <header>
+                        <button class="oe_highlight"  name="ex_search" string="Search" type="object"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="project_ids"
+                                    options='{"no_create": 1, "no_open": 1}'
+                                    widget="many2many_tags" />
+                             <field name="budget_ids"
+                                    options='{"no_create": 1, "no_open": 1}'
+                                    widget="many2many_tags" />
+                        </group>
+                        <group>
+                            <field name="currency_id" />
+                            <field name="company_id" />
+                            <field name="user_id" />
+                        </group>
+                    </group>
+
+
+                    <notebook>
+                        <page name="line_ids" string="Lines">
+                            <field name="line_ids" widget="one2many_list" readonly="1">
+                                <list editable="bottom"
+                                      decoration-success="status == 'on_time'"
+                                      decoration-danger="status == 'late'">
+                                    <field name="project_id" widget="many2onebutton"/>
+                                    <field name="budget_id"
+                                           widget="many2onebutton"
+                                           options='{"no_create": true}'
+                                           domain="[('project_id', '=', project_id)]" />
+                                    <field name="concept_id"
+                                           widget="many2onebutton"
+                                           options='{"no_create": true}'
+                                           domain="[
+                                                    ('budget_id', '=', budget_id),
+                                                    ('type', '=', 'departure'),
+                                           ]" />
+                                    <field name="qty" sum="sum"/>
+                                    <field name="qty_accumulated" sum="sum"/>
+                                    <field name="qty_pending" sum="sum"/>
+                                    <field name="price_unit" />
+                                    <field name="currency_id" optional="hide"/>
+                                    <field name="amount" sum="sum"/>
+                                    <field name="amount_r" sum="sum"/>
+                                    <field name="acs_date_start"/>
+                                    <field name="acs_date_end"/>
+                                    <field name="real_date"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_contractor_contract_analysis" model="ir.ui.view">
+        <field name="name">view.tree.contractor.contract.analysis</field>
+        <field name="model">contractor.contract.analysis</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_ids"/>
+                <field name="budget_ids"/>
+                <field name="company_id"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_contractor_contract_analysis" model="ir.actions.act_window">
+        <field name="name">Contractor Contract analysis</field>
+        <field name="res_model">contractor.contract.analysis</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Contractor Contract analysis!
+            </p>
+        </field>
+    </record>
+    </data>
+</odoo>

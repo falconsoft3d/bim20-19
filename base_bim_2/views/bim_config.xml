@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bim_configuration" model="ir.ui.view">
+        <field name="name">bim.res.config.view</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Bim 2.0" string="Bim 2.0" name="base_bim_2" groups="base_bim_2.group_manager_bim">
+                    <block title="General Configuration" name="bim_setting_container">
+                        <setting string="INVOICING" company_dependent="1" id="invoicing" help="You must configure these values to invoice from the Payment Status" title="Values set here are company-specific.">
+                            <div class="mt16">
+                                <label for="journal_id" class="col-lg-4"/>
+                                <field name="journal_id"/>
+                            </div>
+                            <div class="mt16">
+                                <label for="paidstate_product" class="col-lg-4" string="Product"/>
+                                <field name="paidstate_product"/>
+                            </div>
+                            <div class="mt16">
+                                <label for="retention_product" class="col-lg-4" string="Retention Product"/>
+                                <field name="retention_product"/>
+                            </div>
+                            <div class="mt16">
+                                <label for="company_resource_template_id" class="col-lg-4" />
+                                <field name="company_resource_template_id"/>
+                            </div>
+                            <div class="row mt16">
+                                <label class="col-lg-5" for="department_required" string="Department Required"/>
+                                <field name="department_required"/>
+                                <div class="text-muted">
+                                    Set the department field on the works form as required.
+                                </div>
+                            </div>
+                            <div class="row mt16">
+                                <label class="col-lg-5" for="create_analytic_account" string="Create Analytic Acc"/>
+                                <field name="create_analytic_account"/>
+                                <div class="text-muted">
+                                    An analytical account is created per project automatically.
+                                </div>
+                            </div>
+                            <div class="row mt16">
+                                <label class="col-lg-5" for="invoice_debit_credit"/>
+                                <field name="invoice_debit_credit"/>
+                            </div>
+                            <div class="row mt16">
+                                <label class="col-lg-5" for="bim_include_invoice_sale"/>
+                                <field name="bim_include_invoice_sale"/>
+                                <div class="text-muted">
+                                    Each invoice is marked as "Include in BIM" by default.
+                                </div>
+                            </div>
+                            <div class="row mt16">
+                                <label class="col-lg-5" for="bim_include_invoice_purchase"/>
+                                <field name="bim_include_invoice_purchase"/>
+                                <div class="text-muted">
+                                    Each invoice is marked as "Include in BIM" by default.
+                                </div>
+                            </div>
+                            <div class="row mt16">
+                                <label class="col-lg-5" for="bim_include_refund" string="Include Refund"/>
+                                <field name="bim_include_refund"/>
+                                <div class="text-muted">
+                                    Each invoice is marked as "Include in BIM" by default.
+                                </div>
+                            </div>
+                            <div class="row mt16">
+                                <label class="col-lg-5" for="bim_invoice_multiple_project"/>
+                                <field name="bim_invoice_multiple_project"/>
+                                <div class="text-muted">
+                                    Each invoice is marked as "Include in BIM" by default.
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="INVENTORY" id="inventory" help="Stock movements made from the Work will be automatically validated" title="Values set here are company-specific.">
+                            <div class="row mt16">
+                                <label for="validate_stock"/>  
+                                <field name="validate_stock"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="stock_location_mobile"/>  
+                                <div class="text-muted">
+                                    Location that will be used by default for the entry of merchandise in the Mobile Warehouse
+                                </div>
+                                <field name="stock_location_mobile" widget="selection"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="use_project_warehouse"/>  
+                                <div class="text-muted">
+                                    Project Warehouse can be used to receive purchased products
+                                </div>
+                                <field name="use_project_warehouse"/>  
+                            </div>  
+                            <div class="row mt16">
+                                <label for="warehouse_prefix"/>  
+                                <div class="text-muted">
+                                    Prefix will be used to create Warehouses from Project
+                                </div>
+                                <field name="warehouse_prefix"/>  
+                            </div>
+
+                            <div class="row mt16">
+                                <label for="sequence_by_year"/>
+                                <div class="text-muted">
+                                    Sequence by Year
+                                </div>
+                                <field name="sequence_by_year"/>
+                            </div>
+
+                            <div class="row mt16">
+                                <label for="include_picking_cost"/>  
+                                <div class="text-muted">
+                                    Picking cost will be included in Project Costs
+                                </div>
+                                <field name="include_picking_cost"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="picking_move_all"/>  
+                                <div class="text-muted">
+                                    If check You can move all the products of a picking at once
+                                </div>
+                                <field name="picking_move_all"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="bim_certificate_chapters" string="Certificate Chapters"/>  
+                                <div class="text-muted">
+                                    Certifications by Chapters will be allowed
+                                </div>
+                                <field name="bim_certificate_chapters"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="limit_purchase"/>  
+                                <div class="text-muted">
+                                    Check to limit purchases according to budgets
+                                </div>
+                                <field name="limit_purchase"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="project_product_limited"/>  
+                                <div class="text-muted">
+                                    Check to limit product for purchases according to budgets
+                                </div>
+                                <field name="project_product_limited"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="bim_main_location"/>  
+                                <div class="text-muted">
+                                    Set Project Locations as Main Locations
+                                </div>
+                                <field name="bim_main_location"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="tools_inventory_movement"/>  
+                                <div class="text-muted">
+                                    Set to create Inventory Movements with Employee Tools Operations
+                                </div>
+                                <field name="tools_inventory_movement"/>  
+                            </div>
+                            <div class="row mt16">
+                                <label for="close_stage_with_certification"/>  
+                                <div class="text-muted">
+                                    Set to close stage when certification is validated
+                                </div>
+                                <field name="close_stage_with_certification"/>  
+                            </div>
+                        </setting>
+                        <setting id="master_url" help="Master Url to update resources">
+                            <field name="master_url"/>
+                        </setting>
+                        <setting id="master_region" help="Location used to update resources from Master">
+                            <field name="master_region"/>
+                        </setting>
+                        <setting id="master_token" help="Token used to update resources from Master">
+                            <field name="master_token"/>
+                        </setting>
+                        <setting id="product_expense_invoice_id" help="Product to invoice expenses.">
+                            <field name="product_expense_invoice_id"/>  
+                        </setting>
+                    </block>    
+                    <block title="Budget Configuration">
+
+                        <setting id="type_work" help="Type Work">
+                            <field name="type_work"/>
+                        </setting>
+
+                        <setting id="type_calc" help="Type Calc">
+                            <field name="type_calc"/>
+                        </setting>
+
+                        <setting id="edit_code_space" help="Edit Code Space">
+                            <field name="edit_code_space"/>
+                        </setting>
+
+                        <setting id="edit_code_project" help="Edit Code Project">
+                            <field name="edit_code_project"/>
+                        </setting>
+
+                        <setting id="edit_code_budget" help="Edit Code Budget">
+                            <field name="edit_code_budget"/>
+                        </setting>
+
+                        <setting id="calc_performance" help="Calc Performance">
+                            <field name="calc_performance"/>
+                        </setting>
+
+                        <setting id="asset_template_id" help="Assets and Discounts template to use when creating a budget.">
+                            <field name="asset_template_id"/>
+                        </setting>
+                        <setting id="include_vat_in_indicators" help="Vat can be included or not in Sales and Project Cost.">
+                            <field name="include_vat_in_indicators"/>
+                        </setting>
+                        <setting id="product_category_id" help="Category used when creating the products of the resources in budget items.">
+                            <field name="product_category_id"/>
+                        </setting>
+                        <setting string="CERTIFICATION LIMIT" id="limit_certification" help="Indicate if you want to limit certification percent.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label class="col-lg-3" for="limit_certification" string="Limit Certification"/>
+                                    <field name="limit_certification"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="PERFORMANCE CALCULATION" id="performance_calculation" help="Indicate if you want to calculate performance.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label class="col-lg-3" for="performance_calculation"/>
+                                    <field name="performance_calculation"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Percent Limit" id="limit_certification_percent" help="This limit will be taken for every budget as certification limit." invisible="limit_certification == False">
+                            <field name="limit_certification_percent"/> 
+                        </setting>
+                        <setting string="Default calc certification" id="type_calc_cert" help="the way to calculate the certification % or quantity">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <field name="type_calc_cert"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Default type calc" id="amount_type" help="the way to calculate the concept price">
+                            <field name="amount_type"/>  
+                        </setting>
+                    </block>
+                    <block title="Purchase Configuration">
+                        <setting id="allow_to_buy_more_mat" help="Will be allowed to Buy more Materials than established">
+                            <field name="allow_to_buy_more_mat"/>  
+                        </setting>
+                        <setting id="allow_to_buy_more_serv" help="Will be allowed to Buy more Services than established">
+                            <field name="allow_to_buy_more_serv"/>  
+                        </setting>
+                        <setting id="purchase_cost_zero" help="Set cost zero in purchase order lines when the purchase order is created from a material request">
+                            <field name="purchase_cost_zero"/>  
+                        </setting>
+                    </block>
+                    <block title="Retention Configuration">
+                        <setting id="retention" help="Configure Retentions" title="Values set here are company-specific.">
+                            <field name="retention"/>  
+                        </setting>
+                    </block>
+                    <block title="Human Resources Configuration">
+                        <setting string="WORKING HOURS" id="working_hours" help="Configure the number of hours of a Working Day and the calculation factor for overtime."  title="Values set here are company-specific.">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label class="col-lg-4" for="working_hours" string="Working Hours"/>
+                                    <field name="working_hours"/>
+                                </div>
+                            </div>  
+                        </setting>
+                        <setting id="extra_hour_factor">
+                            <div class="content-group">
+                                <br/>
+                                <br/>
+                                <div class="mt16">
+                                    <label class="col-lg-4" for="extra_hour_factor" string="Overtime Factor"/>
+                                    <field name="extra_hour_factor"/>
+                                </div>
+                            </div> 
+                        </setting>
+                        <setting id="hour_start_job" help="At what time do you start to work?" title="Values set here are company-specific.">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label class="col-lg-4" for="hour_start_job" string="Working Hours"/>
+                                    <field name="hour_start_job"/>
+                                </div>
+                            </div> 
+                        </setting>
+                        <setting id="minute_start_job">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label class="col-lg-4" for="minute_start_job"/>
+                                    <field name="minute_start_job"/>
+                                </div>
+                            </div> 
+                        </setting>
+                        <setting string=" " id="hourly_cost" help="Default hourly cost" title="Values set here are company-specific.">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label class="col-lg-4" for="hourly_cost" string="Default hourly cost"/>
+                                    <field name="hourly_cost"/>
+                                </div>
+                            </div> 
+                        </setting>
+                        <setting string=" " id="server_hour_difference" help="Hours of difference with Odoo Server?"  title="Values set here are company-specific.">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label class="col-lg-4" for="server_hour_difference" string="Hours of difference"/>
+                                    <field name="server_hour_difference"/>
+                                </div>
+                            </div> 
+                        </setting>
+                    </block>
+                </app>
+            </xpath></field>
+    </record>
+    <record id="action_bim_configuration" model="ir.actions.act_window">
+        <field name="name">BIM Configurations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'base_bim_2'}</field>
+    </record>
+    <menuitem action="action_bim_configuration" groups="base.group_system" id="menu_bim_general_settings" name="Settings" parent="menu_bim_config" sequence="10"/>
+</odoo>

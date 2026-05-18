@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <template id="attendance_mass_summary_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="base_bim_2.bim_header_external_layout">
+                        <div class="page">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <table class="table table-sm table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-left">
+                                                        <strong>Cliente</strong><br/>
+                                                        <span t-field="o.customer_id.name" />
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Proyecto</strong><br/>
+                                                        <span t-field="o.project_id.nombre" />
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Factura</strong><br/>
+                                                        <span t-field="o.invoice_id.name"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Total Horas</strong><br/>
+                                                        <span t-field="o.total_hours"/>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <strong>Fecha</strong><br/>
+                                                        <span t-field="o.date_create" t-options='{"format": "d - MMMM - y"}'/>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div><br/><br/>
+                                
+                                <div class="row">
+                                    <div class="col table-responsive">
+                                        <table class="table table-sm table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Empleado</th>
+                                                    <th class="text-left">Cliente</th>
+                                                    <th class="text-left">Entrada</th>
+                                                    <th class="text-left">Salida</th>
+                                                    <th class="text-left">Horas trabajadas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="o.attendance_line_ids" t-as="line">
+                                                    <tr>
+                                                        <td class="text-left"><span t-field="line.employee_id.display_name"/></td>
+                                                        <td class="text-left"><span t-field="line.customer_id.display_name"/></td>
+                                                        <td class="text-center"><span t-field="line.check_in"/></td>
+                                                        <td class="text-center"><span t-field="line.check_out"/></td>
+                                                        <td class="text-center"><span t-field="line.worked_hours"/></td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_general_config" model="ir.ui.view">
+        <field name="name">view.form.bim.general.config</field>
+        <field name="model">bim.general.config</field>
+        <field name="arch" type="xml">
+            <form string="Bim General Config">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="key" required="1"/>
+                            <field name="value" required="1"/>
+                            <field name="note"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="user_id"/>
+                            <field name="create_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_general_config" model="ir.ui.view">
+        <field name="name">view.tree.bim.general.config</field>
+        <field name="model">bim.general.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="key"/>
+                <field name="value"/>
+                <field name="company_id"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+         <record id="action_bim_general_config" model="ir.actions.act_window">
+            <field name="name">Bim General Config</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.general.config</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_tree_bim_general_config"/>
+        </record>
+
+    </data>
+
+</odoo>

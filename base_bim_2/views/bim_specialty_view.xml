@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_specialty_form" model="ir.ui.view">
+        <field name="name">view.form.specialty.form</field>
+        <field name="model">bim.specialty</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                       <group>
+                           <group>
+                               <field name="name"/>
+                           </group>
+                       </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_form_specialty_tree" model="ir.ui.view">
+        <field name="name">view.form.specialty.tree</field>
+        <field name="model">bim.specialty</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_specialty" model="ir.actions.act_window">
+        <field name="name">Bim Specialty</field>
+        <field name="res_model">bim.specialty</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new BIM Specialty!
+            </p>
+        </field>
+    </record>
+    </data>
+
+</odoo>

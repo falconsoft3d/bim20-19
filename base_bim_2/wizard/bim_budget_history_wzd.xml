@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_bim_budget_history_wzd" model="ir.ui.view">
+            <field name="name">view.bim.budget.history.wzd</field>
+            <field name="model">bim.budget.history.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Modify Budget">
+                    <group>
+                        <group>
+                            <field name="history_id" readonly="1" options="{'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="save_current"/>
+                        </group>
+                    </group>
+                    <div class="row">
+                        <div class="col-6"><p>Are you sure you want to set this Budget History to it's Budget?</p></div>
+                        <div class="col-6"><p><strong>Check if you want to save Current Budget Values</strong></p></div>
+                    </div>
+                    <group>
+                        <field name="deleted_concepts_message" class="text-danger" nolabel="1"/>
+                    </group>
+                    <footer>
+                        <button string='Apply' name="action_set_budget_history" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_apply_bim_budget_history" model="ir.actions.act_window">
+            <field name="name">Apply Budget History</field>
+            <field name="res_model">bim.budget.history.wzd</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bim_budget_history_wzd"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

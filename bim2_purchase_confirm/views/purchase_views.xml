@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="button_confirm_purchase_order_form" model="ir.ui.view">
+        <field name="name">button.confirm.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Eliminar el botón de confirmar pedido con replace -->
+            <xpath expr="//button[@name='button_cancel']" position="before">
+                <button name="button_confirm" string="Confirmar Pedido" type="object"
+                        confirm="¿Está seguro que lugar de entrega es correcto?"
+                        invisible="state != 'draft'"
+                        class="btn-primary" groups="purchase.group_purchase_manager"/>
+            </xpath>
+
+            <xpath expr="//form[1]/header[1]/button[@name='button_confirm'][2]" position="attributes">
+                    <attribute name="effect">false</attribute>
+                    <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

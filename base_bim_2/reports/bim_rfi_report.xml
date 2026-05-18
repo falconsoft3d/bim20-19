@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+         <template id="base_bim_2.bim_rfi_report">
+            <t t-call="web.html_container">
+              <t t-foreach="docs" t-as="o">
+                <t t-call="base_bim_2.bim_header_clear">
+                  <div class="page">
+                      <!-- Encabezado -->
+                       <div>
+                            <h3 class="text-center">REQUEST FOR INFORMATION (RFI)</h3>
+                            <p class="subtitle">Response to an RFI does not constitute a Contractual Change. Any cost, time or change in terms implied by any response to this RFI must be in a Contract Change Order to a Contractor to have any rights to payment.</p>
+                       </div>
+                           <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="text-left align-middle">
+                                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                            style="max-height: 70px; max-width: 400px;" alt="Logo"/>
+                                    </th>
+                                    <th colspan="4" class="text-right">
+                                       <p>
+                                           <span t-esc="o.company_id.name"/><br/>
+                                           <span t-esc="o.company_id.street"/><br/>
+                                           <span t-esc="o.company_id.email"/><br/>
+                                       </p>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td class="table-header" style="width: 20%;"><strong>PROJECT NUMBER:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.project_id.name"/></td>
+                                    <td class="table-header highlighted" style="width: 20%;"><strong>DATE:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.date"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="table-header" style="width: 20%;"><strong>PROJECT DESCRIPTION:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.project_id.nombre"/></td>
+                                    <td class="table-header highlighted" style="width: 20%;"><strong>RFI NUMBER:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="table-header" style="width: 20%;"><strong>PROJECT LOCATION:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.project_id.street_id.name"/></td>
+                                    <td class="table-header highlighted" style="width: 20%;"><strong>STATE:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.state"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="table-header" style="width: 20%;"><strong>ORIGIN:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.origin_request"/></td>
+                                    <td class="table-header highlighted" style="width: 20%;"><strong>TYPE:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.type"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="table-header" style="width: 20%;"><strong>Information Requested by:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.user_id.name"/></td>
+                                    <td class="table-header highlighted" style="width: 20%;"><strong>Request Directed to:</strong></td>
+                                    <td style="width: 30%;"><span t-esc="o.contact_id.name"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div>
+                            <h3 class="text-center">DESCRIPTION</h3>
+                            <p class="subtitle"><span t-raw="o.description"/></p>
+                        </div>
+                        <div>
+                            <h3 class="text-center">RESPONSE</h3>
+                            <p class="subtitle"><span t-raw="o.response"/></p>
+                        </div>
+                   </div>
+                </t>
+          </t>
+        </t>
+    </template>
+    </data>
+</odoo>

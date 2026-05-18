@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_ticket_bim" model="ir.ui.view">
+            <field name="name">view.form.ticket.bim</field>
+            <field name="model">ticket.bim</field>
+            <field name="arch" type="xml">
+                <form delete="0" string="Ticket List">
+                    <header>
+                        <button class="oe_highlight" invisible="state != 'Draft'" name="exe_autorizar" string="Authorize" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'aprobado'" name="exe_work" string="Working" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'trabajando'" name="exe_resuelto" string="Resolved" type="object"/>
+                        <button confirm="Are you sure you want to Open the Ticket? We recommend creating another ticket and linking it." invisible="state != 'resuelto' and state != 'calificado'" name="exe_abrir" string="Open" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'resuelto'" name="exe_close" string="Set to Qualified" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <div class="alert alert-success" invisible="state != 'resuelto'" role="alert" style="margin-bottom:0px;">
+                        Please, qualify
+                        <bold>
+                            <a class="alert-link" href="#glosa" role="button">
+                                Ticket
+                            </a>
+                        </bold>
+                        in the qualification field and click
+                        <bold>
+                            Set to Qualified
+                        </bold>
+                        ,
+                    </div>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="title" required="1"/>
+                                <field name="partner_id" options='{"no_create": 1, "no_open": 1}'/>
+                                <field name="user_error_id" options='{"no_create": 1, "no_open": 1}' required="1"/>
+                                <field name="prioridad" required="1"/>
+                                <field name="category_id" options='{"no_create": 1, "no_open": 1}' required="1"/>
+
+
+                                <field name="clasificacion"/>
+                            </group>
+                            <group>
+                                <field name="project_id"/>
+                                <field invisible="True" name="comprobante_01_name"/>
+                                <field filename="comprobante_01_name" name="comprobante_01"/>
+                                <field name="ticket_id" options='{"no_create": 1, "no_open": 1}'/>
+
+                                <field name="end_date" readonly="1"/>
+                                <field name="end_will_end"/>
+                                <field name="user_id" readonly="1"/>
+                                <field invisible="state != 'trabajando'" name="user_work_id" required="state == 'trabajando'"/>
+                                <field invisible="state != 'resuelto' and state != 'calificado'" name="calificacion" widget="priority"/>
+                                <field invisible="state != 'resuelto' and state != 'calificado'" name="obs_calificacion"/>
+
+                            </group>
+                        </group>
+
+
+
+                    <notebook>
+                         <page name="other" string="Other">
+                            <group>
+                                <field name="obs" required="1"/>
+                                <field name="obs_solucion" required="state == 'trabajando'"/>
+                                 <field name="numero_veces" readonly="1"/>
+                            </group>
+                        </page>
+                        <page name="other" string="Other">
+                            <group>
+                                 <group>
+                                      <field name="entry_date" readonly="1"/>
+                                      <field name="company_id" readonly="1"/>
+                                 </group>
+                            </group>
+                        </page>
+                    </notebook>
+
+
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_tree_ticket_bim" model="ir.ui.view">
+            <field name="name">view.tree.ticket.bim</field>
+            <field name="model">ticket.bim</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'Draft'"  delete="0">
+                    <field name="name" optional="show"/>
+                    <field name="title" optional="show"/>
+                    <field name="prioridad" optional="hide"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="partner_id" optional="hide"/>
+                    <field name="user_error_id" optional="hide"/>
+                    <field name="user_work_id" optional="hide"/>
+                    <field name="entry_date" optional="hide"/>
+                    <field name="end_will_end" optional="hide"/>
+                    <field name="end_date" optional="hide"/>
+                    <field name="category_id" optional="show"/>
+                    <field name="numero_veces" optional="show" sum="sum"/>
+                    <field name="ticket_id" optional="hide"/>
+                    <field name="calificacion" widget="priority" optional="hide"/>
+                    <field name="clasificacion" optional="hide"/>
+                    <field name="project_id" optional="hide"/>
+                    <field name="state" optional="show"/>
+                </list></field>
+        </record>
+        <record id="action_ticket_bim" model="ir.actions.act_window">
+            <field name="name">Ticket</field>
+            <field name="res_model">ticket.bim</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_tree_ticket_bim"/>
+        </record>
+    </data>
+</odoo>

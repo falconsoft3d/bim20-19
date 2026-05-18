@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_resource_report_wizard_form" model="ir.ui.view">
+        <field name="name">bim.resource.report.wizard.form</field>
+        <field name="model">bim.resource.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Resource Report">
+                <group name="main">
+                    <group name="left">
+                        <field invisible="True" name="budget_id"/>
+                        <field invisible="True" name="count_stages"/>
+                        <field name="resource_all"/>
+                        <field name="filter_categ"/>
+                        <field name="type_unit"/>
+                        <field name="show_footer"/>
+                        <field name="concept_ids"
+                               domain="[('budget_id','=',budget_id),('type','=','departure')]"
+                               widget="many2many_tags" options="{'no_create': True, 'no_open': True }"/>
+
+                        <field invisible="filter_categ == False" name="category_id" options="{'no_create': True, 'no_open': True }" required="filter_categ == True"/>
+                        <field invisible="count_stages == 0" name="group_stage"/>
+                        <field domain="[('budget_id','=',budget_id)]" invisible="group_stage != 'select'" name="stage_ids" required="group_stage == 'select'" widget="many2many_tags"/>
+                    </group>
+                    <group name="right">
+                        <field name="material"/>
+                        <field name="equipment"/>
+                        <field name="labor"/>
+                        <field name="fsubcontract"/>
+                        <field name="aux"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-default" special="cancel" string="Cancel"/>
+                    <button class="btn-primary" invisible="group_stage != 'not'" name="print_report" string="Print" type="object"/>
+                    <button class="btn-primary" name="check_report_xls" string="Print Excel" type="object"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_resource_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Resource Report</field>
+        <field name="res_model">bim.resource.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

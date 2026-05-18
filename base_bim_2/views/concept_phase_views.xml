@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_form_bim_concept_phase" model="ir.ui.view">
+        <field name="name">view.form.bim.concept.phase</field>
+        <field name="model">concept.phase</field>
+        <field name="arch" type="xml">
+            <form string="order" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="ro"/>
+                            <field name="parent_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_concept_phase" model="ir.ui.view">
+        <field name="name">view.tree.concept.phase</field>
+        <field name="model">concept.phase</field>
+        <field name="arch" type="xml">
+            <list delete="1">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="ro"/>
+                <field name="parent_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_concept_phase" model="ir.actions.act_window">
+        <field name="name">Concept Phase</field>
+        <field name="res_model">concept.phase</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Phase
+            </p>
+        </field>
+    </record>
+
+</odoo>

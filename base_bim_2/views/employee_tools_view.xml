@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_employee_tools" model="ir.ui.view">
+            <field name="name">view.form.employee.tools</field>
+            <field name="model">employee.tools</field>
+            <field name="arch" type="xml">
+                <form string="Employee Tools">
+                    <header>
+                        <button class="btn btn-primary" invisible="state not in ['draft']" name="action_approve" string="Approve" type="object"/>
+                        <button class="btn btn-primary" invisible="state not in ['approved']" name="action_create_picking" string="Confirm" type="object"/>
+                        <button class="btn btn-secondary" invisible="state not in ['draft','requested','approved']" name="action_cancel" string="Cancel" type="object"/>
+                        <button class="btn btn-primary" invisible="state not in ['cancel']" name="action_return_draft" string="Back to Draft" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id"
+                                        readonly="state == 'done'"
+                                       options='{"no_create": 1}'/>
+                                <field
+                                        readonly="state == 'done'"
+                                        name="type"/>
+                                <field name="location_id"
+                                        readonly="state == 'done'"
+                                       options='{"no_create": 1, "no_open": 1}' required="1"/>
+                                <field name="location_dest_id"
+                                       readonly="state == 'done'"
+                                       options='{"no_create": 1, "no_open": 1}' required="1"/>
+                                <field
+                                       readonly="state == 'done'"
+                                       name="picking_id"/>
+                                <field invisible="type != 'deprecation'"
+                                       readonly="state == 'done'"
+                                       name="motive_id" required="type == 'deprecation'"/>
+                                <field
+                                         readonly="state == 'done'"
+                                        name="date"/>
+                            </group>
+                            <group>
+                                <field name="project_id"
+                                       readonly="state == 'done'"
+                                       options='{"no_create": 1, "no_open": 1}' required="1"/>
+                                <field name="budget_id"
+                                       readonly="state == 'done'"
+                                       options='{"no_create": 1, "no_open": 1}'/>
+                                <field groups="base_bim_2.group_budget_concept_documents"
+                                        readonly="state == 'done'"
+                                       name="concept_id" optional="show" options='{"no_create": 1, "no_open": 1}'/>
+                                <field name="user_id" readonly="1"/>
+                                <field groups="base.group_multi_company"
+                                        readonly="state == 'done'"
+                                       name="company_id"/>
+                                <field invisible="True" name="company_id"/>
+                                <field invisible="True" name="currency_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Tools">
+                                <field name="tool_ids" readonly="state == 'done'">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field force_save="1" name="date_due" readonly="date_due_readonly == True"/>
+                                        <field optional="hide" name="date_due_readonly"/>
+                                        <field name="qty" sum="sum"/>
+                                        <field name="cost" widget="monetary"/>
+                                        <field force_save="1" name="subtotal" sum="sum" widget="monetary"/>
+                                        <field  name="currency_id" optional="hide"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes"  readonly="state == 'done'"/>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_tree_employee_tools" model="ir.ui.view">
+            <field name="name">view.tree.bim.employee.tools</field>
+            <field name="model">employee.tools</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'draft'" decoration-muted="state == 'cancel'" delete="false">
+                    <field name="name"/>
+                    <field name="employee_id" widget="many2one"/>
+                    <field name="type"/>
+                    <field name="date"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id" optional="show"/>
+                    <field name="concept_id" optional="show"/>
+                    <field name="user_id"/>
+                    <field name="picking_id" optional="show"/>
+                    <field invisible="True" name="currency_id"/>
+                    <field name="amount_total" sum="sum" widget="monetary"/>
+                    <field groups="base.group_multi_company" name="company_id"/>
+                    <field name="state"/>
+                </list></field>
+        </record>
+        <record id="action_employee_tools_delivery" model="ir.actions.act_window">
+            <field name="name">Employee Tools</field>
+            <field name="res_model">employee.tools</field>
+            <field name="context">{'default_type': 'deliver'}</field>
+            <field name="domain">[('type','=','deliver')]</field>
+            <field name="res_model">employee.tools</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new employee tools delivery!
+                </p></field>
+        </record>
+        <record id="action_employee_tools_withdraw" model="ir.actions.act_window">
+            <field name="name">Tools Withdraw</field>
+            <field name="res_model">employee.tools</field>
+            <field name="context">{'default_type': 'withdraw'}</field>
+            <field name="domain">[('type','=','withdraw')]</field>
+            <field name="res_model">employee.tools</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new employee tools withdraw!
+                </p></field>
+        </record>
+        <record id="action_employee_tools_transfer" model="ir.actions.act_window">
+            <field name="name">Tools Transfer</field>
+            <field name="res_model">employee.tools</field>
+            <field name="context">{'default_type': 'transfer'}</field>
+            <field name="domain">[('type','=','transfer')]</field>
+            <field name="res_model">employee.tools</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new employee tools transfer!
+                </p></field>
+        </record>
+        <record id="action_employee_tools_deprecation" model="ir.actions.act_window">
+            <field name="name">Tools Deprecation</field>
+            <field name="res_model">employee.tools</field>
+            <field name="context">{'default_type': 'deprecation'}</field>
+            <field name="domain">[('type','=','deprecation')]</field>
+            <field name="res_model">employee.tools</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new employee tools deprecation!
+                </p></field>
+        </record>
+        <menuitem id="menu_employee" name="Employees"
+                  parent="menu_bim_data" sequence="140"/>
+
+        <menuitem id="menu_employee_tools" name="Herramientas de Empleados"
+                  parent="menu_bim_data" sequence="150"/>
+
+        <menuitem action="action_employee_tools_delivery"
+                  id="submenu_employee_tools_delivery" name="Tools Delivery" parent="menu_employee_tools" sequence="101"/>
+        <menuitem action="action_employee_tools_withdraw"
+                  id="submenu_employee_tools_withdraw" name="Tools Withdraw" parent="menu_employee_tools" sequence="102"/>
+        <menuitem action="action_employee_tools_transfer"
+                  id="submenu_employee_tools_transfer" name="Tools Transfer" parent="menu_employee_tools" sequence="103"/>
+        <menuitem action="action_employee_tools_deprecation"
+                  id="submenu_employee_tools_deprecation" name="Tools Deprecation" parent="menu_employee_tools" sequence="104"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <t t-name="hide_chat.ChatterToggleButton" owl="1">
+        <button class="btn btn-sm o_chatter_toggle" 
+                t-on-click="toggleChatter" 
+                t-att-title="state.hidden ? 'Mostrar Chatter' : 'Ocultar Chatter'">
+            <i t-att-class="state.hidden ? 'fa fa-eye-slash' : 'fa fa-eye'" />
+        </button>
+    </t>
+
+</templates>

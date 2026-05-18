@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_document_notes_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="base_bim_2.bim_header_external_layout_notes">
+                            <div class="page">
+                                 <span t-raw="o.obs" style="line-height:11pt;"/>
+                            </div>
+                        </t>
+                </t>
+            </t>
+        </template>        
+    </data>
+</odoo>

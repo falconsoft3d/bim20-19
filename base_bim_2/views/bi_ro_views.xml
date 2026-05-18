@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bi_ro" model="ir.ui.view">
+        <field name="name">view.form.bi.ro</field>
+        <field name="model">bi.ro</field>
+        <field name="arch" type="xml">
+            <form string="BI RO">
+                <header>
+                    <button name="calculate_ro" string="Calculate"
+                            type="object" class="oe_highlight"/>
+                </header>
+
+
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="bim_budget_id"/>
+                             <field name="budget_id"/>
+                             <field name="date"/>
+                             <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids" nolabel="1" readonly="1">
+                                <list editable="bottom">
+                                    <field name="name" optional="show"/>
+                                    <field name="description" optional="show"/>
+                                    <field name="invoices_ids" optional="hide" widget="many2many_tags"/>
+                                    <field name="bim_concept_ids" optional="hide" widget="many2many_tags"/>
+                                    <field name="parent_budget" sum="sum" optional="show"/>
+                                    <field name="budget" sum="sum" optional="show"/>
+                                    <field name="forecast" sum="sum" optional="show"/>
+                                    <field name="purchase_order" sum="sum" optional="show"/>
+                                    <field name="saldo" sum="sum" optional="show"/>
+                                    <field name="estimated_margin" sum="sum" optional="show"/>
+                                    <field name="expenses" sum="sum" optional="show"/>
+                                    <field name="currency_id" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Others">
+                            <group>
+                                <group>
+                                    <field name="clear_invoices_ids"
+                                             string="Facturas sin Fases"
+                                             widget="many2many_tags"/>
+                                </group>
+                                <group>
+                                    <button name="action_open_invoices" string="Facturas sin Fases"
+                                            type="object" class="oe_highlight"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="obj_bim_budget_id"
+                                             />
+                                    <field name="parent_bim_concept_ids"
+                                             string="Conceptos sin Fases"
+                                                widget="many2many_tags"
+                                             />
+                                </group>
+                                <group>
+                                    <button name="parent_check" string="Conceptos sin Fases"
+                                            type="object" class="oe_highlight"/>
+                                </group>
+                            </group>
+                        </page>
+
+                    </notebook>
+
+
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bi_ro" model="ir.ui.view">
+        <field name="name">view.tree.bi.ro</field>
+        <field name="model">bi.ro</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="bim_budget_id"/>
+                <field name="budget_id"/>
+                <field name="type"/>
+                <field name="user_id"/>
+                <field name="company_id"/>
+                <field name="date"/>
+                <field name="type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bi_ro" model="ir.actions.act_window">
+        <field name="name">BI RO</field>
+        <field name="res_model">bi.ro</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Register!
+            </p>
+        </field>
+    </record>
+
+
+    </data>
+</odoo>

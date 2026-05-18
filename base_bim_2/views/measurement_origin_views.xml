@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_form_measurement_origin" model="ir.ui.view">
+        <field name="name">view.form.measurement.origin</field>
+        <field name="model">measurement.origin</field>
+        <field name="arch" type="xml">
+            <form string="order">
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name" class="oe_inline" colspan="1"/>
+                       </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_measurement_origin" model="ir.ui.view">
+        <field name="name">view.tree.measurement.origin</field>
+        <field name="model">measurement.origin</field>
+        <field name="arch" type="xml">
+            <list delete="1">
+                <field name="name"/>
+                <field name="user_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_measurement_origin" model="ir.actions.act_window">
+        <field name="name">Measurement Origin</field>
+        <field name="res_model">measurement.origin</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Measurement Origin
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="action_measurement_origin" id="measurement_origin" name="Measurement Origin"
+              parent="submenu_bim_certification" sequence="91"/>
+
+</odoo>

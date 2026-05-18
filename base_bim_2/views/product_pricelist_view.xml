@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_pricelist_form" model="ir.ui.view">
+        <field name="name">product.pricelist.form</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <widget name="web_ribbon" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" groups="base_bim_2.group_user_bim" icon="fa-money" invisible="budget_count == 0" name="action_view_budgets" string="Budgets" type="object">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="budget_count" nolabel="1" widget="statinfo"/>
+                            </span>
+                            <span class="o_stat_text">
+                                Budgets
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </widget></field>
+    </record>
+</odoo>

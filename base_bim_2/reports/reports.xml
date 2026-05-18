@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="bim_budget_full" model="ir.actions.report">
+        <field name="name">Full Budget Report</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.budget_report_full</field>
+        <field name="report_file">base_bim_2.budget_report_full</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget" model="ir.actions.report">
+        <field name="name">Budget Report</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.budget_report</field>
+        <field name="report_file">base_bim_2.budget_report</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget_programming" model="ir.actions.report">
+        <field name="name">Budget Programing Report </field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.bim_budget_programming_report</field>
+        <field name="report_file">base_bim_2.bim_budget_programming_report</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget_summary" model="ir.actions.report">
+        <field name="name">Summary Budget</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.budget_summary</field>
+        <field name="report_file">base_bim_2.budget_summary</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget_resource" model="ir.actions.report">
+        <field name="name">Resource Report</field>
+        <field name="model">bim.resource.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.budget_resource</field>
+        <field name="report_file">base_bim_2.budget_resource</field>
+        <field name="binding_model_id" ref="model_bim_resource_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_checklist_act" model="ir.actions.report">
+        <field name="name">Checklist Report</field>
+        <field name="model">bim.checklist</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.report_checklist</field>
+        <field name="report_file">base_bim_2.report_checklist</field>
+        <field name="binding_model_id" ref="model_bim_checklist"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget_certification" model="ir.actions.report">
+        <field name="name">Certification Report</field>
+        <field name="model">bim.certification.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.certification_report</field>
+        <field name="report_file">base_bim_2.certification_report</field>
+        <field name="binding_model_id" ref="model_bim_certification_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_origin_certification" model="ir.actions.report">
+        <field name="name">Certification Report</field>
+        <field name="model">bim.certification.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.origin_cert_report</field>
+        <field name="report_file">base_bim_2.origin_cert_report</field>
+        <field name="binding_model_id" ref="model_bim_certification_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget_compare" model="ir.actions.report">
+        <field name="name">Comparative Report</field>
+        <field name="model">bim.certification.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.compare_cert_report</field>
+        <field name="report_file">base_bim_2.compare_cert_report</field>
+        <field name="binding_model_id" ref="model_bim_certification_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget_real_execute" model="ir.actions.report">
+        <field name="name">Real Execution Report</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.real_execute_report</field>
+        <field name="report_file">base_bim_2.real_execute_report</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="bim_budget_stage" model="ir.actions.report">
+        <field name="name">Stage Report</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.budget_stage_report</field>
+        <field name="report_file">base_bim_2.budget_stage_report</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="notes_report_budget" model="ir.actions.report">
+        <field name="name">Budget Notes</field>
+        <field name="model">bim.budget</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.report_budget_notes_template</field>
+        <field name="report_file">base_bim_2.report_budget_notes_template</field>
+        <field name="binding_model_id" ref="model_bim_budget"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="notes_report_document" model="ir.actions.report">
+        <field name="name">Document Notes</field>
+        <field name="model">bim.documentation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.report_document_notes_template</field>
+        <field name="report_file">base_bim_2.report_document_notes_template</field>
+        <field name="binding_model_id" ref="model_bim_documentation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_workorder" model="ir.actions.report">
+        <field name="name">Report</field>
+        <field name="model">bim.work.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.report_workorder</field>
+        <field name="report_file">base_bim_2.report_workorder</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Budget - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_bim_work_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <record id="bim_quality_control_act" model="ir.actions.report">
+        <field name="name">Quality Control Report</field>
+        <field name="model">bim.quality.control.plan</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.report_quality_control</field>
+        <field name="report_file">base_bim_2.report_quality_control</field>
+        <field name="binding_model_id" ref="model_bim_quality_control_plan"/>
+        <field name="binding_type">report</field>
+    </record>
+
+     <record id="bim_quality_control_paperformat" model="report.paperformat">
+            <field name="name">Quality Control</field>
+            <field name="default" eval="True"/>
+            <field name="format">Letter</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">28</field>
+            <field name="dpi">90</field>
+    </record>
+
+    <record id="base_bim_2.bim_quality_control_act" model="ir.actions.report">
+        <field name="paperformat_id" ref="bim_quality_control_paperformat"/>
+    </record>
+
+    <record id="bim_budget_real_execute_detailed" model="ir.actions.report">
+        <field name="name">Real Execution Detailed Report</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.real_execute_detailed_report</field>
+        <field name="report_file">base_bim_2.real_execute_detailed_report</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <record id="bim_budget_real_execute_full_detailed" model="ir.actions.report">
+        <field name="name">Real Execution Full Detailed Report</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.real_execute_full_detailed_report</field>
+        <field name="report_file">base_bim_2.real_execute_full_detailed_report</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_multiple_cost_detailed" model="ir.actions.report">
+        <field name="name">Detailed Cost Report</field>
+        <field name="model">bim.budget</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.multiple_cost_detailed_report</field>
+        <field name="report_file">base_bim_2.multiple_cost_detailed_report</field>
+        <field name="print_report_name">'Finished products - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_bim_budget"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_attendance_mass_works" model="ir.actions.report">
+        <field name="name">Detailed Work Report</field>
+        <field name="model">hr.attendance.mass</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.attendance_work_detailed_report</field>
+        <field name="report_file">base_bim_2.attendance_work_detailed_report</field>
+        <field name="print_report_name">'Work - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_hr_attendance_mass"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_attendance_mass_summary" model="ir.actions.report">
+        <field name="name">Mass Summary Report</field>
+        <field name="model">hr.attendance.mass.summary</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.attendance_mass_summary_report</field>
+        <field name="report_file">base_bim_2.attendance_mass_summary_report</field>
+        <field name="print_report_name">'MassSumm - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_hr_attendance_mass_summary"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <record id="action_report_timesheet_summary" model="ir.actions.report">
+        <field name="name">Timesheet Summary Report</field>
+        <field name="model">bim.project.employee.timesheet.summary</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.timesheet_summary_report</field>
+        <field name="report_file">base_bim_2.timesheet_summary_report</field>
+        <field name="print_report_name">'TimesheetSumm - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_bim_project_employee_timesheet_summary"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="departarture_assets_discount_paperformat" model="report.paperformat">
+            <field name="name">Departarture assets discount</field>
+            <field name="default" eval="True"/>
+            <field name="format">Letter</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">19</field>
+            <field name="dpi">90</field>
+    </record>
+
+    <record id="bim_budget_departure_asset_discount" model="ir.actions.report">
+        <field name="name">Departure asset discount</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.budget_departure_asset_discount</field>
+        <field name="report_file">base_bim_2.budget_departure_asset_discount</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base_bim_2.departarture_assets_discount_paperformat"/>
+    </record>
+
+    <record id="departarture_list_paperformat" model="report.paperformat">
+            <field name="name">Departarture assets discount</field>
+            <field name="default" eval="True"/>
+            <field name="format">Letter</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">38</field>
+            <field name="dpi">90</field>
+    </record>
+
+    <record id="bim_budget_departure_list" model="ir.actions.report">
+        <field name="name">Departure list</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">base_bim_2.budget_departure_list</field>
+        <field name="report_file">base_bim_2.budget_departure_list</field>
+        <field name="binding_model_id" ref="model_bim_budget_report_wizard"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base_bim_2.departarture_list_paperformat"/>
+    </record>
+
+    <record id="action_report_certification_by_line" model="ir.actions.report">
+        <field name="name">Informe</field>
+        <field name="model">bim.massive.certification.by.line</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.certification_by_line_report</field>
+        <field name="report_file">base_bim_2.certification_by_line_report</field>
+        <field name="print_report_name">'Certificación por líneas - %s' % object.name.replace('/','-')</field>
+        <field name="binding_model_id" ref="model_bim_massive_certification_by_line"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_budget_request" model="ir.actions.report">
+        <field name="name">Informe</field>
+        <field name="model">budget.request</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.budget_request_report</field>
+        <field name="report_file">base_bim_2.budget_request_report</field>
+        <field name="print_report_name">'SOLPE - %s' % object.name.replace('/','-')</field>
+        <field name="binding_model_id" ref="model_budget_request"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_bim_rfi" model="ir.actions.report">
+        <field name="name">Bim RFI</field>
+        <field name="model">bim.rfi</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.bim_rfi_report</field>
+        <field name="report_file">base_bim_2.bim_rfi_report</field>
+        <field name="print_report_name">'RFI - %s' % object.name.replace('/','-')</field>
+        <field name="binding_model_id" ref="model_bim_rfi"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- QWeb Reports Purchase.valuation -->
+    <record id="action_report_purchase_valuation" model="ir.actions.report">
+        <field name="name">Purchase Valuation</field>
+        <field name="model">purchase.valuation</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.report_purchase_valuation</field>
+        <field name="report_file">base_bim_2.report_purchase_valuation</field>
+        <field name="print_report_name">'Valorizacion - %s' % object.name.replace('/','-')</field>
+        <field name="binding_model_id" ref="model_purchase_valuation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

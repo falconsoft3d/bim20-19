@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="customer_survey_view_tree" model="ir.ui.view">
+            <field name="name">customer.survey.view.tree</field>
+            <field name="model">customer.survey</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'draft'" decoration-muted="state == 'cancel'" delete="0">
+                    <field name="name"/>
+                    <field name="customer" optional="show"/>
+                    <field name="from_customer" optional="show"/>
+                    <field name="department_id" optional="show"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="customer_question_template_id" optional="show"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id" optional="show"/>
+                    <field name="bim_concepts" optional="show"/>
+                    <field name="create_date" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="state" optional="show"/>
+                </list></field>
+        </record>
+        <record id="customer_survey_view_form" model="ir.ui.view">
+            <field name="name">customer.survey.view.form</field>
+            <field name="model">customer.survey</field>
+            <field name="arch" type="xml">
+                <form string="Customer Survey">
+                    <header>
+                        <button class="oe_highlight" invisible="state not in ['draft']" name="action_done" string="Done" type="object"/>
+                        <button confirm="Are you sure you want to set this survey to draft?" invisible="state not in ['done','cancel']" name="action_draft" string="Draft" type="object"/>
+                        <button name="action_cancel" string="Cancel" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="customer"/>
+                                <field name="from_customer"/>
+                                <field name="project_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in 'draft'" widget="many2one"/>
+                                <field domain="[('project_id','=',project_id)]" name="budget_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in 'draft'" widget="many2one"/>
+                                <field domain="[('budget_id','=',budget_id)]" name="bim_concepts" options='{"no_create": 1, "no_open": 1}' readonly="state not in 'draft'" widget="many2one"/>
+                            </group>
+                            <group>
+                                <field name="customer_question_template_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in 'draft'" widget="many2one"/>
+                                <field name="department_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in 'draft'" widget="many2one"/>
+                                <field name="user_id"/>
+                                <field name="create_date"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="lines" string="Lines">
+                                <field name="lines_ids" nolabel="1" readonly="state not in 'draft'">
+                                    <list editable="bottom">
+                                        <field name="name" optional="show" options='{"no_create": 1, "no_open": 1}' widget="many2one"/>
+                                        <field name="value" optional="show" sum="sum"/>
+                                    </list></field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="customer_survey_action" model="ir.actions.act_window">
+            <field name="name">Customer Survey</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.survey</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem action="customer_survey_action" id="menu_bim_customer_survey" name="Customer Survey" parent="menu_customer_evaluation" sequence="8"/>
+        <record id="customer_survey_line_view_tree" model="ir.ui.view">
+            <field name="name">customer.survey.line.view.tree</field>
+            <field name="model">customer.survey.line</field>
+            <field name="arch" type="xml">
+                <list delete="0">
+                    <field name="survey_id" optional="show"/>
+                    <field name="name" optional="show"/>
+                    <field name="department_id" optional="show"/>
+                    <field name="create_date" optional="show"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id" optional="show"/>
+                    <field name="bim_concepts" optional="show"/>
+                    <field name="customer" optional="show"/>
+                    <field name="from_customer" optional="show"/>
+                    <field name="value" optional="show" sum="sum"/>
+                </list></field>
+        </record>
+        <record id="customer_survey_line_action" model="ir.actions.act_window">
+            <field name="name">Customer Survey Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.survey.line</field>
+            <field name="view_mode">list</field>
+        </record>
+        <menuitem action="customer_survey_line_action" id="menu_bim_customer_survey_line" name="Customer Survey Lines" parent="menu_customer_evaluation" sequence="8"/>
+    </data>
+</odoo>

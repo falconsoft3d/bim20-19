@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <data>
+    <record id="view_form_ticket_bim_category" model="ir.ui.view">
+         <field name="name">view.form.ticket.bim.category</field>
+         <field name="model">ticket.bim.category</field>
+         <field name="arch" type="xml">
+            <form string="Category List">
+              <header>
+              </header>
+              <sheet>
+                  <group>
+                      <group>
+                          <field name="name" required="1"/>
+                          <field name="email" required="1"/>
+                       </group>
+                      <group>
+                          <field name="company_id"/>
+                       </group>
+                  </group>
+               </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_ticket_bim_category" model="ir.ui.view">
+         <field name="name">view.tree.ticket.bim.category</field>
+         <field name="model">ticket.bim.category</field>
+         <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_ticket_bim_category" model="ir.actions.act_window">
+        <field name="name">Categories</field>
+        <field name="res_model">ticket.bim.category</field>
+        <field name="view_id" ref="view_tree_ticket_bim_category"/>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Create a new Category!
+          </p>
+       </field>
+    </record>
+
+
+
+    </data>
+</odoo>

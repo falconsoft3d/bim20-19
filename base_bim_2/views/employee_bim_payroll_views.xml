@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="employee_bim_payroll_view_tree" model="ir.ui.view">
+            <field name="name">employee.bim.payroll.view.tree</field>
+            <field name="model">employee.bim.payroll</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="employee_bim_payroll_view_form" model="ir.ui.view">
+            <field name="name">employee.bim.payroll.view.form</field>
+            <field name="model">employee.bim.payroll</field>
+            <field name="arch" type="xml">
+                <form string="Employee Bim Payroll">
+                    <sheet>
+                     <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                     </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="employee_bim_payroll_action" model="ir.actions.act_window">
+            <field name="name">Employee Bim Payroll</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.bim.payroll</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+         <menuitem action="employee_bim_payroll_action"
+                   id="submenu_employee_bim_payroll" name="Employee Bim Payroll"
+                   parent="menu_employee" sequence="2"/>
+
+    </data>
+</odoo>

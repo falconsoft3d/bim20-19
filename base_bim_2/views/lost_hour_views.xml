@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="lost_hour_view_tree" model="ir.ui.view">
+            <field name="name">lost.hour.view.tree</field>
+            <field name="model">lost.hour</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="validate == 'claim'" edit="0" delete="0" create="0">
+                    <field name="diary_part_id"/>
+                    <field name="date"/>
+                    <field name="project_id"/>
+                    <field name="employee_category_id"/>
+                    <field name="employee_specialty_id"/>
+                    <field name="description"/>
+                    <field name="quantity" sum="sum"/>
+                    <field name="cause_lost_hour_id"/>
+                    <field name="validate"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="lost_hour_view_pivot" model="ir.ui.view">
+            <field name="name">lost.hour.view.pivot</field>
+            <field name="model">lost.hour</field>
+            <field name="arch" type="xml">
+                <pivot string="Lost Hour">
+                    <field name="cause_lost_hour_id" type="row"/>
+                    <field interval="month" name="date" type="col"/>
+                    <field name="quantity" type="measure"/>
+                </pivot></field>
+        </record>
+
+        <record id="lost_hour_view_form" model="ir.ui.view">
+            <field name="name">lost.hour.view.form</field>
+            <field name="model">lost.hour</field>
+            <field name="arch" type="xml">
+                <form string="Lost Hour">
+                    <sheet>
+                     <group>
+                            <group>
+                                <field name="date"/>
+                                <field name="project_id"/>
+                                <field name="employee_category_id"/>
+                                <field name="employee_specialty_id"/>
+                            </group>
+                            <group>
+                                <field name="description"/>
+                                <field name="quantity"/>
+                                <field name="cause_lost_hour_id"/>
+                                <field name="validate"/>
+                            </group>
+                     </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="lost_hour_action" model="ir.actions.act_window">
+            <field name="name">Lost Hour</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">lost.hour</field>
+            <field name="view_mode">list,form,pivot</field>
+        </record>
+
+    </data>
+</odoo>

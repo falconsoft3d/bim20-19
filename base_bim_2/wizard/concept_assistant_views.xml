@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="concept_assistant_wizard_form" model="ir.ui.view">
+        <field name="name">concept.assistant.form</field>
+        <field name="model">concept.assistant</field>
+        <field name="arch" type="xml">
+            <form string="Concept Assistant">
+                <group name="main">
+                    <group name="left">
+                        <field name="concept_id" invisible="True"/>
+                    </group>
+                    <group>
+                    </group>
+                </group>
+
+                <notebook>
+                        <page string="Lines">
+                            <field name="line_ids" nolabel="1">
+                                <list decoration-danger="product_id == False"
+                                      editable="bottom"
+                                      excel_export="1">
+                                    <field name="type" optional="show"/>
+                                    <field name="product_id"
+                                           domain="[('resource_type', '=', type )]"
+                                            options='{"no_create": True}'
+                                           optional="show"/>
+                                    <field name="code" optional="hide"/>
+                                    <field name="description" optional="hide"/>
+                                    <field name="uom" optional="show"/>
+                                    <field name="quantity" optional="show" sum="sum"/>
+                                    <field name="cost" optional="show"/>
+                                    <field name="total" sum="sum" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                </notebook>
+                <footer>
+                    <button string="Execute" name="do_execute"  type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="concept_assistant_action" model="ir.actions.act_window">
+        <field name="name">Concept Assistant</field>
+        <field name="res_model">concept.assistant</field>
+        <field name="view_mode">form</field>
+       <field name="target">new</field>
+    </record>
+
+</odoo>

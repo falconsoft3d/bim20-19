@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_purchase_departure" model="ir.ui.view">
+        <field name="name">view.form.purchase.departure</field>
+        <field name="model">purchase.departure</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button class="oe_highlight" invisible="state != 'draft'" name="exe_done" string="To Done" type="object"/>
+                    <button class="oe_highlight" invisible="state != 'done'" name="exe_draft" string="To Draft" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="state != 'draft'" required="1"/>
+                            <field domain="[('project_id', '=', project_id)]" name="budget_id" readonly="state != 'draft'" required="1"/>
+                        </group>
+                        <group>
+                            <field name="type" readonly="state != 'draft'" required="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Lista" string="Lista">
+                            <field name="purchase_departure_line_ids"><list create="0" delete="0" editable="bottom" string="Lines">
+                                    <field name="concept_id" optional="show" readonly="1"/>
+                                    <field name="old_id" optional="hide" readonly="1"/>
+                                    <field name="partner_id" optional="show"/>
+                                    <field invisible="True" name="purchase"/>
+                                    <field name="purchases_ids" optional="show" readonly="1" widget="many2many_tags"/>
+                                    <field name="amount_total" optional="show" readonly="1" sum="sum"/>
+                                    <button class="oe_highlight" name="exe_purchase" string="Purchase" type="object"/>
+                                    <!-- attrs="{'invisible': [('purchase','=', True)]}" -->
+                                </list></field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form></field>
+    </record>
+    <record id="view_tree_purchase_departure" model="ir.ui.view">
+        <field name="name">view.tree.purchase.departure</field>
+        <field name="model">purchase.departure</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="budget_id"/>
+                <field name="type"/>
+                <field name="user_id"/>
+                <field name="create_date"/>
+                <field name="state"/>
+            </list></field>
+    </record>
+    <record id="action_purchase_departure" model="ir.actions.act_window">
+        <field name="name">Purchase Departure</field>
+        <field name="res_model">purchase.departure</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

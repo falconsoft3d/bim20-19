@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_account_payment_register_form" model="ir.ui.view">
+        <field name="name">bim.account.payment.register.form</field>
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+        <field name="arch" type="xml">
+            <field name="communication" position="after">
+                <field name="project_id"/>
+                <field name="budget_id"
+                       invisible="project_id == False"
+                       domain="[('project_id', '=', project_id)]"/>
+                <field name="concept_id"
+                       invisible="budget_id == False"
+                       domain="[('budget_id', '=', budget_id), ('type', '=', 'departure')]"/>
+                <field name="_wh_amount" invisible="1"/>
+            </field>
+
+            <field name="group_payment" position="after">
+                <field name="pay_wh_retention"/>
+            </field>
+
+        </field>
+    </record>
+</odoo>

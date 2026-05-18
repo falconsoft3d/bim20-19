@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_bim_massive_certification_by_line_form" model="ir.ui.view">
+            <field name="name">view.bim.massive.certification.by.line.form</field>
+            <field name="model">bim.massive.certification.by.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button class="oe_highlight"
+                                groups="base_bim_2.group_bim_certification"
+                                invisible="state not in ['draft']" name="action_load_lines" string="Load" type="object"/>
+                        <button class="oe_highlight"
+                                groups="base_bim_2.group_bim_certification"
+                                invisible="state not in ['loaded']" name="action_validate" string="Validate" type="object"/>
+                        <button invisible="state not in ['loaded']" name="mark_all"
+                                groups="base_bim_2.group_bim_certification"
+                                string="Mark All" type="object"/>
+                        <button invisible="state not in ['draft']"
+                                groups="base_bim_2.group_bim_certification"
+                                name="action_clear" string="Clear" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['cancelled']"
+                                groups="base_bim_2.group_bim_certification"
+                                name="action_convert_to_draft" string="Set to Draft"
+                                type="object"/>
+                        <button class="oe_highlight"
+                                groups="base_bim_2.group_bim_certification"
+                                invisible="state not in ['ready']"
+                                name="action_massive_certification" string="Certify" type="object"/>
+                        <button invisible="state not in ['ready']" name="action_load_consume"
+                                groups="base_bim_2.group_bim_certification"
+                                string="Load Consume" type="object"/>
+
+                        <button invisible="state not in ['ready','draft','loaded']"
+                                name="action_cancel"
+                                groups="base_bim_2.group_bim_certification"
+                                string="Cancel" type="object"/>
+
+                        <button invisible="state not in ['ready','draft','loaded']"
+                                name="action_update_prices"
+                                groups="base_bim_2.group_bim_certification"
+                                string="Update Price" type="object"/>
+
+                        <button class="oe_highlight"
+                                invisible="state != 'done' or paid_state_id != False"
+                                groups="base_bim_2.group_bim_certification"
+                                name="action_create_paid_state" string="Create Paid State" type="object"/>
+                        <button invisible="state != 'done' or paid_state_id != False"
+                                groups="base_bim_2.group_bim_certification"
+                                name="action_fix" string="Undo" type="object"/>
+
+
+                        <button invisible="state != 'ready'"
+                                name="action_to_load"
+                                icon="fa-arrow-left"
+                                groups="base_bim_2.group_bim_certification"
+                                string="Pasar Cargado" type="object"/>
+
+
+
+                        <!-- Boton para imprmir el reporte -->
+                        <button name="%(base_bim_2.action_report_certification_by_line)d"
+                                invisible="state in ['draft','loaded']"
+                                icon="fa-print"
+                                groups="base_bim_2.group_bim_certification"
+                                string="Certification Report" type="action"/>
+
+                        <button invisible="state != 'done'"
+                                icon="fa-arrow-left"
+                                groups="base_bim_2.group_bim_certification"
+                                confirm="¿Estás seguro que quieres pasar a Validado?"
+                                name="action_to_ready" string="Pasar Validado" type="object"/>
+
+                        <field name="state"  widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <widget bg_color="bg-success" invisible="invoice_state == 'pending'" name="web_ribbon" title="Invoiced"/>
+                        <widget bg_color="bg-warning" invisible="invoice_state == 'invoiced'" name="web_ribbon" title="Pending"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group col="3">
+                            <group>
+                                <field name="project_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                                <field name="budget_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                                <field name="budget_id_code" readonly="state != 'draft'" string="Código"/>
+                                <field invisible="paid_state_id == False"
+                                       domain="[('project_id', '=', project_id)]"
+                                       name="paid_state_id"
+                                       readonly="state == 'done'"
+                                />
+                                <field invisible="True" name="invoice_state"/>
+
+                                <field name="certify_everything" widget="boolean_toggle"
+                                       readonly="state not in ['draft', 'ready']"/>
+                            </group>
+                            <group>
+                                <field name="creation_date"  readonly="state not in ['draft', 'ready']"/>
+                                <field invisible="state in ['draft', 'ready']" name="certification_date"/>
+                                <field name="user_id" options="{'no_create': True}"/>
+
+
+                                <field name="certif_percent_mass"
+                                       invisible="type_calc_cert == 'quantity'"
+                                       readonly="state not in ['draft', 'ready']"/>
+
+                                <field name="acc_certif_percent_mass"
+                                       invisible="type_calc_cert == 'quantity'"
+                                       readonly="state not in ['draft', 'ready']"/>
+
+
+
+                                <field domain="[('budget_id', '=', budget_id), ('type', '=', 'departure')]"
+                                       name="only_concept_ids" options='{"no_create": 1, "no_open": 1, "no_quick_create": 1, "no_create_edit": 1}' placeholder="Concepts" readonly="state not in ['draft']" widget="many2many_tags"/>
+
+                                <field name="default_cuantity_to_cert"
+                                       readonly="state not in ['draft', 'ready']"/>
+
+
+                            </group>
+
+                           <group>
+                               <field name="stage_id"  invisible="stage_id == False"  readonly="state in ['ready', 'done']"/>
+                               <field name="date_start" invisible="stage_id == False"/>
+                               <field name="date_stop" invisible="stage_id == False"/>
+
+                               <field name="new_date_start" invisible="stage_id != False"/>
+                               <field name="new_date_stop" invisible="stage_id != False"/>
+                           </group>
+
+                        </group>
+                        <notebook>
+                            <page invisible="type != 'current_stage'" string="Certification by Stages">
+                                <field name="certification_stage_ids" readonly="state in ['ready','done', 'cancelled']">
+                                    <list create="0"
+                                          decoration-danger="quantity_to_cert > quantity_to_cert_o"
+                                          decoration-success="quantity_to_cert > 0"
+                                          editable="bottom" excel_export="1" optional="show">
+
+                                        <field force_save="1" name="name" optional="hide"/>
+                                        <field force_save="1" name="parent_id" optional="show" options="{'no_create': True}" readonly="True" />
+                                        <field force_save="1" name="concept_id" optional="show" options="{'no_create': True}" readonly="True"  widget="many2one_clickable"/>
+                                        <field force_save="1" name="uom_id" optional="hide" options="{'no_create': True}" readonly="True"  widget="many2one_clickable"/>
+                                        <field force_save="1" name="stage_id" optional="show" options="{'no_create': True}" readonly="True"  widget="many2one"/>
+
+                                        <!-- PRESUPUESTO -->
+                                        <field force_save="1" name="budget_qty" optional="show" readonly="True"
+                                               string="CanPres"
+                                               sum="sum"
+                                               />
+
+                                        <field name="sale_price" optional="show"
+                                               readonly="True"
+                                               string="Precio"
+                                               />
+
+                                        <field name="amount_budget" optional="show"
+                                               readonly="True"
+                                               string="ImpPres"
+                                               sum="ImpPres"/>
+                                        <field name="percent_acc" optional="Pres" readonly="True" />
+
+
+                                        <!-- ORIGEN MES ANTERIOR -->
+                                        <field name="qty_acc"
+                                               string="CanAnt"
+                                               sum="sum"
+                                               optional="hide" readonly="True" />
+
+                                        <field name="ImpAnt"
+                                               optional="hide" readonly="True"
+                                               sum="Total"
+                                        />
+
+
+                                        <field name="qty_t" optional="hide" style="background-color:white;"/>
+
+                                        <field name="certif_percent_error" optional="hide" />
+                                        <field name="certif_percent" optional="hide" readonly="False"/>
+                                        <field name="acc_certif" optional="hide" readonly="False"/>
+
+                                        <!-- ORIGEN MES ACTUAL -->
+                                        <field name="quantity_to_cert_o"
+                                               string="CanOrig"
+                                               optional="hide" readonly="False" sum="sum"/>
+
+                                        <field force_save="1" name="ImpOrig"
+                                               string="ImpOrig"
+                                               optional="hide" readonly="True" sum="Total"/>
+
+                                        <!-- MES ACTUAL -->
+
+                                        <field name="planned_quantity"
+                                               string="CanPlan"
+                                               optional="hide" sum="sum"/>
+
+                                        <field name="quantity_to_cert"
+                                               string="CanAct"
+                                               optional="show" readonly="False" sum="sum"/>
+
+                                        <field name="amount_certif"
+                                               string="ImpAct"
+                                               optional="show" sum="Total"/>
+
+                                        <field name="TotalImpPres" optional="hide" readonly="False"/>
+                                        <field name="TotalImpAnt" optional="hide" readonly="False"/>
+                                        <field name="TotalImpOrig" optional="hide" readonly="False"/>
+                                        <field name="TotalImpAct" optional="hide" readonly="False"/>
+
+                                    </list></field>
+                            </page>
+                            <page invisible="type != 'fixed'" string="Manual Certification">
+                                <field name="concept_ids" readonly="state in ['done', 'cancelled']">
+                                    <list create="0" decoration-danger="percent_acc > 100" decoration-success="percent_acc == 100" editable="bottom" excel_export="1">
+                                        <field name="parent_id" readonly="True"  widget="many2one_clickable"/>
+                                        <field name="name" readonly="True" />
+                                        <field name="quantity" readonly="True" />
+                                        <field name="percent_acc" readonly="True" />
+                                        <field name="quantity_to_cert" readonly="False" style="background-color:white;"/>
+                                        <field name="percent_cert" readonly="False" style="background-color:white;"/>
+                                        <field name="acc_certif" readonly="False" style="background-color:white;"/>
+                                        <field name="balance" readonly="True" string="Amount Budget."  sum="Total"/>
+                                        <field force_save="1" name="amount_certif" readonly="True"  sum="Total"/>
+                                    </list></field>
+                            </page>
+
+                            <page string="Measurements">
+                                <group>
+                                    <group>
+                                        <field  name="measurements" widget="boolean_toggle"/>
+                                        <button name="insert_measurement" class="oe_link pt-0" string="Insert measurement" type="object"/>
+                                    </group>
+                                    <group>
+                                        <field domain="[('bim_massive_certification_by_line_id', '=' , False),
+                                                ('project_id', '=', project_id),
+                                                ('state', 'in', ['done'])]"
+                                               name="measurement_capture_ids"
+                                               options='{"no_create": 1, "no_open": 1, "no_quick_create": 1, "no_create_edit": 1}'
+                                               placeholder="Measurements"
+                                               readonly="state not in ['draft']" widget="many2many_tags"/>
+                                    </group>
+
+                                </group>
+
+
+
+
+
+
+                                <field name="measurement_ids" readonly="state in ['done', 'cancelled']">
+                                    <list create="0" editable="bottom" excel_export="1">
+                                        <field name="concept_id"  widget="many2one_clickable"/>
+                                        <field name="qty" sum="sum"/>
+                                        <field name="length" />
+                                        <field name="width"/>
+                                        <field name="height"/>
+                                        <field name="amount_subtotal" sum="sum"/>
+                                        <field name="bim_certification_stage_certification_id" optional="hide"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <page invisible="type != 'current_stage'" string="Notes">
+                                <group>
+                                    <group>
+                                        <field name="note" placeholder="Add certification note..."/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </page>
+                            <page invisible="type != 'fixed'" string="Notes">
+                                <field name="note" placeholder="Add certification note..."/>
+                            </page>
+                            <page name="Other" string="Other">
+                                <group>
+                                    <group>
+                                        <field name="same_stage" readonly="state == 'done'" widget="boolean_toggle"/>
+                                        <field name="type" readonly="state != 'draft'"/>
+                                        <field name="type_invoice" readonly="state != 'draft'"/>
+                                        <field name="type_calc_cert" readonly="state != 'draft'"/>
+                                        <field name="contractor_contract_progress_capture_id" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="load_timesheet" readonly="state != 'draft'" widget="boolean_toggle"/>
+                                        <field domain="[('project_id', '=', project_id),('state', 'not in', ['draft'])]" name="bim_massive_certification_by_line_id" readonly="state not in ['draft']" string="Certification Template"/>
+                                        <field name="greater_than_100" readonly="state != 'draft'" widget="boolean_toggle"/>
+                                        <field groups="base.group_multi_company" name="company_id"/>
+                                        <field invisible="True" name="company_id"/>
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page name="progress" string="Progreso">
+                                <group>
+                                    <table border="1" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="2" style="padding: 8px;">PROGRESO CANTIDAD</th>
+                                                    <th colspan="3" style="padding: 8px;">
+                                                        <button name="action_update_progress"
+                                                                class="btn btn-primary"
+                                                                icon="fa-refresh"
+                                                                type="object"/>
+
+                                                            valores en %
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="padding: 8px;">Anterior</th>
+                                                    <th style="padding: 8px;">Periodo</th>
+                                                    <th style="padding: 8px;">Acumulado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 8px;">PLANIFICADO</td>
+                                                    <td style="padding: 8px;"><field name="progress_plan_last" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="progress_plan_this" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="progress_plan_acc" readonly="1"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px;">EJECUTADO</td>
+                                                    <td style="padding: 8px;"><field name="progress_exe_last" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="progress_exe_this" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="progress_exe_acc" readonly="1"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px;">DESVIACION</td>
+                                                    <td style="padding: 8px;"><field name="progress_acc_last" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="progress_acc_this" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="progress_acc_acc" readonly="1"/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                </group>
+                            </page>
+                        </notebook>
+
+                        <group class="oe_right">
+                        <group class="oe_subtotal_footer">
+                            <field name="total_fit" readonly="state in ['done', 'cancelled']"/>
+                            <field name="total_certif" />
+                        </group>
+
+                    </group>
+
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_bim_massive_certification_by_line_tree" model="ir.ui.view">
+            <field name="name">view.bim.massive.certification.by.line.tree</field>
+            <field name="model">bim.massive.certification.by.line</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'draft'"
+                      decoration-primary="state == 'ready'"
+                      decoration-success="state == 'done'"
+                      delete="0" string="Massive Certification">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="budget_id"/>
+                    <field name="creation_date"/>
+                    <field name="certification_date"/>
+                    <field name="type" string="Type"/>
+                    <field name="stage_id" optional="show"/>
+                    <field name="date_start" optional="show"/>
+                    <field name="date_stop" optional="show"/>
+                    <field groups="base.group_multi_company" name="company_id" optional="hide"/>
+                    <field name="total_certif" sum="Total"/>
+                    <field name="percent_certif" sum="Total"/>
+                    <field name="paid_state_id" optional="show"/>
+                    <field decoration-success="invoice_state == 'invoiced'" decoration-warning="invoice_state == 'pending'" name="invoice_state" optional="show" widget="badge"/>
+                    <field name="state"  widget="badge" decoration-danger="state == 'draft'"
+                      decoration-primary="state == 'ready'"
+                      decoration-success="state == 'done'"/>
+                </list></field>
+        </record>
+
+        <record id="bim_massive_certification_by_line_action" model="ir.actions.act_window">
+            <field name="name">Certifications</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.massive.certification.by.line</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Certify the first Budget!
+                </p></field>
+        </record>
+
+        <menuitem action="bim_massive_certification_by_line_action" id="bim_massive_certification_by_line_submenu"
+                  name="Certifications"
+                  parent="submenu_bim_certification" sequence="1"/>
+    </data>
+</odoo>

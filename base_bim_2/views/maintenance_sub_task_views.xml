@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_sub_task" model="ir.ui.view">
+         <field name="name">view.form.sub.task</field>
+         <field name="model">maintenance.sub.task</field>
+         <field name="arch" type="xml">
+            <form>
+              <header>
+                      <button class="btn btn-primary"
+                                   invisible="state not in ['draft']"
+                                   name="action_ots_in_process" string="To Process" type="object"/>
+
+                       <button class="btn btn-primary"
+                                   invisible="state not in ['in_progress']"
+                                   name="action_done" string="Done" type="object"/>
+
+                       <button
+                                   invisible="state not in ['done']"
+                                   name="to_draft" string="To Draft" type="object"/>
+
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+
+              <sheet>
+                    <group>
+                        <group>
+                            <field name="code" readonly="1"/>
+                            <field name="name" required="1"/>
+                            <field name="maintenance_part_id"/>
+                            <field name="type"/>
+                            <field name="required"/>
+                            <field name="doc_required"/>
+                        </group>
+                        <group>
+                            <field name="maintenance_task_id"/>
+                            <field name="company_id"/>
+                            <field name="user_id"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                   <notebook>
+                      <page string="Text" invisible="type != 'text'">
+                          <field name="sub_task_text" required="type == 'text'" placeholder="Text..."/>
+                      </page>
+                       <page string="Numeric" invisible="type != 'numeric'">
+                          <field name="sub_task_numeric"
+                                 required="type == 'numeric'"/>
+                      </page>
+                      <page string="Date" invisible="type != 'date'">
+                          <field name="sub_task_date"
+                                 required="type == 'date'"/>
+                      </page>
+                      <page string="Datetime" invisible="type != 'date_time'">
+                          <field name="sub_task_date_time"
+                                 required="type == 'date_time'"/>
+                      </page>
+                       <page string="GPS" invisible="type != 'gps'">
+                           <group>
+                                   <group>
+                                        <button name="get_location" string="Get Location" type="object"/>
+                                   </group>
+                                   <group>
+                                       <field name="sub_latitude" required="type == 'gps'" readonly="1"/>
+                                        <field name="sub_longitude" required="type == 'gps'" readonly="1"/>
+                                   </group>
+                           </group>
+                      </page>
+                    </notebook>
+               </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_sub_task" model="ir.ui.view">
+         <field name="name">view.tree.sub.task</field>
+         <field name="model">maintenance.sub.task</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="sequence" widget="handle"/>
+                 <field name="code"/>
+                 <field name="name"/>
+                 <field name="maintenance_part_id"/>
+                 <field name="type"/>
+                 <field name="required"/>
+                 <field name="doc_required"/>
+                 <field name="maintenance_task_id"/>
+                 <field name="company_id"/>
+                 <field name="user_id"/>
+                 <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sub_task" model="ir.actions.act_window">
+        <field name="name">Sub Task</field>
+        <field name="res_model">maintenance.sub.task</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="seq_invoice_from_picking_in" model="ir.sequence">
+            <field name="name">Facturar Albaranes Entrada</field>
+            <field name="code">in.invoice.from.picking.mass</field>
+            <field name="prefix">IN/IFPM</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_invoice_from_picking_out" model="ir.sequence">
+            <field name="name">Facturar Albaranes Salida</field>
+            <field name="code">out.invoice.from.picking.mass</field>
+            <field name="prefix">OUT/IFPM</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

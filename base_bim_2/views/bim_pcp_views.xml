@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_form_bim_bim_pcp" model="ir.ui.view">
+        <field name="name">view.form.bim.pcp</field>
+        <field name="model">bim.pcp</field>
+        <field name="arch" type="xml">
+            <form string="order" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="concept_phase_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_bim_pcp" model="ir.ui.view">
+        <field name="name">view.tree.bim.pcp</field>
+        <field name="model">bim.pcp</field>
+        <field name="arch" type="xml">
+            <list delete="1">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="concept_phase_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_pcp" model="ir.actions.act_window">
+        <field name="name">Bim Pcp</field>
+        <field name="res_model">bim.pcp</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new PCP
+            </p>
+        </field>
+    </record>
+
+</odoo>

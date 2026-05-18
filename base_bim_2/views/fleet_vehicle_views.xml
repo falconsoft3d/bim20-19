@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_inherit_fleet_vehicle_form" model="ir.ui.view">
+            <field name="name">view.inherit.fleet.vehicle.form</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                    <page string="Bim" name="fleet_bim">
+                      <group>
+                           <group name="bim">
+                                <field name="fleet_vehicle_price_id"/>
+                                <field name="product_id"  domain="[('resource_type', '=', 'Q')]"/>
+                                <field name="rent_state" readonly="1"/>
+                           </group>
+                      </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

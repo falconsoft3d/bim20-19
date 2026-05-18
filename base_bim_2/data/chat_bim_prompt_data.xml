@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record forcecreate="True" id="ramdom_01" model="chat.bim.prompt">
+            <field name="name">4 capitulos random</field>
+            <field name="prompt">creame 4 capitulos random</field>
+        </record>
+
+        <record forcecreate="True" id="ramdom_02" model="chat.bim.prompt">
+            <field name="name">5 partidas random</field>
+            <field name="prompt">creame 5 partidas random</field>
+        </record>
+
+        <record forcecreate="True" id="ramdom_03" model="chat.bim.prompt">
+            <field name="name">4 materiales random</field>
+            <field name="prompt">4 materiales random</field>
+        </record>
+
+        <record forcecreate="True" id="chat_01" model="chat.bim.prompt">
+            <field name="name">Crear Presupuestos Básicos</field>
+            <field name="prompt">
+Dada una archivo de una edificio, genera un presupuesto de construcción detallado. Estructura el presupuesto 20 capitulos.
+
+Para cada capítulo, incluye:
+1. **Partidas**: Define cada partida relevante, indicando una breve descripción, unidad de medida y cantidad aproximada.
+2. **APUs (Análisis de Precios Unitarios)**: Para cada partida, especifica el precio unitario y el costo total.
+3. **Recursos**: Lista los recursos necesarios para cada partida, incluyendo mano de obra, materiales y equipos. Para cada recurso, especifica la cantidad, unidad de medida, costo unitario y costo total.
+4. Calcula las fechas de inicio y finalización de cada partida, considerando la disponibilidad de recursos y la duración de cada tarea.
+
+Solo dame el json no me des ni encabezado ni pie de página porque lo quiero meter en un json.
+Solo creame un capitulo y que todas las partidas sean hija de ese capitulo
+No me des el json cortado
+
+Devuélveme el resultado en formato JSON con la siguiente estructura de ejemplo:
+
+{
+      "concepts": [
+        {
+          "id": 17,
+          "code": "01",
+          "name": "CAPITULO 1",
+          "type": "chapter",
+          "quantity": 1.0,
+          "price": 1.0,
+          "parent": false,
+          "performance": 0.0,
+          "begin_date": "2021-01-01",
+          "end_date": "2021-01-31",
+        },
+        {
+          "id": 72,
+          "code": "01.1",
+          "name": "Cimentacion corrida de hormigon",
+          "type": "departure",
+          "quantity": 100,
+          "price": 1.0,
+          "parent": 17,
+          "performance": 0.0,
+          "begin_date": "2021-01-01",
+          "end_date": "2021-01-31",
+        },
+        {
+          "id": 95,
+          "code": "012",
+          "name": "Ladrillo de 15x20",
+          "type": "material",
+          "quantity": 1.0,
+          "price": 1.0,
+          "parent": 72,
+          "performance": 0.0,
+          "begin_date": "2021-01-01",
+          "end_date": "2021-01-31",
+        },
+        {
+          "id": 96,
+          "code": "0121",
+          "name": "Hormigon Armado de 20Pma",
+          "type": "material",
+          "quantity": 300.0,
+          "price": 1.0,
+          "parent": 72,
+          "performance": 0.0,
+          "begin_date": "2021-01-01",
+          "end_date": "2021-01-31",
+        },
+        {
+          "id": 97,
+          "code": "012.2",
+          "name": "Ayudante ",
+          "product": 6,
+          "type": "labor",
+          "quantity": 1.0,
+          "price": 1.0,
+          "parent": 72,
+          "performance": 0.0,
+          "begin_date": "2021-01-01",
+          "end_date": "2021-01-31",
+        },
+        {
+          "id": 98,
+          "code": "012.3",
+          "name": "Motoniveladora",
+          "type": "equip",
+          "quantity": 2.0,
+          "price": 22.0,
+          "parent": 72,
+          "performance": 0.0,
+          "begin_date": "2021-01-01",
+          "end_date": "2021-01-31",
+        }
+  ]
+}
+            </field>
+        </record>
+    </data>
+</odoo>

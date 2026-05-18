@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="massive_view_form_deliver_products" model="ir.ui.view">
+        <field name="name">view.form.deliver.products</field>
+        <field name="model">massive.deliver.products</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <header>
+                    <button class="oe_highlight" confirm="Are you sure you want to Request?" invisible="state not in ['draft']" name="exe_solicitado" string="Request" type="object"/>
+                    <button class="oe_highlight" confirm="Are you sure you want to approve?" invisible="state not in ['requested']" name="exe_aprobar" string="Approve" type="object"/>
+                    <button class="oe_highlight" confirm="Are you sure you want to deliver?" invisible="state not in ['approved']" name="exe_deliver" string="Deliver" type="object"/>
+                    <button confirm="Are you sure you want to set back to draft" invisible="state not in ['cancel']" name="exe_return_draft" string="Back to draft" type="object"/>
+                    <button confirm="Are you sure to cancel?" invisible="state not in ['draft','requested','approved']" name="exe_cancel" string="Cancel" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="entry_date" required="1"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="type" required="1"/>
+                            <field name="user_id" readonly="1" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="product_ids">
+                                <list decoration-danger="expired" decoration-info="retry == False" decoration-muted="retry == True" editable="bottom">
+                                    <field name="product_id" options='{"no_create": 1, "no_open": 1}' required="1"/>
+                                    <field name="qty" required="1" sum="Sum"/>
+                                    <field name="expiration_days" optional="hide"/>
+                                    <field name="expiration_date" optional="hide"/>
+                                    <field name="expired" optional="hide"/>
+                                    <field name="note" optional="hide"/>
+                                    <field name="stock_product" optional="show" string="Stock"/>
+                                    <field name="cost" required="1"/>
+                                    <field name="subtotal" required="1" sum="Sum"/>
+                                    <field invisible="True" name="retry"/>
+                                </list></field>
+                        </page>
+                        <page string="Employees">
+                            <field name="employee_ids"><list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="work_email"/>
+                                    <field name="work_phone"/>
+                                    <field name="work_location_id"/>
+                                    <field invisible="True" name="company_id"/>
+                                    <field invisible="True" name="address_id"/>
+                                </list></field>
+                        </page>
+                        <page string="Notes">
+                            <field name="obs"/>
+                        </page>
+                        <page invisible="state not in ['done']" string="Transfers">
+                            <field name="picking_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form></field>
+    </record>
+    <record id="massive_view_tree_deliver_products" model="ir.ui.view">
+        <field name="name">view.tree.deliver.products</field>
+        <field name="model">massive.deliver.products</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state=='cancel'" decoration-primary="state=='draft'" delete="0">
+                <field name="name"/>
+                <field name="type" required="1"/>
+                <field name="user_id"/>
+                <field name="entry_date"/>
+                <field name="product_ids" optional="hide" widget="many2many_tags"/>
+                <field name="company_id"/>
+                <field name="state"/>
+            </list></field>
+    </record>
+    <record id="massive_view_search_deliver_products" model="ir.ui.view">
+        <field name="name">view.search.deliver.products</field>
+        <field name="model">massive.deliver.products</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="type" required="1"/>
+                <field name="user_id"/>
+                <field name="entry_date"/>
+                <field name="product_ids" widget="many2many_tags"/>
+                <field name="state"/>
+            </search></field>
+    </record>
+    <record id="massive_view_search_product_line_list" model="ir.ui.view">
+        <field name="name">view.tree.deliver.products</field>
+        <field name="model">massive.product.line.list</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="retry"/>
+                <group expand="0" string="Group by...">
+                    <filter context="{'group_by':'product_id'}" domain="[]" name="group_by_product" string="Product"/>
+                </group>
+            </search></field>
+    </record>
+    <record id="massive_action_deliver_products" model="ir.actions.act_window">
+        <field name="name">EPIs massive delivery</field>
+        <field name="res_model">massive.deliver.products</field>
+        <field name="search_view_id" ref="massive_view_search_deliver_products"/>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

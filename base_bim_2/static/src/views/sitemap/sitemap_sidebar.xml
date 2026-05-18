@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="base_bim_2.Sidebar.Item" t-inherit="sitemap_view.Sidebar.Item" t-inherit-mode="primary">
+        <li position="attributes">
+            <attribute name="t-on-contextmenu.prevent.stop">openContextmenu</attribute>
+        </li>
+        <t t-out="item.name" position="before">
+            <i t-att-class="icon"/>
+        </t>
+    </t>
+
+</templates>

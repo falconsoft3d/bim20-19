@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="general_config_01" model="bim.general.config">
+        <field name="key">retention</field>
+        <field name="value">invoice_line</field>
+        <field name="note">invoice_line/invoice</field>
+    </record>
+    <record id="general_config_02" model="bim.general.config">
+        <field name="key">sequence</field>
+        <field name="value">0</field>
+        <field name="note">sequence</field>
+    </record>
+    <record id="general_config_03a" model="bim.general.config">
+        <field name="key">apu_unique</field>
+        <field name="value">0</field>
+        <field name="note">1 - el código del apu es único para el presupuesto , 0 - No lo valida</field>
+    </record>
+    <record id="general_config_04" model="bim.general.config">
+        <field name="key">max_day</field>
+        <field name="value">6</field>
+        <field name="note">Máximos de días continuos trabajando</field>
+    </record>
+    <record id="general_config_05" model="bim.general.config">
+        <field name="key">blok_aprove_part</field>
+        <field name="value">1</field>
+        <field name="note">1- No deja aprobar los partes con difrencias de horas contra el real, 0- Deja</field>
+    </record>
+    <record id="general_config_06" model="bim.general.config">
+        <field name="key">type_calc</field>
+        <field name="value">standard</field>
+        <field name="note">standard,apu,apu-hh</field>
+    </record>
+    <record id="general_config_07" model="bim.general.config">
+        <field name="key">type_model_calc</field>
+        <field name="value">2</field>
+        <field name="note">0-Optimizado IA,  1 - Recursivo ,2- Rapido, 3- Por parte</field>
+    </record>
+    <record id="general_config_08" model="bim.general.config">
+        <field name="key">type_cost</field>
+        <field name="value">1</field>
+        <field name="note">1 - Albaran de Salida, 2 - Albaran de Entrada</field>
+    </record>
+    <record id="general_config_09" model="bim.general.config">
+        <field name="key">valoration</field>
+        <field name="value">1</field>
+        <field name="note">1 - Servicios, 2 - Almacenable, 3- Todos</field>
+    </record>
+    <record id="general_config_10" model="bim.general.config">
+        <field name="key">cuenta_gastos_rendir</field>
+        <field name="value">14131</field>
+        <field name="note">Número de cuenta de gastos por rendir</field>
+    </record>
+    <record id="general_config_11" model="bim.general.config">
+        <field name="key">cuenta_gastos_proveedores</field>
+        <field name="value">410000</field>
+        <field name="note">Número de cuenta de Proveedores para Gastos</field>
+    </record>
+
+    <record id="general_config_12" model="bim.general.config">
+        <field name="key">nombre_diario_gastos</field>
+        <field name="value">Operaciones varias</field>
+        <field name="note">Nombre del diario para los gastos</field>
+    </record>
+
+    <!-- DBIM:06/03/2025 : Controlar cuando se actualiza el presupuesto en la certificación -->
+    <record id="general_config_13" model="bim.general.config">
+        <field name="key">certification_update</field>
+        <field name="value">1</field>
+        <field name="note">1 - Al cargar un presupuesto en la certificación actualiza antes el presupuesto, 0 - No actualiza</field>
+    </record>
+
+    <!-- DBIM:07/03/2025 : Es para los picking.analysis -->
+    <record id="general_config_14" model="bim.general.config">
+        <field name="key">picking_analysis_day</field>
+        <field name="value">1</field>
+        <field name="note">10 - Usa este número como día de búsqueda del mes actual al siguiente, 0 - No actualiza</field>
+    </record>
+
+    <record id="general_config_15" model="bim.general.config">
+        <field name="key">maintenance_measure</field>
+        <field name="value">BIM2023012121IO</field>
+        <field name="note">Clave de Documentación de Mediciones en mantenimiento</field>
+    </record>
+
+    <record id="general_config_16" model="bim.general.config">
+        <field name="key">date_bim</field>
+        <field name="value">08-08-25A</field>
+        <field name="note">Fecha de Actualización</field>
+    </record>
+
+    <record id="general_config_17" model="bim.general.config">
+        <field name="key">como_imputa_viajes</field>
+        <field name="value">50</field>
+        <field name="note">100-% o != 50%  afecta el Importe de los Viajes como un %, 50-% que afecta 50% tanto al origen como el destino</field>
+    </record>
+
+    <record id="general_config_18" model="bim.general.config">
+        <field name="key">cuenta_analitica_unica</field>
+        <field name="value">0</field>
+        <field name="note">0 No valida, 1 Si</field>
+    </record>
+
+    <record id="general_config_19" model="bim.general.config">
+        <field name="key">auto_etapa</field>
+        <field name="value">0</field>
+        <field name="note">0 No valida, 1 solo necesita una etapa para certificar</field>
+    </record>
+
+
+    <record id="general_config_20" model="bim.general.config">
+        <field name="key">direct_cost_rounding_type</field>
+        <field name="value">1</field>
+        <field name="note">Método de redondeo para costes directos</field>
+    </record>
+
+</odoo>

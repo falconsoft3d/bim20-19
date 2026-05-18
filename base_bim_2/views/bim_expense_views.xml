@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_expense" model="ir.ui.view">
+        <field name="name">view.form.bim.expense</field>
+        <field name="model">bim.expense</field>
+        <field name="arch" type="xml">
+            <form string="Diary Part" delete="0">
+                <header>
+                    <button class="oe_highlight" invisible="not state in ('draft')"
+                            name="to_required"
+                            string="To Required" type="object"/>
+
+                    <button class="oe_highlight" invisible="not state in ('required')"
+                            name="to_approved"
+                            groups="base_bim_2.group_user_bim_expense_all"
+                            string="To Approved" type="object"/>
+
+                    <button class="oe_highlight" invisible="not state in ('approved')"
+                            name="to_deposited"
+                            groups="base_bim_2.group_user_bim_expense_all"
+                            string="To Deposited" type="object"/>
+
+                    <button invisible="not state in ('required')"
+                            name="to_rejected"
+                            groups="base_bim_2.group_user_bim_expense_all"
+                            string="To Rejected" type="object"/>
+
+                    <button class="oe_highlight" invisible="not state in ('deposited')"
+                            name="to_cover"
+                            groups="base_bim_2.group_user_bim_expense_all"
+                            string="To Cover" type="object"/>
+
+                    <button class="oe_highlight" invisible="not state in ('to_cover')"
+                            name="to_finish"
+                            groups="base_bim_2.group_user_bim_expense_all"
+                            string="To Finish" type="object"/>
+
+                    <button invisible="not state in ('finalized')"
+                            name="create_invoices"
+                            groups="base_bim_2.group_user_bim_expense_all"
+                            string="Create Invoices" type="object"/>
+
+                    <button invisible="not state in ('finalized')"
+                            name="delete_invoices"
+                            groups="base_bim_2.group_user_bim_expense_all"
+                            string="Delete Invoices" type="object"/>
+
+
+                    <button  invisible="state in ('draft')"
+                             name="to_draft" string="To Draft" type="object"/>
+
+
+                    <button  invisible="state in ('cancel')"
+                             groups="base_bim_2.group_user_bim_expense_all"
+                             name="to_cancel" string="To Cancel" type="object"/>
+
+                    <button  invisible="state != 'cancel'"
+                            name="to_draft" string="To Draft" type="object"/>
+
+
+                <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name" />
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="type"
+                                   widget="radio"
+                                   readonly="state != 'draft'"/>
+
+                             <field name="amount_surrender" readonly="state != 'draft'"/>
+                             <field name="amount_delivered" readonly="state != 'required'"/>
+
+                             <field name="user_id" options="{'no_create': True, 'no_edit': True}" readonly="state != 'draft'"/>
+
+                             <field name="partner_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+                             <field name="account_journal_id"
+                                    domain="[('company_id', '=', company_id),('type', 'in', ['bank', 'cash'])]"
+                                    options="{'no_create': True, 'no_edit': True}"
+                                    readonly="state == 'finalized'"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="approval_date" readonly="True"/>
+                            <field name="company_id" readonly="state != 'draft'"/>
+                            <field name="currency_id" readonly="state != 'draft'"/>
+                            <field name="saldo"/>
+
+                            <field name="project_id"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="show"/>
+
+                             <field name="budget_id"
+                                           domain="[('project_id', '=', project_id)]"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="show"/>
+
+                            <field name="phase_id"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="show"/>
+                        </group>
+                    </group>
+
+
+                    <notebook>
+                      <page name="lines_ids"
+                            string="Lines">
+
+                          <field name="line_ids"
+                                   readonly="state in ('finalized')"
+                                   widget="one2many_list">
+                                <list editable="bottom" optional="show">
+                                    <field name="name" optional="show"/>
+                                    <field name="partner_id" optional="show"/>
+                                    <field name="invoice_number" optional="show"/>
+                                    <field name="date" optional="show"/>
+                                    <field name="project_id"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="show"/>
+                                    <field name="budget_id"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="show"/>
+                                    <field name="phase_id"
+                                           options="{'no_create': True, 'no_edit': True}"
+                                           optional="show"/>
+                                    <field name="currency_id" optional="hide"/>
+                                    <field name="amount" optional="show" sum="sum" widget="monetary"/>
+                                    <field name="storable" optional="show"/>
+                                    <field name="file" optional="show"/>
+                                    <field name="invoice_id"
+                                           widget="many2onebutton"
+                                           optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+
+                      <page string="Text">
+                           <field name="observation" placeholder="Observation..."/>
+                      </page>
+
+                     <page string="Others">
+                         <group>
+                             <group>
+                                <field name="include_for_bim" />
+                                <field name="account_move_id"
+                                       invisible="account_move_id == False"
+                                       readonly="1"/>
+                                <field name="account_move2_id"
+                                       invisible="account_move2_id == False"
+                                       readonly="1"/>
+                            </group>
+                         </group>
+                     </page>
+
+                    </notebook>
+
+
+                 </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_expense" model="ir.ui.view">
+        <field name="name">view.tree.bim.expense</field>
+        <field name="model">bim.expense</field>
+        <field name="arch" type="xml">
+            <list delete="0">
+                <field name="name"/>
+                <field name="user_id" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="company_id" optional="hide"/>
+                <field name="project_id" optional="show"/>
+                <field name="budget_id" optional="show"/>
+                <field name="phase_id" optional="show"/>
+                <field name="date" optional="show"/>
+                <field name="approval_date" optional="show"/>
+                <field name="type" optional="show"/>
+                <field name="amount_surrender" widget="monetary"
+                       sum="sum" optional="show"/>
+                <field name="amount_delivered"
+                       widget="monetary"
+                       sum="sum" optional="show"/>
+                <field name="saldo"
+                       widget="monetary"
+                       sum="sum" optional="show"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="state"
+                           widget="badge"
+                           decoration-success="state == 'finalized'" decoration-warning="state == 'approved'"
+                           decoration-info="state == 'received'" decoration-danger="state == 'draft'"
+                           optional="show"/>
+
+            </list>
+        </field>
+    </record>
+
+
+
+    <record id="action_bim_expense" model="ir.actions.act_window">
+        <field name="name">Bim Expense</field>
+        <field name="res_model">bim.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Bim Expense!
+            </p>
+        </field>
+    </record>
+
+    <!-- Solo muestra los gastos del usuario logueado -->
+    <record id="action_my_bim_expense" model="ir.actions.act_window">
+        <field name="name">Bim Expense</field>
+        <field name="res_model">bim.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Bim Expense!
+            </p>
+        </field>
+    </record>
+
+
+
+
+    </data>
+</odoo>

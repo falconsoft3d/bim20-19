@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="email_template_timesheet_summary" model="mail.template">
+            <field name="name">Timesheet: Summary</field>
+            <field name="model_id" ref="base_bim_2.model_bim_project_employee_timesheet_summary"/>
+            <field name="subject">Timesheet Summ (Ref ${object.name or 'n/a' })</field>
+            <field name="email_from">${(object.user_id.email)}</field>
+            <field name="email_to">${(object.customer_id.email)}</field>
+            <field name="auto_delete" eval="True"/>
+            <!-- <field name="report_template_ids" ref="[(4, ref('base_bim_2.action_report_timesheet_summary'))]"/> -->
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello ${object.customer_id.name}
+                        <br/><br/>
+                        Here is your summary of timesheet for a total of <strong>${(object.total_hours)}</strong> hours of the project: <strong>${object.project_id.name}</strong>
+                        <br/><br/>
+                        Regards,
+                    </p>
+                </div>
+            </field>
+            <field name="lang">${object.customer_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+
+
+        <record id="email_template_rfi" model="mail.template">
+            <field name="name">RFI: Send rfi</field>
+            <field name="model_id" ref="base_bim_2.model_bim_rfi"/>
+            <field name="subject">{{object.company_id.name}} RFI: {{object.name or 'n/a'}}</field>
+            <field name="email_from">{{(object.user_id.email_formatted or user.email_formatted)}}</field>
+            <field name="partner_to">{{object.contact_id.id}}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello <strong t-out="object.project_id.customer_id.name"/>
+                        <br/><br/>
+                        RFI is attached <strong t-out="object.name"></strong>
+                        <br/><br/>
+                        Regards,
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{object.project_id.customer_id.lang}}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+
+    </data>
+</odoo>

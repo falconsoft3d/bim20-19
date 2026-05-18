@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_hr_attendance_mass" model="ir.ui.view">
+        <field name="name">view.form.hr.attendance.mass</field>
+        <field name="model">hr.attendance.mass</field>
+        <field name="arch" type="xml">
+            <form delete="0" string="Report">
+                <header>
+                    <button class="btn-primary" invisible="state not in ['draft']" name="action_confirm" string="Validate Attendance" type="object"/>
+                    <button invisible="state not in ['draft','validated']" name="action_cancel" string="Cancel" type="object"/>
+                    <button invisible="state not in ['validated','cancel']" name="action_draft" string="Draft" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-check" invisible="attendance_count == 0" name="action_view_attendances" string="Attendances" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="attendance_count" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Attendances
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" options="{'no_open': True, 'no_create': True}" readonly="state not in ['draft']"/>
+                            <field domain="[('project_id','=',project_id)]" name="bim_documentation_id" options="{'no_open':True,'no_create':True}" readonly="state not in ['draft']"/>
+                            <field name="customer_id" options="{'no_open': True, 'no_create': True}" readonly="state not in ['draft']"/>
+                            <field name="budget_id" options="{'no_open':True,'no_create':True}" readonly="state not in ['draft']"/>
+                            <field name="concept_id" options="{'no_open':True,'no_create':True}" readonly="state not in ['draft']"/>
+                            <field name="date_from" readonly="state not in ['draft']"/>
+                            <field name="date_to" readonly="state not in ['draft']"/>
+                            <field name="user_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="hour_start_job" readonly="state not in ['draft']"/>
+                            <field name="minute_start_job" readonly="state not in ['draft']"/>
+                            <field name="working_hours" readonly="state not in ['draft']"/>
+                            <field name="bim_extra_hour_id" options="{'no_open': True, 'no_create': True}" readonly="state not in ['draft']"/>
+                            <field name="include_weekend" readonly="state not in ['draft']"/>
+                            <field invisible="True" name="show_alert" readonly="state not in ['draft']"/>
+                            <field name="total_hours" readonly="state not in ['draft']"/>
+                            <field name="total_amount" readonly="state not in ['draft']"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" nolabel="1" readonly="state not in ['draft']">
+                        <list editable="bottom">
+                            <field name="employee_id" options="{'no_open': True, 'no_create': True}" widget="many2one_avatar_user"/>
+                            <field name="project_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="note"/>
+                            <field name="hour_start_job"/>
+                            <field name="minute_start_job"/>
+                            <field name="working_hours" sum="total"/>
+                            <field name="bim_extra_hour_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field invisible="True" name="employee_ids"/>
+                        </list></field>
+                    <field name="description" nolabel="1" placeholder="Add description..." readonly="state not in ['draft']"/>
+                </sheet>
+                <chatter/>
+            </form></field>
+    </record>
+    <record id="view_tree_hr_attendance_mass" model="ir.ui.view">
+        <field name="name">view.tree.hr.attendance.mass</field>
+        <field name="model">hr.attendance.mass</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'draft'" decoration-info="state in ('validated')" decoration-muted="state == 'cancel'" delete="0">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="bim_documentation_id"/>
+                <field name="customer_id"/>
+                <field name="user_id"/>
+                <field name="budget_id"/>
+                <field name="concept_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="hour_start_job"/>
+                <field name="minute_start_job"/>
+                <field name="working_hours"/>
+                <field name="total_hours" sum="Sum"/>
+                <field name="total_amount" sum="Sum"/>
+                <field name="state"/>
+            </list></field>
+    </record>
+    <record id="action_hr_attendance_mass" model="ir.actions.act_window">
+        <field name="name">Massive attendance</field>
+        <field name="res_model">hr.attendance.mass</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new attendance massive!
+            </p></field>
+    </record>
+    <record id="actions_server_attendance_mass_confirm" model="ir.actions.server">
+        <field name="name">Confirm Attendance</field>
+        <field name="model_id" ref="base_bim_2.model_hr_attendance_mass"/>
+        <field name="binding_model_id" ref="base_bim_2.model_hr_attendance_mass"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">records.action_confirm()</field>
+    </record>
+</odoo>

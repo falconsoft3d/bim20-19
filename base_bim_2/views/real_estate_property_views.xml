@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_real_estate_property" model="ir.ui.view">
+        <field name="name">view.form.real.estate.property</field>
+        <field name="model">real.estate.property</field>
+        <field name="arch" type="xml">
+            <form string="Real Estate property" delete="0" >
+                <header>
+                        <button class="oe_highlight"  name="exe_update" string="Update" type="object"/>
+                 </header>
+                <sheet>
+                    <field class="oe_avatar" name="image_1920" options='{"preview_image": "image_128"}' widget="image"/>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="real_estate_development_id"/>
+                             <field name="real_estate_block_id"/>
+                             <field name="real_estate_lot_id"/>
+                             <field name="real_estate_prototype_id"/>
+                             <field name="project_ids" widget="many2many_tags"/>
+                             <field name="budget_ids" widget="many2many_tags"/>
+                             <field name="area"/>
+                        </group>
+                        <group>
+                            <field name="price"/>
+                            <field name="cost"/>
+                            <field name="benefit"/>
+                            <field name="partner_id"/>
+                            <field name="currency_id"/>
+                            <field name="company_id"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+
+
+                    <notebook>
+
+                        <page name="line_ids" string="Lines">
+                            <field name="line_ids" widget="one2many_list">
+                                <list editable="bottom">
+                                    <field name="real_estate_property_variant_id"
+                                           widget="many2onebutton"
+                                           options='{"no_create": true}'/>
+                                    <field name="quantity" />
+                                    <field name="note" />
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_real_estate_property" model="ir.ui.view">
+        <field name="name">view.tree.real.estate.property</field>
+        <field name="model">real.estate.property</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id" optional="show"/>
+                <field name="real_estate_development_id" optional="show"/>
+                <field name="real_estate_block_id" optional="show"/>
+                <field name="real_estate_lot_id" optional="show"/>
+                <field name="real_estate_prototype_id" optional="show"/>
+                <field name="price" sum="sum" optional="show"/>
+                <field name="cost" sum="sum" optional="show"/>
+                <field name="benefit" sum="sum" optional="show"/>
+                <field name="project_ids" widget="many2many_tags" optional="show" />
+                <field name="budget_ids" widget="many2many_tags" optional="show"/>
+                <field name="area" optional="show" sum="sum"/>
+                <field name="currency_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="state" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_real_estate_property" model="ir.actions.act_window">
+        <field name="name">Real Estate property</field>
+        <field name="res_model">real.estate.property</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new real estate property!
+            </p>
+        </field>
+    </record>
+
+
+    <record id="update_exe_update" model="ir.actions.server">
+            <field name="name">Update</field>
+            <field name="model_id" ref="base_bim_2.model_real_estate_property"/>
+            <field name="binding_model_id" ref="base_bim_2.model_real_estate_property"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+            if records:
+                res = records.action_update()
+            </field>
+        </record>
+
+
+    </data>
+
+
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    
+    <record id="view_form_tool_use_tree" model="ir.ui.view">
+        <field name="name">view.form.tool.use.tree</field>
+        <field name="model">bim.tool.use</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="product_id" options='{"no_create": 1, "no_open": 1}'/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="hours"/>
+                <field name="project_id" options='{"no_create": 1, "no_open": 1}' optional="show"/>
+                <field name="budget_id" options='{"no_create": 1, "no_open": 1}' groups="base_bim_2.group_budget_concept_documents" optional="show"/>
+                <field name="concept_id" options='{"no_create": 1, "no_open": 1}' groups="base_bim_2.group_budget_concept_documents" optional="show"/>
+                <field name="cost" widget="monetary" force_save="1" optional="show"/>
+                <field name="total" widget="monetary" optional="show"/>
+                <field name="company_id" invisible="True"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="currency_id" invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_tool_use" model="ir.actions.act_window">
+        <field name="name">Bim Tool Use</field>
+        <field name="res_model">bim.tool.use</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Tool Use!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_bim_tool_use"
+        name="Bim Tool Use"
+        parent="base_bim_2.menu_bim_2_equipment"
+        action="action_bim_tool_use"
+        sequence="4" />
+
+    </data>
+
+</odoo>

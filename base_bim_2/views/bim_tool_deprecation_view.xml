@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    
+    <record id="view_form_tool_deprecation_tree" model="ir.ui.view">
+        <field name="name">view.form.tool.deprecation.tree</field>
+        <field name="model">bim.tool.deprecation</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_tool_deprecation" model="ir.actions.act_window">
+        <field name="name">Bim Tool Deprecation Motive</field>
+        <field name="res_model">bim.tool.deprecation</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Tool Deprecation Motive!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_bim_tools_config"
+        name="Tools"
+        parent="base_bim_2.menu_bim_config"
+        sequence="19" />
+
+    <menuitem id="menu_bim_deprecation_motive"
+        name="Deprecation Motive"
+        parent="menu_bim_tools_config"
+        action="action_bim_tool_deprecation"
+        sequence="1" />
+
+    </data>
+
+</odoo>

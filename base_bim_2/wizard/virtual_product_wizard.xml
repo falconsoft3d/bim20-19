@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+       <record id="action_view_convert_virtual_product" model="ir.ui.view">
+           <field name="name">Virtual_product_wizard_view_form</field>
+           <field name="model">virtual.product.wizard</field>
+           <field name="arch" type="xml">
+               <form string="Virtual product To:">
+                   <sheet>
+                       <group col="4" string="Convert Virtual Product to:">
+                           <field name="selection_type" readonly="1"/>
+                       </group>
+                   </sheet>
+                   <footer>
+                        <button string="Accept" type="object" class="btn-primary"
+                                name="action_convert_product" />
+                        <button name="cancel" string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+               </form>
+           </field>
+       </record>
+
+        <record id="action_window_convert_virtual_product" model="ir.actions.act_window">
+            <field name="name">Convert Virtual Product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">virtual.product.wizard</field>
+            <field name="view_mode">form,list</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="base_bim_2.model_virtual_product"/>
+            <field name="binding_view_types">list</field>
+        </record>
+
+    </data>
+</odoo>

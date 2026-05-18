@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="bim_boq_template_view_tree" model="ir.ui.view">
+            <field name="name">bim.boq.template.view.tree</field>
+            <field name="model">bim.boq.template</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="name"/>
+                    <field name="code_name"/>
+                    <field name="quantity_name"/>
+                    <field name="type"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="bim_boq_template_view_search" model="ir.ui.view">
+            <field name="name">bim.boq.template.view.search</field>
+            <field name="model">bim.boq.template</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="name"/>
+                    <field name="code_name"/>
+                    <field name="quantity_name"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_bim_boq_templates" model="ir.actions.act_window">
+            <field name="name">Bim boq templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.boq.template</field>
+            <field name="view_mode">list</field>
+            <field name="search_view_id" ref="bim_boq_template_view_search"/>
+        </record>
+
+        <menuitem id="menu_bim_boq_templates"
+            name="Boq templates"
+            parent="menu_bim_import_bim"
+            action="action_bim_boq_templates"
+            sequence="15" />
+
+
+    </data>
+</odoo>

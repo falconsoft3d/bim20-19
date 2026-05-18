@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="crm_case_form_bim_view" model="ir.ui.view">
+            <field name="name">crm.case.form.bim.view</field>
+            <field name="model">bim.project</field>
+            <field name="inherit_id" ref="base_bim_2.view_form_bim_project"/>
+            <field name="arch" type="xml">
+                <field name="amount_award" position="after">
+                    <field name="opportunity_id" optional="show"/>
+                </field>
+            </field>
+        </record>
+</odoo>

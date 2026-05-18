@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+        <title>Mediciones</title>
+    <body>
+            <div class="content">
+                <div class="container">
+                    <div class="row text-center">
+
+                        <div class="col-md-6 mx-auto my-2">
+                            <input type="hidden" id="csrf_token"
+                                   value="{{csrf_token}}"/>
+
+                            <input type="hidden" id="key"
+                                   value="{{key}}"/>
+
+                                <h2>Mediciones</h2>
+                            </ul>
+
+                            <div id="successMessage" class="alert alert-success" role="alert" style="display:none;">
+                                Las mediciones se han enviado correctamente.
+                            </div>
+
+                            <form class="mb-5" method="post" id="medForm" name="medForm">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="serial" class="col-form-label">Código Equipo</label>
+                                        <input type="text" class="form-control"
+                                               value="{{serial}}"
+                                               name="serial" id="serial"  required>
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label for="value" class="col-form-label">Valor</label>
+                                        <input type="text" class="form-control"
+                                               name="value" id="value"  required>
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label for="user" class="col-form-label">Usuario</label>
+                                        <input type="text" class="form-control" name="user"
+                                               id="user"  required>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-12">
+                                        <input value="Enviar" class="btn btn-primary"
+                                               id="submitButton"
+                                               onclick="btnSave()">
+                                        <span class="submitting"></span>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="form-message-warning mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </body>
+
+
+    <script>
+        function btnSave() {
+            event.preventDefault();
+            console.log("btnSave");
+
+            var serial = document.getElementById("serial").value;
+            var value = document.getElementById("value").value;
+            var user = document.getElementById("user").value;
+            var key = document.getElementById("key").value;
+            var csrf_token = document.getElementById("csrf_token").value;
+            var submitButton = document.getElementById("submitButton");
+            var successMessage = document.getElementById("successMessage");
+            var medForm = document.getElementById("medForm");
+
+            // Validar que los campos no estén vacíos
+            if (serial === "" || value === "" || user === "") {
+                alert("Por favor, complete todos los campos antes de enviar.");
+                return;
+            }
+            console.log("serial: " + serial);
+
+            // POST http://localhost:8069/bim/maintenance/measure/BIM2023012121IO/serial
+
+            $.ajax({
+                url: "/bim/maintenance/measure/" + key + "/" + serial,
+                method: 'post',
+                timeout: 0,
+                headers: { 'Content-Type': 'application/json' },
+                data: JSON.stringify({
+                    params: {
+                        csrf_token: csrf_token,
+                            serial: serial,
+                            value: value,
+                            user: user
+                    }
+                }),
+                success: function(response) {
+                    if (response.result.status == "ok") {
+                        submitButton.style.display = 'none';
+                        medForm.style.display = 'none';
+                        successMessage.style.display = 'block';
+                    } else {
+                        alert("Error al enviar");
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("Error al enviar");
+                }
+            });
+
+        }
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous">
+
+    </script>
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Descarga de Documento</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container text-center">
+        {% if doc_id %}
+
+           <h1 class="mt-5">{{doc_id.company_id.name}}</h1>
+           <p class="lead">La documentación compartida es privada por favor no comparta este link.</p>
+           <h2 class="mt-5">{{doc_id.code_doc}} - {{doc_id.desc}}</h2>
+
+
+            {% if doc_id.url %}
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-4">
+                    <a href="{{doc_id.url}}" class="btn btn-primary">Ver Documento (URL)</a>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if doc_id.file_01 %}
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-4">
+                    <!- En este enlace descargaremos el archivo binario ->
+                    <a href="{{doc_id.url_file}}" class="btn btn-primary">Descargar Documento</a>
+                </div>
+            </div>
+            {% endif %}
+
+        <hr>
+        <p>
+            {{ doc_id.public_obs }}
+        </p>
+        {% else %}
+            <h1 class="mt-5">Documento no encontrado</h1>
+            <p class="lead">El documento que intenta descargar no existe o ha sido eliminado.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

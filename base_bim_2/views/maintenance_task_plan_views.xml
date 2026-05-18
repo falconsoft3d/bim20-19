@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_maintenance_task_plan" model="ir.ui.view">
+         <field name="name">view.form.maintenance.task_plan</field>
+         <field name="model">maintenance.task.plan</field>
+         <field name="arch" type="xml">
+            <form>
+              <sheet>
+                  <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-list" name="action_view_maintenance_tasks"
+                                string="Tasks" type="object">
+                            <field name="count_maintenance_tasks" string="Tasks" widget="statinfo"/>
+                        </button>
+                      <button class="oe_stat_button" icon="fa-cogs"
+                                name="action_view_maintenance_assets"
+                                string="Assets" type="object">
+                            <field name="count_maintenance_assets" string="Assets" widget="statinfo"/>
+                        </button>
+                  </div>
+                  <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                   </div>
+                    <group>
+                        <group>
+                            <field name="description"/>
+                            <field name="maintenance_location_id"/>
+                            <field name="bim_project_id"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+
+                  <notebook>
+                      <page string="Text">
+                           <field name="observation" placeholder="Observation..."/>
+                      </page>
+                  </notebook>
+
+               </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_maintenance_task_plan" model="ir.ui.view">
+         <field name="name">view.tree.maintenance.task.plan</field>
+         <field name="model">maintenance.task.plan</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="name"/>
+                 <field name="description"/>
+                 <field name="bim_project_id"/>
+                 <field name="maintenance_location_id"/>
+                 <field name="count_maintenance_tasks" string="Tasks"/>
+                 <field name="count_maintenance_assets" string="Assets"/>
+                 <field name="user_id"/>
+                 <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_maintenance_task_plan" model="ir.actions.act_window">
+        <field name="name">Task Plans</field>
+        <field name="res_model">maintenance.task.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

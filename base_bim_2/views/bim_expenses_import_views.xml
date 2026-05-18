@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_form_bim_expenses_import" model="ir.ui.view">
+            <field name="name">view.form.bim.expenses.import</field>
+            <field name="model">bim.expenses.import</field>
+            <field name="arch" type="xml">
+                <form string="Bim expenses import">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="type"/>
+                                <field name="project"/>
+                                <field name="product"/>
+                                <field name="partner"/>
+                            </group>
+                            <group>
+                                <field name="cost"/>
+                                <field name="qty"/>
+                                <field name="date"/>
+                                <field name="company"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_bim_expenses_import" model="ir.ui.view">
+            <field name="name">view.tree.bim.expenses.import</field>
+            <field name="model">bim.expenses.import</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="project"/>
+                    <field name="partner"/>
+                    <field name="product"/>
+                    <field name="cost"/>
+                    <field name="qty"/>
+                    <field name="company"/>
+                    <field name="date"/>
+                    <field name="migrated"/>
+                    <field name="company_id"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_bim_expenses_import" model="ir.actions.act_window">
+            <field name="name">Bim Expenses Import</field>
+            <field name="res_model">bim.expenses.import</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new bim expenses import!
+                </p>
+            </field>
+        </record>
+
+
+        <record id="migrate_expenses" model="ir.actions.server">
+            <field name="name">Migrate Expenses</field>
+            <field name="model_id" ref="base_bim_2.model_bim_expenses_import"/>
+            <field name="binding_model_id" ref="base_bim_2.model_bim_expenses_import"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+            if records:
+                res = records.action_migrate_expenses()
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

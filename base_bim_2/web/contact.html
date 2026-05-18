@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+        <title>Contact Form</title>
+    <body>
+            <div class="content">
+                <div class="container">
+                    <div class="row mt-2">
+
+
+
+                        <div class="col-md-5 mr-auto">
+                            <input type="hidden" id="csrf_token" value="{{csrf_token}}"/>
+                            <h2>Contacto</h2>
+                            <p class="mb-5">{{ campaign.text_contact }}</p>
+
+                            <h2>{{ campaign.company_id.name }}</h2>
+
+                            <ul class="list-unstyled pl-md-5 mb-5">
+                                <li class="d-flex text-black mb-2">
+                                    <span class="mr-3"><span class="icon-map"></span></span> {{ campaign.company_id.street }}, <br> {{ campaign.company_id.country_id.name }}
+                                </li>
+                                <li class="d-flex text-black mb-2"><span class="mr-3"><span class="icon-phone"></span></span> {{ campaign.company_id.email }}</li>
+                                <li class="d-flex text-black mb-2"><span class="mr-3"><span class="icon-phone"></span></span> {{ campaign.company_id.phone }}</li>
+
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div id="successMessage" class="alert alert-success" role="alert" style="display:none;">
+                                Formulario enviado correctamente. Nos pondremos en contacto con usted lo antes posible.
+                            </div>
+
+                            <form class="mb-5" method="post" id="contactForm" name="contactForm">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="name" class="col-form-label">Nombre</label>
+                                        <input type="text" class="form-control" name="name" id="name"  required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="email" class="col-form-label">Correo</label>
+                                        <input type="text" class="form-control" name="email" id="email" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="phone" class="col-form-label">Teléfono</label>
+                                        <input type="text" class="form-control" name="phone" id="phone" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="message" class="col-form-label">Mensaje</label>
+                                        <textarea class="form-control" name="message" id="message" cols="30" rows="7" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-12">
+                                        <input value="Enviar" class="btn btn-primary"
+                                               id="submitButton"
+                                               onclick="btnSave()">
+                                        <span class="submitting"></span>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="form-message-warning mt-4"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+
+
+    </div>
+    </body>
+
+
+    <script>
+        function btnSave() {
+            event.preventDefault();
+            var campaign = {{campaign.id}};
+            var name = document.getElementById("name");
+            var email = document.getElementById("email");
+            var phone = document.getElementById("phone");
+            var text = document.getElementById("message");
+            var submitButton = document.getElementById("submitButton");
+            var successMessage = document.getElementById("successMessage");
+            var contactForm = document.getElementById("contactForm");
+
+            // Validar que los campos no estén vacíos
+            if (name.value === "" || email.value === "" || phone.value === "" || text === "") {
+                alert("Por favor, complete todos los campos antes de enviar.");
+                return;
+            }
+
+    $.ajax({
+        url: '/bim/form/save',
+        method: 'post',
+        timeout: 0,
+        headers: { 'Content-Type': 'application/json' },
+        data: JSON.stringify({
+            params: {
+                csrf_token: csrf_token,
+                campaign: campaign,
+                name: name.value,
+                email: email.value,
+                phone: phone.value,
+                text: text.value
+            }
+        }),
+        success: function(response) {
+            if (response.result.status == "ok") {
+                submitButton.style.display = 'none';
+                contactForm.style.display = 'none';
+                successMessage.style.display = 'block';
+            } else {
+                alert("Error al enviar");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("Error al enviar");
+        }
+    });
+}
+    </script>
+</html>

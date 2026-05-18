@@ -1,0 +1,56 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* picking_standard_price
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-27 14:14+0000\n"
+"PO-Revision-Date: 2024-02-27 14:14+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: picking_standard_price
+#: model:ir.model.fields,field_description:picking_standard_price.field_stock_picking__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: picking_standard_price
+#: model:res.groups,name:picking_standard_price.group_picking_cost
+msgid "Picking Cost Value"
+msgstr "Costo del Albarán"
+
+#. module: picking_standard_price
+#: model:ir.model.fields,field_description:picking_standard_price.field_stock_move__product_cost
+msgid "Product Cost"
+msgstr "Costo"
+
+#. module: picking_standard_price
+#: model:ir.model.fields,field_description:picking_standard_price.field_stock_move__purchase_id
+msgid "Purchase"
+msgstr "Compra"
+
+#. module: picking_standard_price
+#: model:ir.model,name:picking_standard_price.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: picking_standard_price
+#: model:ir.model.fields,field_description:picking_standard_price.field_stock_picking__total_cost
+msgid "Total Cost"
+msgstr "Costo Total"
+
+#. module: picking_standard_price
+#: model:ir.model,name:picking_standard_price.model_stock_picking
+msgid "Transfer"
+msgstr "Albarán"
+
+#. module: picking_standard_price
+#: model_terms:ir.ui.view,arch_db:picking_standard_price.view_picking_form_standard_price
+msgid "Update Cost"
+msgstr "Actualizar Costo"

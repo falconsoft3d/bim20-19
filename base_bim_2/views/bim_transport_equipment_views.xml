@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_bim_transport_equipment" model="ir.ui.view">
+        <field name="name">view.form.bim.transport.equipment</field>
+        <field name="model">bim.transport.equipment</field>
+        <field name="arch" type="xml">
+            <form delete="0" string="order">
+                <header>
+                    <field name="state" options="{'clickable': '1'}" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div>
+                        <widget bg_color="bg-success" invisible="rented_by == False" name="web_ribbon" title="Rented"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field class="oe_inline" colspan="1" name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="description" required="1"/>
+                            <field name="brand_id" options="{'no_create': True}"/>
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="driver_id" options="{'no_create': True}"/>
+                            <field name="product_id"/>
+                            <field name="price"/>
+                            <field name="bim_project_id"/>
+                            <field name="earnings"/>
+                            <field name="expenses"/>
+                            <field name="benefit"/>
+                        </group>
+                        <group>
+                            <field name="account_analytic_account_id"/>
+                            <field name="chassis_number"/>
+                            <field name="plate_number"/>
+                            <field name="kilometers"/>
+                            <field name="rented_by" optional="show"/>
+                            <field decoration-info="rent_state=='available'" decoration-success="rent_state=='rented'" name="rent_state" optional="show" widget="badge"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form></field>
+    </record>
+    <record id="view_tree_bim_transport_equipment" model="ir.ui.view">
+        <field name="name">view.tree.bim.transport.equipment</field>
+        <field name="model">bim.transport.equipment</field>
+        <field name="arch" type="xml">
+            <list delete="1">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="brand_id" optional="show"/>
+                <field name="model_id" optional="show"/>
+                <field name="description" optional="show"/>
+                <field name="account_analytic_account_id" optional="show"/>
+                <field name="product_id" optional="show"/>
+                <field name="price" optional="show"/>
+                <field name="driver_id" optional="show"/>
+                <field name="bim_project_id" optional="show"/>
+                <field name="plate_number" optional="show"/>
+                <field name="chassis_number" optional="show"/>
+                <field name="kilometers" optional="show"/>
+                <field name="earnings" optional="show"/>
+                <field name="expenses" optional="show"/>
+                <field name="benefit" optional="show"/>
+                <field name="state" optional="show"/>
+                <field decoration-info="rent_state=='available'" decoration-success="rent_state=='rented'" name="rent_state" optional="show" widget="badge"/>
+            </list></field>
+    </record>
+    <record id="action_bim_transport_equipment" model="ir.actions.act_window">
+        <field name="name">Bim transport equipment</field>
+        <field name="res_model">bim.transport.equipment</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new bim transport equipment!
+            </p></field>
+    </record>
+</odoo>

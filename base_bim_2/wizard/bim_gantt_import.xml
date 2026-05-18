@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- bim.gantt.import form view -->
+    <record id="bim_gantt_import_view_form" model="ir.ui.view">
+        <field name="name">bim.gantt.import.view.form</field>
+        <field name="model">bim.gantt.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Gantt">
+                <group>
+                    <group>
+
+                        <field name="gantt_type" widget="radio"/>
+                        <field invisible="True" name="budget_id"/>
+                        <field invisible="True" name="filename"/>
+                        <field filename="filename" invisible="gantt_type != 'ms'" name="xml_file" required="gantt_type == 'ms'"/>
+                        <field filename="filename" invisible="gantt_type not in ['excel','2000']" name="excel_file" required="gantt_type in ['excel','2000']"/>
+                        <field filename="filename" invisible="gantt_type != 'csv'" name="csv_file" required="gantt_type == 'csv'"/>
+
+                    </group>
+                    <group>
+                        <!--
+                        <field invisible="gantt_type != 'ms'" name="create_missing"/>
+                        <field invisible="True" name="allow_certification"/>
+                        <field invisible="gantt_type != 'ms'" name="import_stages" readonly="allow_certification == False"/>
+                        <field invisible="import_stages == False or gantt_type != 'ms'" name="stage_id" required="import_stages == True" widget="selection"/>
+                        -->
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-secondary" name="cancel" special="cancel" string="Cancel"/>
+                    <button class="btn-primary" name="action_import_gantt" string="Import" type="object"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_gantt_import_action" model="ir.actions.act_window">
+        <field name="name">Import Gantt</field>
+        <field name="res_model">bim.gantt.import</field>
+        <field name="binding_model_id" ref="model_bim_budget"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">form</field>
+        <field name="context">{'default_budget_id': active_id}</field>
+    </record>
+</odoo>

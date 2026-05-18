@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_bim_sql_report_form" model="ir.ui.view">
+        <field name="name">bim.sql.report.form</field>
+        <field name="model">bim.sql.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object" name="generate_report"
+                            invisible="type != 'sql'"
+                            string="Generate CSV" class="btn btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="description"/>
+                            <field name="type"/>
+                            <field name="project_id"
+                                   invisible="type == 'sql'" options="{'no_open':True,'no_create': True}"/>
+                            <field name="budget_id"
+                                   domain="[('project_id','=',project_id)]"
+                                   invisible="type != 'budget'" options="{'no_open':True,'no_create': True}"/>
+                            <field name="select_sql" invisible="type != 'sql'" placeholder="SELECT * FROM res_partner" />
+                        </group>
+                        <group>
+                            <field name="url" invisible = "active_token == False" widget="url"/>
+                            <field name="token"/>
+                            <field name="active_token"/>
+                            <field name="company_id"/>
+                        </group>
+
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bim_sql_report_tree" model="ir.ui.view">
+        <field name="name">bim.sql.report.tree</field>
+        <field name="model">bim.sql.report</field>
+        <field name="arch" type="xml">
+           <list>
+                <field name="name"/>
+                <field name="description" optional="show"/>
+                <field name="select_sql" optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="budget_id" optional="show"/>
+                <field name="active_token" optional="show"/>
+                <field name="url" widget="url" optional="show"/>
+                <field name="company_id" optional="show"/>
+           </list>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_bim_sql_reports">
+        <field name="name">BIM SQL Reports</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bim.sql.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

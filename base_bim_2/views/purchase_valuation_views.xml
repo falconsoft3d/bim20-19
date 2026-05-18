@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="purchase_valuation_view_tree" model="ir.ui.view">
+            <field name="name">purchase.valuation.view.tree</field>
+            <field name="model">purchase.valuation</field>
+            <field name="arch" type="xml">
+                <list string="Purchase Valuation" delete="false">
+                    <field name="name"/>
+                    <field name="purchase_id" optional="show"/>
+                    <field name="partner_id"  optional="show"/>
+                    <field name="date"  optional="show"/>
+                    <field name="begin_date"  optional="show"/>
+                    <field name="end_date"  optional="show"/>
+                    <field name="create_date"  optional="show"/>
+                    <field name="include_for_bim" optional="hide"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="price_subtotal" optional="show" sum="sum"/>
+                    <field name="price_total" optional="show" sum="sum"/>
+                    <field name="currency_id" optional="show"/>
+                    <field name="account_move_id" optional="show"/>
+                    <field name="state"
+                           widget="badge"
+                           decoration-success="state == 'received'" decoration-warning="state == 'approved'"
+                           decoration-info="state == 'invoiced'" decoration-danger="state == 'draft'"
+                           optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="purchase_valuation_view_form" model="ir.ui.view">
+            <field name="name">purchase.valuation.view.form</field>
+            <field name="model">purchase.valuation</field>
+            <field name="arch" type="xml">
+                <form string="Purchase valuation" delete="false">
+                    <header>
+                        <button name="load_lines" string="Load Lines"
+                                invisible="state != 'draft'"
+                                type="object"/>
+
+                        <button name="action_approve" string="Approve"
+                                invisible="state != 'draft'"
+                                type="object" class="oe_highlight"/>
+
+                        <button name="create_invoice" string="Create Invoice"
+                                invisible="state != 'approved'"
+                                class="oe_highlight"
+                                type="object"/>
+
+                        <button name="action_received" string="Recibir"
+                                invisible="state != 'invoiced'"
+                                type="object" class="oe_highlight"/>
+
+                        <button name="action_draft" string="Draft"
+                                invisible="state == 'draft'"
+                                type="object"/>
+                        <field name="state" widget="statusbar"/>
+
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="purchase_id"
+                                       required="1"
+                                       readonly="state != 'draft'" />
+                                <field name="project_id"/>
+                                <field name="partner_id"/>
+                                <field name="include_for_bim"
+                                       widget="boolean_toggle"/>
+
+                                <field name="account_move_id"
+                                        readonly="1"
+                                        invisible="account_move_id == False"/>
+
+                                <field name="begin_date" />
+                                <field name="end_date" />
+
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="create_date" readonly="1" />
+                                <field name="user_id"
+                                       readonly="1"/>
+                                <field name="company_id"
+                                       readonly="state != 'draft'"
+                                />
+                                <field name="currency_id"
+                                       readonly="state != 'draft'"/>
+                                <field name="purchase_valuation_reference"/>
+                                <field name="balance_oc"/>
+
+                            </group>
+                        </group>
+
+
+                        <notebook>
+                            <page string="Products List">
+                                <field name="line_ids" readonly="state != 'draft'">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="description"/>
+                                        <field name="product_uom_id"/>
+                                        <field name="product_qty_oc"
+                                               string="Cant. OC"
+                                               sum="sum" optional="hide"/>
+                                        <field name="product_qty" sum="sum"/>
+                                        <field name="concept_phase_id" optional="show"/>
+                                        <field name="price_unit"/>
+                                        <field name="discount"/>
+                                        <field name="taxes_id" widget="many2many_tags"/>
+                                        <field name="price_subtotal"/>
+                                        <field name="tax_subtotal" />
+                                        <field name="price_total" />
+                                        <field name="purchase_line_id" optional="hide"/>
+                                    </list>
+                                </field>
+                                <group colspan="4" class="oe_subtotal_footer oe_right">
+                                    <group  class="oe_subtotal_footer oe_right" colspan="2">
+                                        <field name="price_subtotal" sum="sum"/>
+                                        <field name="tax_subtotal" sum="sum"/>
+                                        <field name="price_total" sum="sum"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Other">
+                                <group>
+                                    <group>
+                                        <button name="update_invoice"
+                                                string="Update Invoice"
+                                                type="object" class="oe_highlight"/>
+                                    </group>
+                                </group>
+                             </page>
+                        </notebook>
+
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="purchase_valuation_action" model="ir.actions.act_window">
+            <field name="name">Purchase Valuation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.valuation</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

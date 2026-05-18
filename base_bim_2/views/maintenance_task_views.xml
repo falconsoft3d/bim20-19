@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_maintenance_task" model="ir.ui.view">
+         <field name="name">view.form.maintenance.task</field>
+         <field name="model">maintenance.task</field>
+         <field name="arch" type="xml">
+            <form>
+                <header>
+                       <button class="btn btn-primary"
+                               invisible="state not in ['draft']"
+                               confirm="Are you sure you want to process this task?"
+                               name="action_ots_in_process" string="To Process" type="object"/>
+
+                        <button class="btn btn-primary"
+                               invisible="run_state not in ['stop'] or state not in ['ots_in_process']"
+                               icon="fa-play"
+                               name="action_play"
+                                string="Play" type="object"/>
+
+                         <button class="btn btn-primary"
+                               invisible="run_state not in ['play'] or state not in ['ots_in_process']"
+                               icon="fa-stop"
+                               name="action_stop" string="Stop" type="object"/>
+
+                        <button class="btn btn-primary"
+                               invisible="state not in ['ots_in_process']"
+                               name="action_ots_in_review"
+                               confirm="Are you sure you want to review this task?"
+                               string="To Review" type="object"/>
+
+                        <button class="btn btn-primary"
+                               invisible="state not in ['ots_in_review']"
+                               confirm="Are you sure you want to finish this task?"
+                               name="action_ots_finished" string="To finished" type="object"/>
+
+                        <button
+                               invisible="state in ['draft']"
+                               confirm="Are you sure you want to draft this task?"
+                               name="to_draft" string="To Draft" type="object"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+              <sheet>
+                  <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-list" name="action_view_maintenance_activator"
+                                string="Activators" type="object">
+                            <field name="count_maintenance_activator" string="Activators" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-check" name="action_view_maintenance_sub_task"
+                                string="Sub Tasks" type="object">
+                            <field name="count_maintenance_sub_task" string="Sub Tasks" widget="statinfo"/>
+                        </button>
+                      <button class="oe_stat_button" icon="fa-book" name="action_view_bim_documentation"
+                                string="Documentations" type="object">
+                            <field name="count_bim_documentation" string="Documentations" widget="statinfo"/>
+                        </button>
+                      <button class="oe_stat_button" icon="fa-archive"
+                                name="action_view_bim_resources"
+                                string="Resources" type="object">
+                            <field name="count_maintenance_resource" string="Resources" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code" readonly="1"/>
+                            <field name="name" required="1" readonly="state in ['ots_finished']"/>
+                            <field name="partner_id" readonly="state in ['ots_finished']"/>
+                            <field name="maintenance_task_plan_id" readonly="state in ['ots_finished']"/>
+                            <field name="maintenance_type_task_id" readonly="state in ['ots_finished']"/>
+                            <field name="maintenance_category_1" readonly="state in ['ots_finished']"/>
+                            <field name="maintenance_category_2"
+                                   readonly="state in ['ots_finished']"
+                                   invisible="maintenance_category_1 == False"/>
+                            <field name="priority" readonly="state in ['ots_finished']"/>
+                            <field name="maintenance_work_request_id"
+                                   invisible="maintenance_work_request_id == False"
+                                   readonly="state in ['ots_finished']"/>
+                            <field name="maintenance_asset_id"
+                                   invisible="maintenance_asset_id == False"
+                                   readonly="state in ['ots_finished']"/>
+                        </group>
+                        <group>
+                            <field name="cost" readonly="state in ['ots_finished']"/>
+                            <field name="estimated_duration" readonly="state in ['ots_finished']"/>
+                            <field name="real_duration" readonly="1" />
+                            <field name="maintenance_downtime" readonly="state in ['ots_finished']"/>
+                            <field name="who_review_id" readonly="state in ['ots_finished']"/>
+                            <field name="begin_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                        </group>
+
+                    </group>
+
+                  <notebook>
+                      <page string="Text">
+                          <group>
+                            <field name="note"
+                                   widget="html"
+                                   placeholder="Note..." readonly="state in ['ots_finished']"/>
+                          </group>
+                      </page>
+                      <page string="Other">
+                          <group>
+                              <group>
+                                  <field name="run_state" readonly="1" />
+                                  <field name="user_id" readonly="state in ['ots_finished']"/>
+                                  <field name="company_id" readonly="state in ['ots_finished']"/>
+                                  <field name="currency_id" readonly="state in ['ots_finished']"/>
+                              </group>
+                          </group>
+                      </page>
+                      <page string="Bim">
+                          <group>
+                              <group>
+                                  <field name="bim_project_id" />
+                                  <field name="include_for_bim" optional="hide" widget="boolean_toggle"/>
+                              </group>
+                          </group>
+                      </page>
+
+                      <page string="Signature">
+                            <label for="digital_signature" string="Signature" class="oe_edit_only"/>
+                            <h2>
+                                <field name="digital_signature" widget="signature" />
+                            </h2>
+                      </page>
+
+                    </notebook>
+               </sheet>
+               <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_maintenance_task" model="ir.ui.view">
+         <field name="name">view.tree.maintenance.task</field>
+         <field name="model">maintenance.task</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="code" readonly="1"/>
+                 <field name="name"/>
+                 <field name="partner_id" optional="show"/>
+                 <field name="maintenance_task_plan_id" optional="show"/>
+                 <field name="maintenance_type_task_id" optional="show"/>
+                 <field name="maintenance_category_1" optional="show"/>
+                 <field name="maintenance_category_2" optional="show"/>
+                 <field name="priority" optional="show"/>
+                 <field name="estimated_duration" optional="show"/>
+                 <field name="real_duration" optional="show"/>
+                 <field name="maintenance_downtime" optional="show"/>
+                 <field name="user_id" optional="show"/>
+                 <field name="company_id" optional="show"/>
+                 <field name="who_review_id" optional="show"/>
+                 <field name="begin_date" optional="show"/>
+                 <field name="end_date" optional="show"/>
+                 <field name="run_state" optional="show"/>
+                 <field name="currency_id" optional="show"/>
+                 <field name="cost" sum="Total" optional="show"/>
+                 <field name="state" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_maintenance_task" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">maintenance.task</field>
+        <field name="view_mode">list,form,activity</field>
+    </record>
+</odoo>

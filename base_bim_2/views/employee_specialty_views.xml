@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="employee_specialty_view_tree" model="ir.ui.view">
+            <field name="name">employee.specialty.view.tree</field>
+            <field name="model">employee.specialty</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="employee_specialty_view_form" model="ir.ui.view">
+            <field name="name">employee.specialty.view.form</field>
+            <field name="model">employee.specialty</field>
+            <field name="arch" type="xml">
+                <form string="Employee Specialty">
+                    <sheet>
+                     <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                     </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="employee_specialty_action" model="ir.actions.act_window">
+            <field name="name">Employee specialty</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.specialty</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+         <menuitem action="employee_specialty_action"
+                   id="submenu_employee_specialty" name="Employee Specialties"
+                   parent="menu_employee" sequence="2"/>
+
+    </data>
+</odoo>

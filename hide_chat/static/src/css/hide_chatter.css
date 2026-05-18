@@ -1,0 +1,53 @@
+/* Ocultar el chatter cuando el usuario tiene la opción activada */
+body.hide-chatter .o_form_sheet_bg .o-mail-ChatterContainer,
+body.hide-chatter .o_form_sheet_bg .o-mail-Chatter,
+body.hide-chatter .o_FormRenderer_chatterContainer,
+body.hide-chatter .o-mail-Form-chatter {
+    display: none !important;
+}
+
+/* Expandir el formulario cuando el chatter está oculto */
+body.hide-chatter .o_form_view .o_form_sheet_bg {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+body.hide-chatter .o_form_view .o_FormRenderer_chatterContainer ~ .o_form_sheet_bg,
+body.hide-chatter .o_form_view .o_form_sheet_bg {
+    margin-right: 0 !important;
+}
+
+body.hide-chatter .o_content {
+    max-width: 100% !important;
+}
+
+body.hide-chatter .o_form_view .o_xxl_form_view .o_form_sheet_bg {
+    max-width: 100% !important;
+}
+
+/* Estilos del botón toggle */
+.o_chatter_toggle {
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 30px;
+}
+
+.o_chatter_toggle:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.o_chatter_toggle i {
+    font-size: 18px;
+    padding: 8px;
+    color: #ffffff;
+}

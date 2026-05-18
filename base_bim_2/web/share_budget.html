@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Compartir Presupuestos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container text-center">
+        {% if budget_id %}
+        <div class="row justify-content-center">
+        <div class="col-md-12">
+                <h2 class="mt-5">{{ budget_id.company_id.name }}</h2>
+        </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="mt-5">PROYECTO </h2>
+                <p class="lead">[ {{ budget_id.project_id.name }} ] {{ budget_id.project_id.nombre }}</p>
+           </div>
+            <div class="col-md-6">
+                 <h2 class="mt-5">PRESUPUESTO </h2>
+                <p class="lead">[ {{ budget_id.code }} ] {{ budget_id.name }}</p>
+
+           </div>
+        </div>
+
+        <div class="row">
+            <!-- table codigo, nombre, um, cantidad, precio, total -->
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Cód.</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Inc</th>
+                            <th>Fin</th>
+                            <th>Ren</th>
+                            <th>Um</th>
+                            <th>Cant</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if budget_id.all_share == True %}
+                          {% for line in budget_id.concept_ids %}
+
+                          {% if line.type == 'chapter' %}
+                          <tr style="background-color: #f2f2f2; font-weight: bold;">
+
+                          {% elif line.type == 'departure' %}
+                          <tr style="background-color: #f2f2f2; font-weight: bold;">
+
+                          {% else %}
+                             <tr>
+                          {% endif %}
+                                <td>{{ line.code }}</td>
+                                <td>{{ line.name }}</td>
+                                <td>{{ line.type }}</td>
+                                <td>{{ line.acs_date_start }}</td>
+                                <td>{{ line.acs_date_end }}</td>
+                                <td>{{ line.performance }}</td>
+                                {% if line.uom_id %}
+                                    <td>{{ line.uom_id.name }}</td>
+                                {% else %}
+                                    <td>Und</td>
+                                {% endif %}
+                                <td>{{ line.quantity }}</td>
+                                <td>{{ line.sale_price }}</td>
+                                <td>{{ line.sale_amount }}</td>
+                            </tr>
+
+                        {% endfor %}
+                    {% else %}
+
+                        {% for line in budget_id.concept_ids %}
+                        {% if line.type == 'departure' %}
+                            <tr>
+                                <td>{{ line.code }}</td>
+                                <td>{{ line.name }}</td>
+                                <td>{{ line.type }}</td>
+                                {% if line.uom_id %}
+                                    <td>{{ line.uom_id.name }}</td>
+                                {% else %}
+                                    <td>Unidades</td>
+                                {% endif %}
+                                <td>{{ line.quantity }}</td>
+                                <td>{{ line.sale_price }}</td>
+                                <td>{{ line.sale_amount }}</td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+
+
+
+                        <tr>
+                            <td><strong>TOTAL</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>{{ budget_id.sale_import }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
+
+        {% else %}
+        <div class="row justify-content-center">
+            <h1 class="mt-5">Presupuesto no encontrado</h1>
+            <p class="lead">El presupuesto que intenta descargar no existe.</p>
+        </div>
+        {% endif %}
+
+        <button id="exportBtn"
+                        class="btn btn-primary mb-3">Exportar a Excel</button>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+    document.getElementById('exportBtn').addEventListener('click', function() {
+        var table = document.querySelector('table');
+        var wb = XLSX.utils.table_to_book(table, {sheet:"Presupuesto"});
+        XLSX.writeFile(wb, 'presupuesto.xlsx');
+    });
+    </script>
+
+
+</body>
+</html>

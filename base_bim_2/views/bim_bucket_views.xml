@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Form view for bim.bucket -->
+        <record id="view_form_bim_bucket" model="ir.ui.view">
+            <field name="name">view.form.bim.bucket</field>
+            <field name="model">bim.bucket</field>
+            <field name="arch" type="xml">
+                <form string="Bucket" delete="0">
+                    <header>
+                        <button name="create_bucket" string="Create Bucket" type="object"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="bim_server_id"/>
+                            </group>
+                            <group>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree view for bim.bucket -->
+        <record id="view_tree_bim_bucket" model="ir.ui.view">
+            <field name="name">view.tree.bim.bucket</field>
+            <field name="model">bim.bucket</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="bim_server_id"/>
+                    <field name="company_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Action to open bim.bucket views -->
+        <record id="action_bim_bucket" model="ir.actions.act_window">
+            <field name="name">Bim Bucket</field>
+            <field name="res_model">bim.bucket</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new Bim Bucket!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

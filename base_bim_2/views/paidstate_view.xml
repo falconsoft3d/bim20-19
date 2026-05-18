@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_bim_paidstate" model="ir.ui.view">
+            <field name="name">view.form.bim.paidstate</field>
+            <field name="model">bim.paidstate</field>
+            <field name="arch" type="xml">
+                <form string="Payment Status" delete="0">
+                    <header>
+                        <button class="btn-primary"
+                                groups="base_bim_2.group_bim_paidstate"
+                                invisible="state not in ['draft']" name="action_validate" string="Validate" type="object"/>
+                        <button invisible="state != 'draft' or type == 'manual' or load_certifications == False"
+                                groups="base_bim_2.group_bim_paidstate"
+                                name="%(base_bim_2.bim_paidstate_wizard_action)d" string="Load Amount" type="action"/>
+                        <button class="btn-primary o_sale_confirm" groups="account.group_account_invoice"
+                                invisible="state not in ['validated']" name="action_invoice" string="Generate Invoice" type="object"/>
+                        <button confirm="Are you sure to cancel this payment state" invisible="state == 'cancel'"
+                                groups="base_bim_2.group_bim_paidstate"
+                                name="action_paid_state_cancel" string="Cancelar" type="object"/>
+                        <button class="btn-primary" invisible="state not in ['cancel']"
+                                groups="base_bim_2.group_bim_paidstate"
+                                name="action_back_to_draft" string="Back to Draft" type="object"/>
+                        <field name="state"
+                               statusbar_visible="draft,validated,invoiced" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="project_id"/>
+                                <field name="object_id" options='{"no_open": True, "no_create": True, "no_create_edit": True, "no_quick_create": True}' readonly="state != 'draft'"/>
+                                <field name="type" readonly="state != 'draft'" widget="radio"/>
+                                <field name="date"/>
+                                <field groups="account.group_account_invoice" invisible="state != 'invoiced'" name="invoice_id"/>
+                                <field name="apply_retention"/>
+                                <field invisible="True" name="load_certifications"/>
+                                <field name="indicator_a" readonly="state != 'draft'"/>
+                                <field name="indicator_b" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field invisible="apply_retention == False" name="paidstate_company_retention"/>
+                                <field invisible="apply_retention == False" name="paidstate_retention"/>
+                                <field name="progress"/>
+                                <field name="currency_id" options='{"no_open": True, "no_create": True, "no_create_edit": True, "no_quick_create": True}'/>
+                                <field groups="account.group_account_invoice" name="invoice_debit_credit"/>
+                                <field groups="base.group_multi_company" name="company_id" readonly="1"/>
+                                <field invisible="True" name="company_id"/>
+                                <field name="type_invoice"/>
+
+                                <field groups="base_bim_2.group_certification_index" name="bim_certification_index_id" readonly="state != 'draft'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page invisible="type == 'manual'" string="Lines">
+                                <field name="lines_ids" readonly="state != 'draft'">
+                                    <list editable="bottom" excel_export="1">
+                                        <field name="budget_id"
+                                               domain="[
+                                                   ('project_id', '=', project_id),('allow_certification', '=', True),
+                                               ]"
+                                               options='{"no_open": True, "no_create": True}'/>
+                                        <field name="name"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                        <field name="certification_factor" string="Factor"/>
+                                        <field name="amount" string="Amount Net" sum="Sum"/>
+                                        <field name="amount_total" string="Total Amount" sum="Sum"/>
+                                        <field optional="hide" name="project_id"/>
+                                        <field optional="hide" name="company_id"/>
+
+                                    </list>
+                                </field>
+                            </page>
+                            <page invisible="type == 'certification'" string="Object Lines">
+                                <field name="object_lines_ids" readonly="state != 'draft'">
+                                    <list editable="bottom">
+                                        <field name="object_id" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="amount" sum="Sum"/>
+                                        <field name="percent"/>
+                                        <field invisible="True" name="project_id"/>
+
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Certifications">
+                                <h5>
+                                    Massive Certifications
+                                </h5>
+                                    <button name="update_certification"
+                                                string="UC"
+                                                icon="fa-refresh"
+                                                type="object"/>
+                                    <field invisible="certification_ids == []" name="certification_ids" readonly="1"/>
+                                <h5>
+                                    Chapter Certifications
+                                </h5>
+                                <field invisible="certification_ids == []" name="chapter_certification_ids" readonly="1"/>
+                            </page>
+                        </notebook>
+                        <field name="paidstate_notes" nolabel="1" placeholder="Add invoice notes..."/>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_tree_bim_paidstate" model="ir.ui.view">
+            <field name="name">view.tree.bim.paidstate</field>
+            <field name="model">bim.paidstate</field>
+            <field name="arch" type="xml">
+                <list
+                      delete="0">
+                    <field name="name" optional="show"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="object_id" optional="show"/>
+                    <field name="type" optional="show"/>
+                    <field name="indicator_a" optional="hide"/>
+                    <field name="indicator_b" optional="hide"/>
+                    <field name="date" optional="show"/>
+                    <field name="progress" optional="hide"/>
+                    <field name="amount" string="Amount Net" sum="Total" optional="hide"/>
+                    <field name="amount_total" string="Total Amount" sum="Total" optional="show"/>
+                    <field name="state"
+                           widget="badge"
+                           decoration-info="state == 'validated'"
+                           decoration-danger="state == 'draft'"
+                           optional="show"/>
+                    <field name="user_id" optional="hide"/>
+                    <field name="company_id" optional="hide"/>
+                    <field optional="hide" name="currency_id"/>
+                </list></field>
+        </record>
+        <record id="action_bim_paidstate" model="ir.actions.act_window">
+            <field name="name">Payment Status</field>
+            <field name="res_model">bim.paidstate</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create new Payment Status!
+                </p></field>
+        </record>
+        <menuitem action="action_bim_paidstate" id="menu_bim_paidstate" name="Payment Status"
+                  parent="base_bim_2.submenu_bim_certification" sequence="3"/>
+        <!-- CONTABILIDAD -->
+        <menuitem id="menu_bim_account_cat" name="BIM" parent="account.menu_finance_receivables" sequence="-1"/>
+        <menuitem action="action_bim_paidstate" id="menu_bim_paidstate_account" name="Payment Status" parent="base_bim_2.menu_bim_account_cat" sequence="1"/>
+    </data>
+</odoo>

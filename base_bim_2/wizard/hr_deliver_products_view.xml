@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wizard_deliver_products" model="ir.ui.view">
+        <field name="name">wizard.deliver.products.view</field>
+        <field name="model">wizard.deliver.products</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="type" widget="radio"/>
+                    </group>
+                    <group>
+                        <field invisible="type != 'retiro'" name="motive_id" options="{'no_quick_create':True,'no_create_edit':True,'no_open':True}" required="type == 'retiro'"/>
+                        <field invisible="type == 'retiro'" name="employee_id" options="{'no_quick_create':True,'no_create_edit':True,'no_open':True}" required="type != 'retiro'"/>
+                    </group>
+                    <field invisible="type != 'retiro'" name="obs_text" placeholder="Nota aqui..."/>
+                </group>
+                <notebook colspan="4">
+                    <page string="Lineas a Retirar">
+                        <field name="lines_ids_to_show" nolabel="1">
+                            <list create="0" delete="0" editable="bottom">
+                                <field name="product_id" readonly="1"/>
+                                <field name="qty" sum="Sum"/>
+                                <field name="cost" readonly="1"/>
+                                <field name="subtotal" readonly="1" sum="Sum"/>
+                            </list></field>
+                    </page>
+                    <page readonly="1" string="Lineas Actuales">
+                        <field name="lines_ids" nolabel="1" readonly="1">
+                            <list create="0" delete="0" editable="bottom">
+                                <field name="product_id" readonly="1"/>
+                                <field name="qty" readonly="1" sum="Sum"/>
+                                <field name="cost" readonly="1"/>
+                                <field name="subtotal" readonly="1" sum="Sum"/>
+                            </list></field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button class="btn btn-primary" name="retry_product" string="Retirar productos" type="object"/>
+                    <button class="btn btn-default" special="cancel" string="Cerrar"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="action_wizard_deliver_products" model="ir.actions.act_window">
+        <field name="name">Retirar Productos</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.deliver.products</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

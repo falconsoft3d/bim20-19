@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <template id="report_budget_notes_template">
+            <t t-call="web.html_container">
+                 <t t-foreach="docs" t-as="o">
+                    <t t-call="base_bim_2.bim_header_external_layout_notes">
+                        <div class="page">
+                             <p style="font-weight: normal; line-height:11pt;" t-raw="o.obs"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>        
+    </data>
+</odoo>

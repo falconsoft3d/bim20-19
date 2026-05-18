@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_real_estate_lot" model="ir.ui.view">
+        <field name="name">view.form.real.estate.lot</field>
+        <field name="model">real.estate.lot</field>
+        <field name="arch" type="xml">
+            <form string="Real Estate Lot" delete="0" >
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="real_estate_development_id"/>
+                             <field name="real_estate_block_id"/>
+                             <field name="partner_id"/>
+                             <field name="state"/>
+                        </group>
+                        <group>
+
+                            <field name="price"/>
+                            <field name="cost"/>
+                            <field name="currency_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_real_estate_lot" model="ir.ui.view">
+        <field name="name">view.tree.real.estate.lot</field>
+        <field name="model">real.estate.lot</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="real_estate_development_id"/>
+                <field name="real_estate_block_id"/>
+                <field name="partner_id"/>
+                <field name="price"/>
+                <field name="cost"/>
+                <field name="currency_id"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_real_estate_lot" model="ir.actions.act_window">
+        <field name="name">Real Estate Lot</field>
+        <field name="res_model">real.estate.lot</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new real estate lot!
+            </p>
+        </field>
+    </record>
+
+
+    </data>
+
+
+</odoo>

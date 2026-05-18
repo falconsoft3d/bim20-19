@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_result_table" model="ir.ui.view">
+        <field name="name">view.form.result.table</field>
+        <field name="model">result.table</field>
+        <field name="arch" type="xml">
+            <form string="Result Table">
+                <header>
+                    <button name="calculate_rows" string="Calculate"
+                            class="oe_highlight"
+                            type="object"
+                            />
+                </header>
+
+                <sheet>
+
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+
+
+
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"  icon="fa-th-list" name="action_view_lines" string="Líneas" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="line_count" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Líneas
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <group>
+                         <group>
+                             <field name="title"/>
+                             <field name="project_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                             <field name="bim_project_state_ids"  widget="many2many_tags" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                                <field name="execution_manager_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                        </group>
+                    </group>
+
+
+                    <notebook>
+                        <page string="Lines">
+                            <field name="lines_ids" nolabel="1" readonly="1">
+                                <list editable="bottom">
+                                    <field name="state_project" optional="show"/>
+                                    <field name="execution_manager" optional="show"/>
+                                    <field name="project_id" optional="show"/>
+
+                                    <field name="customer_id" optional="hide"/>
+                                    <field name="contracted_sale" optional="hide"/>
+                                    <field name="expansion_contract" optional="hide"/>
+                                    <field name="contracted_cost" optional="hide"/>
+                                    <field name="contracted_coefficient" optional="hide"/>
+                                    <field name="pending_execution" optional="hide"/>
+
+                                    <field name="currency_id" optional="hide"/>
+
+                                    <field name="year" optional="show" />
+                                    <field name="month" optional="show"/>
+
+
+                                    <field name="fdo_orig" optional="show"  sum="sum"/>
+                                    <field name="fdo_mon" optional="show"   sum="sum"/>
+                                    <field name="fdo_year" optional="show"   sum="sum"/>
+
+
+                                    <field name="cte_orig" optional="show"   sum="sum"/>
+                                    <field name="cte_mes" optional="show"   sum="sum"/>
+
+                                    <field name="mat" optional="show"   sum="sum"/>
+                                    <field name="partner" optional="hide"   sum="sum"/>
+                                    <field name="asist" optional="show"  sum="sum"/>
+                                    <field name="viajes" optional="show"  sum="sum"/>
+                                    <field name="otros" optional="show"  sum="sum"/>
+
+                                    <field name="o_mat" optional="hide"   sum="sum"/>
+                                    <field name="o_partner" optional="hide"   sum="sum"/>
+                                    <field name="o_asist" optional="hide"  sum="sum"/>
+                                    <field name="o_viajes" optional="hide"  sum="sum"/>
+                                    <field name="o_otros" optional="hide"  sum="sum"/>
+
+                                    <field name="cte_year_mat" optional="hide"   sum="sum"/>
+                                    <field name="cte_year_partner" optional="hide"   sum="sum"/>
+                                    <field name="cte_year_asist" optional="hide"  sum="sum"/>
+                                    <field name="cte_year_viajes" optional="hide"  sum="sum"/>
+                                    <field name="cte_year_otros" optional="hide"  sum="sum"/>
+
+
+                                    <field name="cte_year" optional="show"  sum="sum"/>
+                                    <field name="ap_mon" optional="show"  sum="sum"/>
+                                    <field name="ap_year" optional="show"  sum="sum"/>
+                                    <field name="oenc_mon" optional="show"  sum="sum"/>
+
+                                    <field name="oenc_year" optional="show"  sum="sum"/>
+                                    <field name="result_orig" optional="show"  sum="sum"/>
+                                    <field name="result_year" optional="show"  sum="sum"/>
+
+                                    <field name="mbrut_orig" optional="show"  sum="avg"/>
+                                    <field name="mbrut_year" optional="show"  sum="avg"/>
+                                    <field name="mnet_orig" optional="show"   sum="avg"/>
+                                    <field name="mmnet_year" optional="show"  sum="avg"/>
+
+                                </list>
+                            </field>
+                        </page>
+
+                         <page string="Other">
+                            <group>
+                                <group>
+                                    <field name="user_id" readonly="1"/>
+                                    <field name="company_id" readonly="1"/>
+                                    <field name="currency_id" readonly="1"/>
+                                </group>
+                            </group>
+                         </page>
+                    </notebook>
+
+
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_result_table" model="ir.ui.view">
+        <field name="name">view.tree.result.table</field>
+        <field name="model">result.table</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="execution_manager_ids" widget="many2many_tags" optional="show"/>
+                <field name="title" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_result_table" model="ir.actions.act_window">
+        <field name="name">Result Table</field>
+        <field name="res_model">result.table</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Register!
+            </p>
+        </field>
+    </record>
+
+
+
+    <record id="view_tree_result_table_line" model="ir.ui.view">
+        <field name="name">view.tree.result.table.line</field>
+        <field name="model">result.table.line</field>
+        <field name="arch" type="xml">
+            <list delete="0" edit="0" create="0">
+                <field name="result_table_id" optional="hide"/>
+
+                <field name="state_project" optional="show"/>
+                <field name="execution_manager" optional="show"/>
+
+                <field name="project_id" optional="show"/>
+                <field name="customer_id" optional="show"/>
+
+                <field name="contracted_sale" optional="hide" sum="sum" options="{'currency_field': 'currency_id'}" />
+                <field name="expansion_contract" optional="hide" sum="sum" options="{'currency_field': 'currency_id'}"/>
+                <field name="contracted_cost" optional="hide" sum="sum" options="{'currency_field': 'currency_id'}"/>
+                <field name="contracted_coefficient" optional="hide" sum="avg"/>
+                <field name="pending_execution" optional="hide" sum="sum" options="{'currency_field': 'currency_id'}"/>
+                <field name="currency_id" optional="hide"/>
+
+                <field name="year" optional="show" />
+                <field name="month" optional="show"/>
+
+
+                <field name="fdo_orig" optional="show"  sum="sum"/>
+                <field name="fdo_mon" optional="show"   sum="sum"/>
+                <field name="fdo_year" optional="show"   sum="sum"/>
+
+
+                <field name="cte_orig" optional="show"   sum="sum"/>
+                <field name="cte_mes" optional="show"   sum="sum"/>
+
+                <field name="mat" optional="show"   sum="sum"/>
+                <field name="partner" optional="hide"  sum="sum"/>
+                <field name="asist" optional="show"  sum="sum"/>
+                <field name="viajes" optional="show"  sum="sum"/>
+                <field name="otros" optional="show"  sum="sum"/>
+
+                <field name="o_mat" optional="hide"   sum="sum"/>
+                <field name="o_partner" optional="hide"   sum="sum"/>
+                <field name="o_asist" optional="hide"  sum="sum"/>
+                <field name="o_viajes" optional="hide"  sum="sum"/>
+                <field name="o_otros" optional="hide"  sum="sum"/>
+
+                <field name="cte_year_mat" optional="hide"   sum="sum"/>
+                <field name="cte_year_partner" optional="hide"   sum="sum"/>
+                <field name="cte_year_asist" optional="hide"  sum="sum"/>
+                <field name="cte_year_viajes" optional="hide"  sum="sum"/>
+                <field name="cte_year_otros" optional="hide"  sum="sum"/>
+
+
+                <field name="cte_year" optional="show"  sum="sum"/>
+                <field name="ap_mon" optional="show"  sum="sum"/>
+                <field name="ap_year" optional="show"  sum="sum"/>
+                <field name="oenc_mon" optional="show"  sum="sum"/>
+
+                <field name="oenc_year" optional="show"  sum="sum"/>
+                <field name="result_orig" optional="show"  sum="sum"/>
+                <field name="result_year" optional="show"  sum="sum"/>
+
+                <field name="mbrut_orig" optional="show"  sum="avg"/>
+                <field name="mbrut_year" optional="show"  sum="avg"/>
+                <field name="mnet_orig" optional="show"  sum="avg"/>
+                <field name="mmnet_year" optional="show" sum="avg"/>
+            </list>
+        </field>
+    </record>
+
+
+   <!-- pivot view -->
+   <record id="view_pivot_result_table_line" model="ir.ui.view">
+        <field name="name">view.pivot.result.table.line</field>
+        <field name="model">result.table.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+
+                <field name="project_id" type="row"/>
+                <field name="state_project" type="row"/>
+                <field name="execution_manager" type="row"/>
+                <field name="year" type="row"/>
+                <field name="month" type="row"/>
+                <field name="fdo_orig" type="measure" sum="Sum"/>
+                <field name="fdo_mon" type="measure" sum="Sum"/>
+                <field name="fdo_year" type="measure" sum="Sum"/>
+                <field name="cte_orig" type="measure" sum="Sum"/>
+                <field name="cte_mes" type="measure" sum="Sum"/>
+                <field name="mat" type="measure" sum="Sum"/>
+                <field name="asist" type="measure" sum="Sum"/>
+                <field name="viajes" type="measure" sum="Sum"/>
+                <field name="otros" type="measure" sum="Sum"/>
+                <field name="o_mat" type="measure" sum="Sum"/>
+                <field name="o_asist" type="measure" sum="Sum"/>
+                <field name="o_viajes" type="measure" sum="Sum"/>
+                <field name="o_otros" type="measure" sum="Sum"/>
+                <field name="cte_year_mat" type="measure" sum="Sum"/>
+                <field name="cte_year_asist" type="measure" sum="Sum"/>
+                <field name="cte_year_viajes" type="measure" sum="Sum"/>
+                <field name="cte_year_otros" type="measure" sum="Sum"/>
+                <field name="cte_year" type="measure" sum="Sum"/>
+                <field name="ap_mon" type="measure" sum="Sum"/>
+                <field name="ap_year" type="measure" sum="Sum"/>
+                <field name="oenc_mon" type="measure" sum="Sum"/>
+                <field name="oenc_year" type="measure" sum="Sum"/>
+                <field name="result_orig" type="measure" sum="Sum"/>
+                <field name="result_year" type="measure" sum="Sum"/>
+                <field name="mbrut_orig" type="measure" sum="Sum"/>
+                <field name="mbrut_year" type="measure" sum="Sum"/>
+                <field name="mnet_orig" type="measure" sum="Sum"/>
+                <field name="mmnet_year" type="measure" sum="Sum"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <record id="action_result_table_line" model="ir.actions.act_window">
+        <field name="name">Result Table Line</field>
+        <field name="res_model">result.table.line</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Register!
+            </p>
+        </field>
+    </record>
+
+
+
+    </data>
+</odoo>

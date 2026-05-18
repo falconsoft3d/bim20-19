@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="space_requisition_wizard_view_form" model="ir.ui.view">
+        <field name="name">space.requisition.wizard.form</field>
+        <field name="model">bim.requisition.space.wzd</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="type" widget="radio"/>
+                        <field name="purchase_type" widget="radio"/>
+                        <field invisible="purchase_type != 'wo_stock'" name="location_type" required="purchase_type == 'wo_stock'" widget="radio"/>
+                    </group>
+                    <group>
+                        <field invisible="True" name="space_id"/>
+                        <field invisible="type == 'all'" name="categ_ids" required="type == 'one'" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-primary" name="create_requisition" string="Create" type="object"/>
+                    <button class="btn-default" special="cancel" string="Cancel"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="act_space_requisition_wizard" model="ir.actions.act_window">
+        <field name="name">Create Material Request</field>
+        <field name="res_model">bim.requisition.space.wzd</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="space_requisition_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

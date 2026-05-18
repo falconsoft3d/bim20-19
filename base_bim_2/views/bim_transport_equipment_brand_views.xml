@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_form_bim_transport_equipment_brand" model="ir.ui.view">
+        <field name="name">view.form.bim.transport.equipment.brand</field>
+        <field name="model">bim.transport.equipment.brand</field>
+        <field name="arch" type="xml">
+            <form string="order" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_transport_equipment_brand" model="ir.ui.view">
+        <field name="name">view.tree.bim.transport.equipment.brand</field>
+        <field name="model">bim.transport.equipment.brand</field>
+        <field name="arch" type="xml">
+            <list delete="1">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_transport_equipment_brand" model="ir.actions.act_window">
+        <field name="name">Bim transport equipment brand</field>
+        <field name="res_model">bim.transport.equipment.brand</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new brand!
+            </p>
+        </field>
+    </record>
+
+</odoo>

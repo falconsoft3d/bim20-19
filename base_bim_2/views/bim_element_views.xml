@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_bim_element_campaign" model="ir.ui.view">
+            <field name="name">view.form.bim.element</field>
+            <field name="model">bim.element</field>
+            <field name="arch" type="xml">
+                <form string="Bim Element">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="uom_id"/>
+                            </group>
+                            <group>
+                                <field name="bim_element_type_id"/>
+                                <field name="weight"/>
+                                <field name="volume"/>
+                                <field name="project_id"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_tree_bim_element" model="ir.ui.view">
+            <field name="name">view.tree.bim.element</field>
+            <field name="model">bim.element</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="uom_id"/>
+                    <field name="bim_element_type_id"/>
+                    <field name="weight"/>
+                    <field name="volume"/>
+                    <field name="project_id"/>
+                    <field name="company_id"/>
+                </list>
+            </field>
+        </record>
+        <record id="action_bim_element" model="ir.actions.act_window">
+            <field name="name">Element</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.element</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_tree_bim_element"/>
+        </record>
+    </data>
+</odoo>

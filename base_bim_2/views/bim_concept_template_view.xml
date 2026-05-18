@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_tree_bim_concept_template" model="ir.ui.view">
+        <field name="name">view.tree.bim.concept.template</field>
+        <field name="model">bim.concept.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="currency_id" optional="hide"/>
+                <field name="code" optional="show"/>
+                <field name="bim_id" optional="show"/>
+                <field name="bim_uom" optional="hide"/>
+                <field name="name"  optional="show"/>
+                <field name="uom_id"  optional="show"/>
+                <field name="user_id"  optional="show"/>
+                <field name="group_id"  optional="hide"/>
+                <field name="sub_group_id"  optional="hide"/>
+                <field name="quantity"  optional="show"/>
+                <field name="type_calc"  optional="hide"/>
+                <field name="amount_total" class="amount_total" widget="monetary"  optional="show"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- bim.concept.template search view -->
+    <record id="bim_concept_template_view_search" model="ir.ui.view">
+        <field name="name">bim.concept.template.view.search</field>
+        <field name="model">bim.concept.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="bim_id"/>
+                <field name="group_id"/>
+                <field name="sub_group_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_form_bim_concept_template" model="ir.ui.view">
+        <field name="name">view.form.bim.concept.template</field>
+        <field name="model">bim.concept.template</field>
+        <field name="arch" type="xml">
+            <form string="Concepts Template">
+                <header>
+                    <button name="%(action_update_concept_template_wzd)d" type="action" context="{'default_template_id': id}"
+                            string="Update Prices"/>
+                    <button name="update_all" type="object" string="UPD"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                         <button name="action_view_parameters" type="object" class="oe_stat_button" icon="fa-bars">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                     <field name="parameter_count" widget="statinfo" nolabel="1"/>
+                                </span>
+                                <span class="o_stat_text">Parameters</span>
+                            </div>
+                         </button>
+
+                        <button name="action_view_concepts" type="object" class="oe_stat_button" icon="fa-tree">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                     <field name="bim_concepts_count" widget="statinfo" nolabel="1"/>
+                                </span>
+                                <span class="o_stat_text">Partidas</span>
+                            </div>
+                         </button>
+                    </div>
+
+                    <group name="budget_concept_template">
+                      <group>
+                            <field name="code" placeholder="Code"  required="True"/>
+                            <field name="name" placeholder="Description"/>
+                            <field name="currency_id"/>
+                            <field name="group_id" options="{'no_create': True}"/>
+                            <field name="quantity" style="width:30%;"/><!--('type','in',('labor','equip','material','aux')),('performance_calculation','=',True),-->
+                            <field name="uom_id" options="{'no_create': True, 'no_edit': True}" style="width:30%;"/>
+                            <field name="active"/>
+
+                      </group>
+
+                      <group name="calculations">
+                            <field name="sub_group_id" options="{'no_create': True}"/>
+                            <field name="performance_calculation" invisible="True"/>
+                            <field name="performance_type" style="width:30%;"/>
+                            <field name="hours_day" invisible="performance_type == 'hours'" style="width:30%;"/>
+                            <field name="performance" style="width:30%;"/>
+                            <field name="bim_id"/>
+                            <field name="bim_uom"/>
+                            <field name="type_calc"/>
+                      </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Concepts">
+                            <field name="template_line_ids">
+                                <list editable="bottom"
+                                      decoration-primary="type == 'H'"
+                                      decoration-warning="type == 'Q'"
+                                      decoration-success="type == 'M'"
+
+                                      excel_export="1">
+                                    <field name="currency_id" optional="hide"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="type"/>
+                                    <field name="code"/>
+                                    <field name="product_id" required="type != 'A'" invisible="type in ('A',False)"/>
+                                    <field name="name"/>
+                                    <field name="uom_id" required="type != 'A'"/>
+                                    <field name="quantity" sum="sum"/>
+                                    <field name="day_price" widget="monetary" optional="hide"/>
+                                    <field name="price" widget="monetary" optional="show"/>
+                                    <field name="dep" sum="sum"/>
+                                    <field name="amount" widget="monetary" optional="show" sum="sum"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Notes..."/>
+                        </page>
+                        <page string="Images">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Phases">
+                            <group>
+                                <group>
+                                    <field name="concept_phase_id"/>
+                                    <field name="sub_phase_id"
+                                             domain="[('parent_id','=',concept_phase_id)]"/>
+
+                                    <field name="concept_specialty_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="APUs">
+                            <group>
+                                <group>
+                                     <field name="apu_total_hh"/>
+                                     <field name="apu_duration"/>
+
+                                     <field name="sub_total_labor"/>
+                                     <field name="apu_labor"/>
+
+                                     <field name="sub_total_equip"/>
+                                     <field name="apu_equip"/>
+
+                                     <field name="sub_total_mat"/>
+                                     <field name="apu_mat"/>
+
+                                    <field name="sub_total_subcontract"/>
+                                    <field name="apu_subcontract"/>
+
+
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Other">
+                            <group>
+                                <group>
+                                    <field name="user_id"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                </group>
+                            </group>
+                        </page>
+
+                    </notebook>
+                    <group class="oe_right">
+                        <group class="oe_subtotal_footer">
+                            <field name="amount_total" class="amount_total" widget="monetary"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bim_concept_template" model="ir.actions.act_window">
+        <field name="name">Concept Template</field>
+        <field name="res_model">bim.concept.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Concept Template!
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_bim_concept_templates"
+        name="Concept Template"
+        parent="menu_bim_data"
+        sequence="130"/>
+    <menuitem
+        id="submenu_bim_concept_templates"
+        name="Concept Template"
+        parent="menu_bim_concept_templates"
+        action="action_bim_concept_template"
+        sequence="1"/>
+
+
+</odoo>

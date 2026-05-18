@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_users_bim_form_inherit" model="ir.ui.view">
+      <field name='name'>res.users.bim.form.inherited</field>
+      <field name='model'>res.users</field>
+      <field name="inherit_id" ref="base.view_users_form"/>
+      <field name='arch' type='xml'>
+          <xpath expr="//field[@name='action_id']/.." position="after">
+                <group string="BIM 2.0">
+                    <field name="check_bim_default"
+                           widget="boolean_toggle"/>
+
+                    <field name="concept_template_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="concept_bim_concept_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="copy_bim_budget_ids" widget="many2many_tags" options="{'no_create': True}"/>
+
+                </group>
+          </xpath>
+      </field>
+    </record>
+</odoo>

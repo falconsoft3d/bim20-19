@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_hr_size" model="ir.ui.view">
+         <field name="name">view.form.hr.size</field>
+         <field name="model">hr.size</field>
+         <field name="arch" type="xml">
+            <form>
+              <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="type"  required="1"/>
+                        </group>
+                    </group>
+               </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_hr_size" model="ir.ui.view">
+         <field name="name">view.tree.hr.size</field>
+         <field name="model">hr.size</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="name"/>
+                 <field name="type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_hr_size" model="ir.actions.act_window">
+        <field name="name">Hr Size</field>
+        <field name="res_model">hr.size</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

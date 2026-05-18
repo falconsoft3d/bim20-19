@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tree_bim_budget_extra" model="ir.ui.view">
+        <field name="name">view.tree.bim.budget.extra</field>
+        <field name="model">bim.budget.extra</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="price" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_budget_extra" model="ir.actions.act_window">
+        <field name="name">Budget extras</field>
+        <field name="res_model">bim.budget.extra</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

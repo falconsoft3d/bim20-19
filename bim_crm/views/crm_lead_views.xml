@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+       <record id="crm_lead_bim_tree" model="ir.ui.view">
+            <field name="name">crm.lead.bim.tree</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='stage_id']" position="after">
+                    <field name="main_project_id" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+       <record id="crm_case_form_view_oppor" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.inherited.crm</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="main_project_id"/>
+                </xpath>
+
+                <button name="action_schedule_meeting" position="after">
+
+                    <button class="oe_stat_button" type="object"
+                        name="action_view_bim_budget" icon="fa-building-o" invisible="type == 'lead'"
+                        groups="base_bim_2.group_user_bim,base_bim_2.group_manager_bim">
+                        <field name="budget_count" widget="statinfo" string="Budgets"/>
+                    </button>
+
+                    <button class="oe_stat_button" type="object"
+                        name="action_view_bim_project" icon="fa-building-o" invisible="type == 'lead'"
+                        groups="base_bim_2.group_user_bim,base_bim_2.group_manager_bim">
+                        <field name="bim_quotation_count" widget="statinfo" string="Projects"/>
+                    </button>
+
+                </button>
+
+
+
+
+                <xpath expr="//div[@name='button_box']" position="inside">
+                   <button name="action_view_budget_request" type="object" class="oe_stat_button" icon="fa-table"
+                            invisible="type == 'lead'">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="budget_request_count" widget="statinfo" nolabel="1"/></span>
+                                <span class="o_stat_text">Solicitudes</span>
+                            </div>
+                    </button>
+
+                   <button name="action_view_budget_sample" type="object" class="oe_stat_button" icon="fa-dollar"
+                   invisible="type == 'lead'">
+                       <div class="o_field_widget o_stat_info">
+                           <span class="o_stat_value"><field name="budget_sample_count" widget="statinfo" nolabel="1"/></span>
+                           <span class="o_stat_text">Budget Samples</span>
+                       </div>
+                   </button>
+               </xpath>
+
+            </field>
+        </record>
+
+
+</odoo>

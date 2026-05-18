@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  Orden de Compra x Línea -->
+        <record id="purchase_order_line_bim_view_tree" model="ir.ui.view">
+            <field name="name">purchase.order.line.bim.view.tree</field>
+            <field name="model">purchase.order.line</field>
+            <field name="arch" type="xml">
+                <list string="Purchase Line"
+                      decoration-info="state == 'draft'"
+                      delete="false" edit="false" create="false">
+                    <field name="id" optional="hide"/>
+                    <field name="order_id" optional="show"/>
+                    <field name="state" optional="show"/>
+                    <field name="partner_id" optional="show"/>
+                    <field name="create_date"
+                           string="Fecha OC" optional="show"/>
+                    <field name="product_id" optional="show"/>
+                    <field name="project_id" optional="hide"/>
+                    <field name="concept_phase_id" optional="show"/>
+                    <field name="product_uom" optional="show"/>
+                    <field name="product_qty" optional="show" sum="sum"/>
+                    <field name="price_unit" optional="show"/>
+                    <field name="price_subtotal" optional="show" sum="sum"/>
+                    <field name="qty_valoration" optional="hide" sum="sum"/>
+                    <field name="price_valoration" optional="hide"/>
+                    <field name="price_valoration" optional="hide" sum="sum"/>
+                    <field name="total_oc_valoration" optional="hide" sum="sum"/>
+                    <field name="qty_saldo" optional="hide" sum="sum"/>
+                    <field name="price_unit" optional="hide"/>
+                    <field name="total_saldo" optional="hide" sum="sum"/>
+                    <field name="qty_invoice" optional="hide" sum="sum"/>
+                    <field name="price_unit_invoice" optional="hide" sum="sum"/>
+                    <field name="total_invoice" optional="hide" sum="sum"/>
+                    <field name="currency_id" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="purchase_order_line_bim_action" model="ir.actions.act_window">
+            <field name="name">Purchase Order Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="purchase_order_line_bim_view_tree"/>
+        </record>
+
+        <menuitem id="purchase_order_line_bim_menu_report"
+              name="Orden de Compra x Línea"
+              parent="purchase.purchase_report_main"
+              sequence="10"
+              groups="base_bim_2.group_report_line"
+              action="purchase_order_line_bim_action" />
+
+
+
+        <!--  Valuación x Linea -->
+        <record id="purchase_valuation_line_bim_view_tree" model="ir.ui.view">
+            <field name="name">purchase.valuation.line.bim.view.tree</field>
+            <field name="model">purchase.valuation.line</field>
+            <field name="arch" type="xml">
+                <list string="Valuation Line"
+                      decoration-info="state == 'draft'"
+                      delete="false" edit="false" create="false">
+                    <field name="id" optional="hide"/>
+                    <field name="valuation_id" optional="show"/>
+                    <field name="state" optional="show"/>
+                    <field name="begin_date" optional="show"/>
+                    <field name="end_date" optional="show"/>
+                    <field name="date" optional="show"/>
+                    <field name="concept_phase_id" optional="show"/>
+                    <field name="product_id" optional="show"/>
+                    <field name="product_qty" optional="show" sum="sum"/>
+                    <field name="price_unit" optional="show"/>
+                    <field name="price_subtotal" optional="show" sum="sum"/>
+                    <field name="currency_id" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="purchase_valuation_line_bim_action" model="ir.actions.act_window">
+            <field name="name">Purchase Valuation Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.valuation.line</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="purchase_valuation_line_bim_view_tree"/>
+        </record>
+
+        <menuitem id="purchase_valuation_line_bim_menu_report"
+              name="Valuación x Línea"
+              parent="purchase.purchase_report_main"
+              sequence="10"
+              groups="base_bim_2.group_report_line"
+              action="purchase_valuation_line_bim_action" />
+
+
+        <!--  Albarán x Linea -->
+        <record id="stock_move_bim_view_tree" model="ir.ui.view">
+            <field name="name">stock.move.bim.view.tree</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <list string="Valuation Line"
+                      decoration-info="state_picking != 'done'"
+                      delete="false" edit="false" create="false">
+                    <field name="id" optional="hide"/>
+                    <field name="name_picking" optional="show"/>
+                    <field name="state_picking" optional="show"/>
+                    <field name="scheduled_date" optional="show"/>
+                    <field name="picking_type_code" optional="show"/>
+                    <field name="product_id" optional="show"/>
+                    <field name="concept_phase_id" optional="show"/>
+                    <field name="product_uom_qty" optional="show"/>
+                    <field name="product_cost" optional="show"/>
+                    <field name="subtotal" optional="show" sum="sum"/>
+                    <field name="currency_id" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="stock_move_bim_action" model="ir.actions.act_window">
+            <field name="name">Stock Move Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_mode">list</field>
+             <field name="domain">[('picking_type_code', '!=', '')] </field>
+            <field name="view_id" ref="stock_move_bim_view_tree"/>
+        </record>
+
+        <menuitem id="stock_move_bim_menu_report"
+              name="Albarán x Línea"
+              parent="purchase.purchase_report_main"
+              sequence="10"
+              groups="base_bim_2.group_report_line"
+              action="stock_move_bim_action" />
+
+
+        <!--  Factura Servicios x Linea -->
+        <record id="account_move_line_bim_view_tree" model="ir.ui.view">
+        <field name="name">account.move.line.bim.view.tree</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <list edit="0" create="0" delete="0" decoration-info="state == 'draft'">
+                <field name="id" optional="hide"/>
+                <field name="move_id" optional="show"/>
+                <field name="state"  optional="show"/>
+
+                <field name="invoice_date" optional="show"/>
+                <field name="product_id" optional="show"/>
+                <field name="detailed_type" optional="show"/>
+                <field name="budgetr_id"  optional="show"/>
+                <field name="concept_phase_id"  optional="show"/>
+                <field name="quantity"  optional="show" sum="sum"/>
+                <field name="price_unit"  optional="show" sum="sum"/>
+                <field name="price_subtotal_signed"  optional="show" sum="sum"/>
+                <field name="move_type"  optional="show"/>
+
+                <field name="currency_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+            </list>
+        </field>
+        </record>
+
+        <record id="action_move_line_bim" model="ir.actions.act_window">
+            <field name="name">Líneas de Factura</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="account_move_line_bim_view_tree"/>
+            <field name="domain">[('move_id.move_type', 'in', ['in_invoice', 'in_refund'])]</field>
+            <field name="help" type="html">
+                    <p class="oe_view_nocontent_create">
+                        Create a new Register!
+                    </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_move_line_bim_purchase" name="Factura Compra x Linea"
+                  parent="purchase.purchase_report_main"
+                  sequence="50"
+                  groups="base_bim_2.group_report_line"
+                  action="action_move_line_bim"/>
+
+    </data>
+</odoo>

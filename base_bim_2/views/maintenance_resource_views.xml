@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_maintenance_resource" model="ir.ui.view">
+         <field name="name">view.form.maintenance.resource</field>
+         <field name="model">maintenance.resource</field>
+         <field name="arch" type="xml">
+            <form>
+              <sheet>
+                    <group>
+                        <group>
+                            <field name="resource_type" required="1"/>
+                            <field name="product_id"
+                                   domain="[('resource_type','=',resource_type)]"
+                                   required="1"/>
+                            <field name="name" required="1"/>
+                            <field name="uom_id" required="1"/>
+                            <field name="quantity" required="1"/>
+                            <field name="cost" required="1"/>
+                            <field name="total" required="1"/>
+                        </group>
+                        <group>
+                            <field name="used"/>
+                            <field name="currency_id" required="1"/>
+                            <field name="company_id" required="1"/>
+                            <field name="user_id"/>
+                        </group>
+
+                    </group>
+               </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_maintenance_resource" model="ir.ui.view">
+         <field name="name">view.tree.maintenance.resource</field>
+         <field name="model">maintenance.resource</field>
+         <field name="arch" type="xml">
+             <list>
+                    <field name="resource_type"/>
+                    <field name="product_id" domain="[('resource_type','=',resource_type)]" />
+                    <field name="name"/>
+                    <field name="uom_id"/>
+                    <field name="quantity" sum="sume"/>
+                    <field name="cost"/>
+                    <field name="total" sum="sume"/>
+                    <field name="used"/>
+                    <field name="user_id"/>
+                    <field name="currency_id"/>
+                    <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_maintenance_resource" model="ir.actions.act_window">
+        <field name="name">Resource</field>
+        <field name="res_model">maintenance.resource</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

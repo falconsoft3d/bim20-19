@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- bim.sale.budget form view -->
+    <record id="bim_sale_budget_view_form" model="ir.ui.view">
+        <field name="name">bim.sale.budget.view.form</field>
+        <field name="model">bim.sale.budget</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field invisible="True" name="sale_id"/>
+                        <field name="option" widget="radio"/>
+                    </group>
+                    <group>
+                        <field name="project_id" options="{'no_open': True, 'no_create': True}"/>
+                        <field invisible="True" name="company_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-primary" invisible="option == 'budget'" name="action_create_budget" string="Create budget" type="object"/>
+                    <button class="btn-primary" invisible="option != 'budget'" name="action_create_from_apu_template" string="Select apu template" type="object"/>
+                    <button class="btn-secondary" name="cancel" special="cancel" string="Cancel"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_budget_sale_action" model="ir.actions.act_window">
+        <field name="name">BIM Budget</field>
+        <field name="res_model">bim.sale.budget</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">form</field>
+        <field name="context">{'default_sale_id': active_id}</field>
+        <field eval="[(4, ref('base_bim_2.group_user_bim'))]" name="groups_id"/>
+    </record>
+</odoo>

@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+        <!-- purchase.valuation.line -->
+        <record id="rule_purchase_valuation_line" model="ir.rule">
+            <field name="name">Multi Company Purchase Valuation Line</field>
+            <field ref="model_purchase_valuation_line" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- measurement.origin-->
+        <record id="rule_measurement_origin" model="ir.rule">
+            <field name="name">Multi Company Measurement Origin</field>
+            <field ref="model_measurement_origin" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- partner.attendance -->
+        <record id="rule_partner_attendance" model="ir.rule">
+            <field name="name">Multi Company Partner Attendance</field>
+            <field ref="model_partner_attendance" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- result.table -->
+        <record id="rule_result_table" model="ir.rule">
+            <field name="name">Multi Company Result Table</field>
+            <field ref="model_result_table" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+       <!-- resource.demand -->
+       <record id="rule_resource_demand" model="ir.rule">
+           <field name="name">Multi Company Resource Demand</field>
+           <field ref="model_resource_demand" name="model_id"/>
+           <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+           <field name="global" eval="1"/>
+       </record>
+
+
+
+       <!-- cost.settlement -->
+        <record id="rule_cost_settlement" model="ir.rule">
+            <field name="name">Multi Company Cost Settlement</field>
+            <field ref="model_cost_settlement" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.rfi -->
+        <record id="rule_bim_rfi" model="ir.rule">
+            <field name="name">Multi Company Bim RFI</field>
+            <field ref="model_bim_rfi" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.massive.certification.by.line -->
+        <record id="rule_bim_massive_certification_by_line" model="ir.rule">
+            <field name="name">Multi Company Bim Massive Certification By Line</field>
+            <field ref="model_bim_massive_certification_by_line" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.mto -->
+        <record id="rule_bim_mto" model="ir.rule">
+            <field name="name">Multi Company Bim MTO</field>
+            <field ref="model_bim_mto" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- diary.part -->
+        <record id="rule_diary_part" model="ir.rule">
+            <field name="name">Multi Company Diary Part</field>
+            <field ref="model_diary_part" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.element -->
+        <record id="rule_bim_element" model="ir.rule">
+            <field name="name">Multi Company Bim Element</field>
+            <field ref="model_bim_element" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- contractor.contract.generator -->
+        <record id="rule_contractor_contract_generator" model="ir.rule">
+            <field name="name">Multi Company Contractor Contract Generator</field>
+            <field ref="model_contractor_contract_generator" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- contractor.contract -->
+        <record id="rule_contractor_contract" model="ir.rule">
+            <field name="name">Multi Company Contractor Contract</field>
+            <field ref="model_contractor_contract" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- contractor.contract.progress.capture -->
+        <record id="rule_contractor_contract_progress_capture" model="ir.rule">
+            <field name="name">Multi Company Contractor Contract Progress Capture</field>
+            <field ref="model_contractor_contract_progress_capture" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- contractor.contract.analysis -->
+        <record id="rule_contractor_contract_analysis" model="ir.rule">
+            <field name="name">Multi Company Contractor Contract Analysis</field>
+            <field ref="model_contractor_contract_analysis" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.concept.template -->
+        <record id="rule_bim_concept_template" model="ir.rule">
+            <field name="name">Multi Company Bim Concept Template</field>
+            <field ref="model_bim_concept_template" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.ite -->
+        <record id="rule_bim_ite" model="ir.rule">
+            <field name="name">Multi Company Bim ITE</field>
+            <field ref="model_bim_ite" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.concepts -->
+        <record id="rule_bim_concepts" model="ir.rule">
+            <field name="name">Multi Company Bim Concepts</field>
+            <field ref="model_bim_concepts" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- budget.request -->
+        <record id="rule_budget_request" model="ir.rule">
+            <field name="name">Multi Company Budget Request</field>
+            <field ref="model_budget_request" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- project.estimate -->
+        <record id="rule_project_estimate" model="ir.rule">
+            <field name="name">Multi Company Project Estimate</field>
+            <field ref="model_project_estimate" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- chat.bim -->
+        <record id="rule_chat_bim" model="ir.rule">
+            <field name="name">Multi Company Chat Bim</field>
+            <field ref="model_chat_bim" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.ai.model -->
+        <record id="rule_bim_ai_model" model="ir.rule">
+            <field name="name">Multi Company Bim AI Model</field>
+            <field ref="model_bim_ai_model" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.sql.report -->
+        <record id="rule_bim_sql_report" model="ir.rule">
+            <field name="name">Multi Company Bim SQL Report</field>
+            <field ref="model_bim_sql_report" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.import.temp -->
+        <record id="rule_bim_import_temp" model="ir.rule">
+            <field name="name">Multi Company Bim Import Temp</field>
+            <field ref="model_bim_import_temp" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- work.database.concept.importer -->
+        <record id="rule_work_database_concept_importer" model="ir.rule">
+            <field name="name">Multi Company Work Database Concept Importer</field>
+            <field ref="model_work_database_concept_importer" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- assistance.importer -->
+        <record id="rule_assistance_importer" model="ir.rule">
+            <field name="name">Multi Company Assistance Importer</field>
+            <field ref="model_assistance_importer" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.expenses.import -->
+        <record id="rule_bim_expenses_import" model="ir.rule">
+            <field name="name">Multi Company Bim Expenses Import</field>
+            <field ref="model_bim_expenses_import" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.server -->
+        <record id="rule_bim_server" model="ir.rule">
+            <field name="name">Multi Company Bim Server</field>
+            <field ref="model_bim_server" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.bucket -->
+        <record id="rule_bim_bucket" model="ir.rule">
+            <field name="name">Multi Company Bim Bucket</field>
+            <field ref="model_bim_bucket" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.model -->
+        <record id="rule_bim_model" model="ir.rule">
+            <field name="name">Multi Company Bim Model</field>
+            <field ref="model_bim_model" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.purchase.requisition -->
+        <record id="rule_bim_purchase_requisition" model="ir.rule">
+            <field name="name">Multi Company Bim Purchase Requisition</field>
+            <field ref="model_bim_purchase_requisition" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.purchase.services -->
+        <record id="rule_bim_purchase_services" model="ir.rule">
+            <field name="name">Multi Company Bim Purchase Services</field>
+            <field ref="model_bim_purchase_services" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.documentation -->
+        <record id="rule_bim_documentation" model="ir.rule">
+            <field name="name">Multi Company Bim Documentation</field>
+            <field ref="model_bim_documentation" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.marketing.campaign -->
+        <record id="rule_bim_marketing_campaign" model="ir.rule">
+            <field name="name">Multi Company Bim Marketing Campaign</field>
+            <field ref="model_bim_marketing_campaign" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- customer.survey -->
+        <record id="rule_customer_survey" model="ir.rule">
+            <field name="name">Multi Company Customer Survey</field>
+            <field ref="model_customer_survey" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- customer.question.template -->
+        <record id="rule_customer_question_template" model="ir.rule">
+            <field name="name">Multi Company Customer Question Template</field>
+            <field ref="model_customer_question_template" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.quality.control.plan -->
+        <record id="rule_bim_quality_control_plan" model="ir.rule">
+            <field name="name">Multi Company Bim Quality Control Plan</field>
+            <field ref="model_bim_quality_control_plan" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.checklist -->
+        <record id="rule_bim_checklist" model="ir.rule">
+            <field name="name">Multi Company Bim Checklist</field>
+            <field ref="model_bim_checklist" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- analitic.account.control -->
+        <record id="rule_analitic_account_control" model="ir.rule">
+            <field name="name">Multi Company Analitic Account Control</field>
+            <field ref="model_analitic_account_control" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- framework.contract -->
+        <record id="rule_framework_contract" model="ir.rule">
+            <field name="name">Multi Company Framework Contract</field>
+            <field ref="model_framework_contract" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.object -->
+        <record id="rule_bim_object" model="ir.rule">
+            <field name="name">Multi Company Bim Object</field>
+            <field ref="model_bim_object" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.tool.use -->
+        <record id="rule_bim_tool_use" model="ir.rule">
+            <field name="name">Multi Company Bim Tool Use</field>
+            <field ref="model_bim_tool_use" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.task.plan -->
+        <record id="rule_maintenance_task_plan" model="ir.rule">
+            <field name="name">Multi Company Maintenance Task Plan</field>
+            <field ref="model_maintenance_task_plan" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.task -->
+        <record id="rule_maintenance_task" model="ir.rule">
+            <field name="name">Multi Company Maintenance Task</field>
+            <field ref="model_maintenance_task" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.sub.task -->
+        <record id="rule_maintenance_sub_task" model="ir.rule">
+            <field name="name">Multi Company Maintenance Sub Task</field>
+            <field ref="model_maintenance_sub_task" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.resource -->
+        <record id="rule_maintenance_resource" model="ir.rule">
+            <field name="name">Multi Company Maintenance Resource</field>
+            <field ref="model_maintenance_resource" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.measure -->
+        <record id="rule_maintenance_measure" model="ir.rule">
+            <field name="name">Multi Company Maintenance Measure</field>
+            <field ref="model_maintenance_measure" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.location -->
+        <record id="rule_maintenance_location" model="ir.rule">
+            <field name="name">Multi Company Maintenance Location</field>
+            <field ref="model_maintenance_location" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.asset -->
+        <record id="rule_maintenance_asset" model="ir.rule">
+            <field name="name">Multi Company Maintenance Asset</field>
+            <field ref="model_maintenance_asset" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- maintenance.work.request -->
+        <record id="rule_maintenance_work_request" model="ir.rule">
+            <field name="name">Multi Company Maintenance Work Request</field>
+            <field ref="model_maintenance_work_request" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.budget.space -->
+        <record id="rule_bim_budget_space" model="ir.rule">
+            <field name="name">Multi Company Bim Budget Space</field>
+            <field ref="model_bim_budget_space" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.budget.stage -->
+        <record id="rule_bim_budget_stage" model="ir.rule">
+            <field name="name">Multi Company Bim Budget Stage</field>
+            <field ref="model_bim_budget_stage" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- tms.shipment -->
+        <record id="rule_tms_shipment" model="ir.rule">
+            <field name="name">Multi Company TMS Shipment</field>
+            <field ref="model_tms_shipment" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- tms.expense.record -->
+        <record id="rule_tms_expense_record" model="ir.rule">
+            <field name="name">Multi Company TMS Expense Record</field>
+            <field ref="model_tms_expense_record" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+       <!-- transportation.expenses -->
+       <record id="rule_transportation_expenses" model="ir.rule">
+           <field name="name">Multi Company Transportation Expenses</field>
+           <field ref="model_transportation_expenses" name="model_id"/>
+           <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+           <field name="global" eval="1"/>
+       </record>
+
+        <!-- bim.resource.template -->
+        <record id="rule_bim_resource_template" model="ir.rule">
+            <field name="name">Multi Company Bim Resource Template</field>
+            <field ref="model_bim_resource_template" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- work.resources.contract -->
+        <record id="rule_work_resources_contract" model="ir.rule">
+            <field name="name">Multi Company Work Resources Contract</field>
+            <field ref="model_work_resources_contract" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- resource.analysis -->
+        <record id="rule_resource_analysis" model="ir.rule">
+            <field name="name">Multi Company Resource Analysis</field>
+            <field ref="model_resource_analysis" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.cash.flow.generator -->
+        <record id="rule_bim_cash_flow_generator" model="ir.rule">
+            <field name="name">Multi Company Bim Cash Flow Generator</field>
+            <field ref="model_bim_cash_flow_generator" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.cash.flow.category -->
+        <record id="rule_bim_cash_flow_category" model="ir.rule">
+            <field name="name">Multi Company Bim Cash Flow Category</field>
+            <field ref="model_bim_cash_flow_category" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- ticket.bim -->
+        <record id="rule_ticket_bim" model="ir.rule">
+            <field name="name">Multi Company Ticket Bim</field>
+            <field ref="model_ticket_bim" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- ticket.bim.category -->
+        <record id="rule_ticket_bim_category" model="ir.rule">
+            <field name="name">Multi Company Ticket Bim Category</field>
+            <field ref="model_ticket_bim_category" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.task -->
+        <record id="rule_bim_task" model="ir.rule">
+            <field name="name">Multi Company Bim Task</field>
+            <field ref="model_bim_task" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.project.employee.timesheet.summary -->
+        <record id="rule_bim_project_employee_timesheet_summary" model="ir.rule">
+            <field name="name">Multi Company Bim Project Employee Timesheet Summary</field>
+            <field ref="model_bim_project_employee_timesheet_summary" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.part -->
+        <record id="rule_bim_part" model="ir.rule">
+            <field name="name">Multi Company Bim Part</field>
+            <field ref="model_bim_part" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.recurring.contract -->
+        <record id="rule_bim_recurring_contract" model="ir.rule">
+            <field name="name">Multi Company Bim Recurring Contract</field>
+            <field ref="model_bim_recurring_contract" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- picking.analysis -->
+        <record id="rule_picking_analysis" model="ir.rule">
+            <field name="name">Multi Company Picking Analysis</field>
+            <field ref="model_picking_analysis" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.cost.list -->
+        <record id="rule_bim_cost_list" model="ir.rule">
+            <field name="name">Multi Company Bim Cost List</field>
+            <field ref="model_bim_cost_list" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- deliver.products -->
+        <record id="rule_deliver_products" model="ir.rule">
+            <field name="name">Multi Company Deliver Products</field>
+            <field ref="model_deliver_products" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.mobile.warehouse -->
+        <record id="rule_bim_mobile_warehouse" model="ir.rule">
+            <field name="name">Multi Company Bim Mobile Warehouse</field>
+            <field ref="model_bim_mobile_warehouse" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- massive.deliver.products -->
+        <record id="rule_massive_deliver_products" model="ir.rule">
+            <field name="name">Multi Company Massive Deliver Products</field>
+            <field ref="model_massive_deliver_products" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- customer.question -->
+        <record id="rule_customer_question" model="ir.rule">
+            <field name="name">Multi Company Customer Question</field>
+            <field ref="model_customer_question" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.department -->
+        <record id="rule_bim_department" model="ir.rule">
+            <field name="name">Multi Company Bim Department</field>
+            <field ref="model_bim_department" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- work.breakdown -->
+        <record id="rule_work_breakdown" model="ir.rule">
+            <field name="name">Multi Company Work Breakdown</field>
+            <field ref="model_work_breakdown" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- purchase.valuation -->
+        <record id="rule_purchase_valuation" model="ir.rule">
+            <field name="name">Multi Company Purchase Valuation</field>
+            <field ref="model_purchase_valuation" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.element.type -->
+        <record id="rule_bim_element_type" model="ir.rule">
+            <field name="name">Multi Company Bim Element Type</field>
+            <field ref="model_bim_element_type" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+        <!-- bim.purchase.report -->
+        <record id="rule_bim_purchase_report" model="ir.rule">
+            <field name="name">Multi Company Bim Purchase Report</field>
+            <field ref="model_bim_purchase_report" name="model_id"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+            <field name="global" eval="1"/>
+        </record>
+
+
+</odoo>

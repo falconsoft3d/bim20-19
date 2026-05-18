@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="analitic_account_control_view_form" model="ir.ui.view">
+            <field name="name">analitic.account.control.view.form</field>
+            <field name="model">analitic.account.control</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button class="btn btn-primary" invisible="state not in ['draft']" name="action_send" string="To send" type="object"/>
+                        <button class="btn btn-primary" invisible="state not in ['sent']" name="action_done" string="To Done" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field domain="[('analytic_id', '=', False)]" name="project_id" readonly="state != 'draft'"/>
+                                <field name="user_id" readonly="state != 'draft'"/>
+                                <field name="create_date" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field invisible="state in ['draft', 'canceled']" name="analytic_code"/>
+                                <field invisible="state in ['draft', 'canceled']" name="analytic_name"/>
+                                <field invisible="not account_analytic_account_id" name="account_analytic_account_id" readonly="1"/>
+                                <field name="bim_department_id" readonly="state != 'draft'"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="analitic_account_control_view_tree" model="ir.ui.view">
+            <field name="name">analitic.account.control.view.tree</field>
+            <field name="model">analitic.account.control</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state=='draft'" decoration-muted="state == 'cancel'" delete="0" string="_tree">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="create_date"/>
+                    <field name="user_id"/>
+                    <field groups="base.group_multi_company" name="company_id"/>
+                    <field name="state"/>
+                </list></field>
+        </record>
+        <record id="action_analitic_account_control_orders" model="ir.actions.act_window">
+            <field name="name">Analitic Account Control</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">analitic.account.control</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

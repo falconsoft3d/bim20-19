@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_concept_template_wizard_form" model="ir.ui.view">
+        <field name="name">bim.concept.template.wizard.form</field>
+        <field name="model">bim.concept.template.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Insert ITEs">
+                <group name="main">
+                    <group name="left">
+                        <field name="code"/>
+                        <field name="group_id" options="{'no_create': True}"/>
+                        <field name="concept_id" force_save="1"/>
+                        <field name="exchange_rate"/>
+                    </group>
+                    <group>
+                        <field name="name"/>
+                        <field name="sub_group_id" options="{'no_create': True}"/>
+                        <field name="concept_template_id" options="{'no_create': True}"/>
+                        <field name="available_template_ids" invisible="True"/>
+                        <field name="parameter_ids" invisible="True"/>
+                    </group>
+                </group>
+                <separator string="Parameters"/>
+                    <field name="attribute_line_ids" nolabel="1">
+                        <list editable="bottom" create="0" delete="0">
+                            <field name="parameter_ids" invisible="True"/>
+                            <field name="parameter_id" options="{'no_create': True}"/>
+                            <field name="parameter_value_id" options="{'no_create': True}"/>
+                        </list>
+                    </field>
+                <footer>
+                    <button string="Continue" name="action_apply_template"  type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="bim_wizard_concept_template_action" model="ir.actions.act_window">
+        <field name="name">Insert Concept Template</field>
+        <field name="res_model">bim.concept.template.wizard</field>
+        <field name="view_mode">form</field>
+       <field name="target">new</field>
+    </record>
+
+</odoo>

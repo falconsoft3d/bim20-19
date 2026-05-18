@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_assistance_importer" model="ir.ui.view">
+        <field name="name">view.form.assistance.importer</field>
+        <field name="model">assistance.importer</field>
+        <field name="arch" type="xml">
+            <form string="Assistance Importer">
+                <header>
+                    <button name="import_file" string="Import File"
+                            invisible="state not in ('draft')"
+                            type="object" class="oe_highlight"/>
+
+                    <button name="insert_hr_attendance" string="Insert"
+                            invisible="state not in ('imported')"
+                            type="object" class="oe_highlight"/>
+
+                    <button name="to_draft" string="To Draft"
+                            invisible="state not in ('imported','error','inserted')"
+                            type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="file_name" invisible="1"/>
+                             <field name="file" filename="file_name" widget="download_link"/>
+                             <field name="date"/>
+                             <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+
+
+                    <field name="line_ids" nolabel="1"
+                           readonly="1"
+                           invisible="state in ('draft')">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="employee_id"
+                                    widget="many2onebutton"
+                            />
+                            <field name="din_hour"/>
+                            <field name="dout_hour"/>
+                            <field name="hr_attendance_id"
+                                   widget="many2onebutton"
+                                   readlony="1"/>
+                        </list>
+                    </field>
+
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_assistance_importer" model="ir.ui.view">
+        <field name="name">view.tree.assistance.importer</field>
+        <field name="model">assistance.importer</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="user_id"/>
+                <field name="company_id"/>
+                <field name="date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_assistance_importer" model="ir.actions.act_window">
+        <field name="name">Assistance Importer</field>
+        <field name="res_model">assistance.importer</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new assistance importer!
+            </p>
+        </field>
+    </record>
+
+
+    </data>
+
+
+</odoo>

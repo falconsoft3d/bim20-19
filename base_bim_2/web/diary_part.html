@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Parte Diario | {{part_id.name}}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="text-center">
+        <h3 class="mt-5">Parte Diario : {{part_id.name}}</h3>
+        <p>{{part_id.project_id.name}} | {{part_id.bim_resource_template_id.name}} | {{part_id.date}} | {{part_id.user_id.name}}</p>
+        <input type="hidden" id="csrf_token" value="{{csrf_token}}"/>
+
+        <div class="row justify-content-center mt-4">
+
+            <table class="table table-sm">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Empleados</th>
+                      {% for pcp in pcps %}
+                            <th scope="col">{{pcp.name}} - {{pcp.description}}  </th>
+                      {% endfor %}
+
+                           <th scope="col">Subtotal</th>
+
+                    </tr>
+                  </thead>
+
+
+                  <tbody>
+
+
+
+                        {% for employee in employees %}
+                            <tr>
+                                {% if employee[0].code_bim %}}
+                                    <th>{{ employee[0].name }} [ {{ employee[0].code_bim }} ]</th>
+                                {% endif %}
+                                {% if not employee[0].code_bim %}
+                                    <th>{{ employee[0].name }}</th>
+                                {% endif %}
+                                {% for pcp in pcps %}
+                                        <td>
+                                            <input type="number" value="{{ employee[1]|selectattr('bim_pcp_id', 'eq', pcp)|map(attribute='hh')|first }}"
+                                                   id="{{ employee[0].id }}-{{ pcp.id }}"
+                                                   name="{{ employee[0].id }}-{{ pcp.id }}"
+                                                   class="form-control matriz-input"
+                                                   oninput="calculateSubtotal('{{ employee[0].id }}')">
+                                        </td>
+                                    {% endfor %}
+                                <td>
+                                    <input type="text" id="subtotal-{{ employee[0].id }}" class="form-control" value="{{ total_hh }}" readonly>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                  <tfoot>
+                    <tr>
+                        <th colspan="{{ pcps|length + 1 }}">Total General</th>
+                        <td>
+                            <input type="text" id="total-general" class="form-control" value="0" readonly>
+                        </td>
+                    </tr>
+                </tfoot>
+
+
+                </table>
+        </div>
+        <hr>
+        <btn class="btn btn-secondary"
+             id="save" onclick="btnSave()">Guardar</btn>
+    </div>
+
+    <style>
+         thead {
+                position: sticky;
+                top: 0;
+                background-color: #343a40; /* Color de fondo igual al thead */
+                color: white;
+                z-index: 1000;
+            }
+
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Para Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+
+    <script>
+        function calculateSubtotal(employeeId) {
+                let total = 0;
+
+                // Buscar todos los inputs que pertenecen al mismo empleado
+                document.querySelectorAll(`input[id^='${employeeId}-']`).forEach(input => {
+                    total += parseFloat(input.value) || 0;  // Convertir a número y evitar NaN
+                });
+
+                // Actualizar el subtotal de la fila
+                document.getElementById(`subtotal-${employeeId}`).value = total;
+
+                // Recalcular el total general
+                calculateTotalGeneral();
+            }
+
+            function calculateTotalGeneral() {
+                let totalGeneral = 0;
+
+                // Sumar todos los subtotales
+                document.querySelectorAll("input[id^='subtotal-']").forEach(input => {
+                    totalGeneral += parseFloat(input.value) || 0;
+                });
+
+                // Actualizar el campo de total general
+                document.getElementById("total-general").value = totalGeneral;
+            }
+
+            // Asignar eventos al cargar la página y calcular totales iniciales
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll(".matriz-input").forEach(input => {
+                    input.addEventListener("input", function() {
+                        let employeeId = this.id.split("-")[0]; // Extraer el ID del empleado
+                        calculateSubtotal(employeeId);
+                    });
+                });
+
+                // Calcular los subtotales y el total general al cargar la página
+                document.querySelectorAll("input[id^='subtotal-']").forEach(input => {
+                    let employeeId = input.id.replace("subtotal-", "");
+                    calculateSubtotal(employeeId);
+                });
+
+                // Calcular el total general al cargar la página
+                calculateTotalGeneral();
+            });
+
+
+
+         function btnSave(){
+                event.preventDefault();
+                part_id = {{part_id.id}};
+                array_inputs = document.getElementsByClassName("matriz-input");
+
+                var inputsData = [];
+                for (var i = 0; i < array_inputs.length; i++) {
+                    var inputId = array_inputs[i].id;
+                    var inputValue = array_inputs[i].value;
+
+                    // Almacenar en el array o imprimir en consola
+                    inputsData.push({ id: inputId, hh: inputValue });
+
+                }
+
+                if (inputsData.length == 0) {
+                    alert("No se ha modificado ningún valor");
+                    return;
+                }
+
+                console.log(inputsData);
+
+
+                $.ajax({
+                        url: '/bim/diary-part/save-matriz',
+                        method: 'post',
+                        timeout: 0,
+                        headers: { 'Content-Type': 'application/json' },
+                        data: JSON.stringify({
+                            params: {
+                                csrf_token: csrf_token,
+                                part_id: part_id,
+                                inputsData: inputsData,
+                            }
+                        }),
+                        success: function (response) {
+                            if (response.result.status == "ok") {
+                                location.reload();
+                            } else {
+                                alert("Error al guardar");
+                            }
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                                alert("Error al guardar");
+                            }
+                    });
+
+                }
+    </script>
+</html>

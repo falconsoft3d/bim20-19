@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="employee_area_view_tree" model="ir.ui.view">
+            <field name="name">employee.area.view.tree</field>
+            <field name="model">employee.area</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="employee_area_view_form" model="ir.ui.view">
+            <field name="name">employee.area.view.form</field>
+            <field name="model">employee.area</field>
+            <field name="arch" type="xml">
+                <form string="Employee area">
+                    <sheet>
+                     <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                     </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="employee_area_action" model="ir.actions.act_window">
+            <field name="name">Employee Area</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.area</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+         <menuitem action="employee_area_action"
+                   id="submenu_employee_area" name="Employee Areas"
+                   parent="menu_employee" sequence="1"/>
+
+    </data>
+</odoo>

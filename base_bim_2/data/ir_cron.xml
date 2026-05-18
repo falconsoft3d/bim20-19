@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo noupdate="1">
+
+
+    <record id="bim_account_move" model="ir.cron">
+        <field name="name">BIM Include in Date</field>
+        <field name="active">False</field>
+        <field name="priority">5</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_run_include_bim()</field>
+    </record>
+
+    <record id="bim_recurring_contract" model="ir.cron">
+        <field name="name">BIM Recurring Contract</field>
+        <field name="active">False</field>
+        <field name="priority">5</field>
+        <field name="interval_number">8</field>
+        <field name="interval_type">hours</field>
+        <field name="model_id" ref="model_bim_recurring_contract"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_run_contract()</field>
+    </record>
+
+    <record id="bim_import_temp_cron" model="ir.cron">
+        <field name="name">BIM Budget import</field>
+        <field name="active">False</field>
+        <field name="priority">5</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="model_id" ref="model_bim_import_temp"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_start_import()</field>
+    </record>
+
+    <record id="bim_update_cost_usd" model="ir.cron">
+        <field name="name">BIM Update Products Cost USD</field>
+        <field name="model_id" ref="model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_update_product_currency()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">False</field>
+    </record>
+
+     <record id="bim_hr_attendance_mass_summary" model="ir.cron">
+        <field name="name">BIM hr attendance mass summary</field>
+        <field name="model_id" ref="model_hr_attendance_mass_summary"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_load_hr_attendance_mass_summary()</field>
+        <field name="interval_number">7</field>
+        <field name="interval_type">days</field>
+        <field name="active">False</field>
+    </record>
+
+    <record id="bim_project_employee_timesheet_summary" model="ir.cron">
+        <field name="name">BIM project employee timesheet summary</field>
+        <field name="model_id" ref="model_bim_project_employee_timesheet_summary"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_load_timesheet_summary()</field>
+        <field name="interval_number">7</field>
+        <field name="interval_type">days</field>
+        <field name="active">False</field>
+    </record>
+
+
+
+    <record id="bim_budget_update_cost_usd" model="ir.cron">
+        <field name="name">Update Budget Resources Cost USD</field>
+        <field name="model_id" ref="model_bim_budget"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_update_budget_resource_usd_currency()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">False</field>
+    </record>
+
+    <record id="bim_project_update_cost" model="ir.cron">
+        <field name="name">BIM project update cost</field>
+        <field name="model_id" ref="model_bim_project"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_update_cost()</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">hours</field>
+        <field name="active">False</field>
+    </record>
+
+
+    <record id="bim_budget_update_cost" model="ir.cron">
+        <field name="name">BIM Update Budget</field>
+        <field name="model_id" ref="model_bim_budget"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_update_cost(max_concepts=0)</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">hours</field>
+        <field name="active">False</field>
+    </record>
+
+    <record id="bim_budget_update_cost_test" model="ir.cron">
+        <field name="name">BIM Update Budget Test</field>
+        <field name="model_id" ref="model_bim_budget"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_update_cost_test()</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">hours</field>
+        <field name="active">False</field>
+    </record>
+</odoo>

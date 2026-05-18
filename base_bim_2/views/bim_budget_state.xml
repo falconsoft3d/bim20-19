@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_budget_state" model="ir.ui.view">
+        <field name="name">view.form.bim.budget.state</field>
+        <field name="model">bim.budget.state</field>
+        <field name="arch" type="xml">
+            <form string="Report" delete="0" >
+                <sheet>                    
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <field name="user_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <group string="Budget">
+                            <field name="required_fields" placeholder="name,user_id"/>
+                            <field name="lock_budget"/>
+                            <field name="include_in_amount"/>
+                            <field name="allow_certification"/>
+                            <field name="convert_virtual_product"/>
+                            <field name="sequence"  invisible="True"/>
+                            <field name="is_new" invisible="True"/>
+                            <field name="write_utility"/>
+                            <field name="type_invoice" required="1"/>
+                            <field name="bim_project_state_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Costs">
+                            <field name="put_costs"/>
+                            <field name="include_in_attendance"/>
+                            <field name="material_request"/>
+                            <field name="project_part"/>
+                            <field name="include_in_open_balance"/>
+                            <field name="include_in_tools"/>
+
+                            <field name="allow_supplier_purchase"/>
+                            <field name="allow_supplier_invoice"/>
+
+                            <field name="is_done" invisible="True"/>
+                        </group>
+                    </group>
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_budget_state" model="ir.ui.view">
+        <field name="name">view.tree.bim.budget.state</field>
+        <field name="model">bim.budget.state</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle" />
+                <field name="name"/>
+                <field name="include_in_attendance"/>
+                <field name="material_request"/>
+                <field name="type_invoice"/>
+                <field name="project_part"/>
+                <field name="include_in_open_balance"/>
+                <field name="include_in_tools"/>
+                <field name="allow_supplier_invoice"/>
+                <field name="convert_virtual_product"/>
+                <field name="is_new" invisible="True"/>
+                <field name="is_done" invisible="True"/>
+                <field name="bim_project_state_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_budget_state" model="ir.actions.act_window">
+        <field name="name">Budget states</field>
+        <field name="res_model">bim.budget.state</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Budget state!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="submenu_bim_budget_state"
+        name="Budget states"
+        parent="base_bim_2.menu_bim_project_state"
+        action="action_bim_budget_state"
+        sequence="3" />
+    </data>
+
+</odoo>

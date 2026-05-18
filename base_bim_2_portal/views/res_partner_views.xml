@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista heredada de res.partner para agregar pestaña Portal BIM -->
+    <record id="view_partner_form_portal_bim" model="ir.ui.view">
+        <field name="name">res.partner.form.portal.bim</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar la pestaña al final del notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Portal BIM" name="portal_bim">
+                    <field name="portal_bim_active" invisible="1"/>
+                    <group>
+                        <group>
+                            <label for="portal_bim_active" string="Estado Portal BIM"/>
+                            <div>
+                                <field name="portal_bim_active" readonly="1" nolabel="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="portal_bim_login"/>
+                            <field name="portal_bim_password" password="True"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group>
+                            <button name="action_activate_portal_bim" 
+                                    string="Activar"
+                                    type="object" 
+                                    class="oe_highlight"
+                                    invisible="portal_bim_active == True"
+                                    icon="fa-check-circle"/>
+                            
+                            <button name="action_deactivate_portal_bim" 
+                                    string="Desactivar"
+                                    type="object"
+                                    confirm="¿Está seguro que desea desactivar el Portal BIM?"
+                                    invisible="portal_bim_active == False"
+                                    icon="fa-times-circle"/>
+                        </group>
+                        <group>
+                            <button name="action_regenerate_password" 
+                                    string="Regenerar"
+                                    type="object"
+                                    invisible="portal_bim_active == False"
+                                    icon="fa-refresh"/>
+                        </group>
+                    </group>
+                    
+                    <separator string="Información"/>
+                    
+                        <div class="oe_grey">
+                            <p><strong>Instrucciones de Activación:</strong></p>
+                            <ul>
+                                <li>El login se asigna automáticamente usando el VAT (NIF/RUC) del contacto</li>
+                                <li>Si no tiene VAT, se usa el correo electrónico</li>
+                                <li>La contraseña se genera automáticamente de forma segura</li>
+                            </ul>
+                            <p><strong>Nota:</strong> Guarde la contraseña generada ya que solo se mostrará una vez.</p>
+                        </div>
+
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

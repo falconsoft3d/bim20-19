@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="tree_excel_export.ListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_optional_columns_dropdown')]/Dropdown/t[@t-set-slot='content']" position="inside">
+            <div role="separator" class="dropdown-divider"/>
+            <DropdownItem onSelected="() => this.mfhExportExcel()">
+                <i class="fa fa-file-excel-o me-2"/>
+                <span>Export excel</span>
+            </DropdownItem>
+        </xpath>
+    </t>
+</templates>

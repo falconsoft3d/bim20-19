@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_real_estate_sale_order" model="ir.ui.view">
+        <field name="name">view.form.real.estate.sale.order</field>
+        <field name="model">real.estate.sale.order</field>
+        <field name="arch" type="xml">
+            <form string="Property Sale Order" delete="0" >
+                <header>
+                    <button class="oe_highlight" name="action_create_quotas"
+                            invisible="quota_count > 0"
+                            string="Create Quotas" type="object"/>
+
+                    <button class="oe_highlight" name="action_crate_cash_flow"
+                            invisible="cash_flow_count > 0"
+                            string="Create Cash Flow" type="object"/>
+
+                    <field name="state_id" options="{'clickable': '1'}" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-dollar"
+                                name="action_view_quotas" string="Quotas"
+                                type="object">
+                            <field name="quota_count" string="Quotas" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-dollar"
+                                name="action_view_cash_flows" string="Cash Flow"
+                                type="object">
+                            <field name="cash_flow_count" string="Cash Flow" widget="statinfo"/>
+                        </button>
+                    </div>
+
+
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="partner_id"
+                                    required="1"/>
+                             <field name="date"/>
+                             <field name="user_id"/>
+                             <field name="real_estate_price_list" required="1"/>
+                        </group>
+                        <group>
+                            <field name="amount_total"/>
+                            <field name="total_paid"/>
+                            <field name="currency_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="line_ids" string="Order Lines">
+                            <field name="line_ids" widget="one2many_list">
+                                <list editable="bottom">
+                                    <field name="real_estate_development_id"/>
+                                    <field name="real_estate_block_id"
+                                           domain="[('real_estate_development_id', '=', real_estate_development_id)]"/>
+
+                                    <field name="property_id"
+                                           domain="[
+                                                    ('real_estate_block_id', '=', real_estate_block_id),
+                                                    ('state', '=', 'available')
+                                           ]"/>
+
+                                    <field name="currency_id" optional="hide"/>
+                                    <field name="subtotal" widget="monetary" sum="sum" options="{'currency_field': 'currency_id'}"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_real_state_sale_order" model="ir.ui.view">
+        <field name="name">view.tree.real.estate.sale.order</field>
+        <field name="model">real.estate.sale.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="currency_id"/>
+                <field name="company_id"/>
+                <field name="amount_total" sum="sum"/>
+                <field name="total_paid" sum="sum"/>
+                <field name="state_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_real_state_sale_order" model="ir.actions.act_window">
+        <field name="name">Property Sale Order</field>
+        <field name="res_model">real.estate.sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new property sale order!
+            </p>
+        </field>
+    </record>
+
+
+    </data>
+
+
+</odoo>

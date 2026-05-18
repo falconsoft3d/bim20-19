@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_inherit_stock_location_form" model="ir.ui.view">
+            <field name="name">view.inherit.stock.location.form</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[1]" position="before">
+                    <group>
+                        <field invisible="usage != 'internal'" name="bim_main_location"/>
+                    </group>
+                </xpath></field>
+        </record>
+        <record id="view_inherit_stock_location_tree" model="ir.ui.view">
+            <field name="name">view.inherit.stock.location.tree</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_tree2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='usage']" position="after">
+                    <field name="bim_main_location" optional="hide"/>
+                    <field invisible="True" name="company_id"/>
+                </xpath></field>
+        </record>
+    </data>
+</odoo>

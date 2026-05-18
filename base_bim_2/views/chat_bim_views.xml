@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="chat_bim_view_tree" model="ir.ui.view">
+            <field name="name">chat.bim.view.tree</field>
+            <field name="model">chat.bim</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'draft'" decoration-muted="state == 'done'">
+                    <field name="name"/>
+                    <field name="budget_id"/>
+                    <field name="model_ai"/>
+                    <field name="user_id"/>
+                    <field name="create_date"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+                </list></field>
+        </record>
+
+        <record id="chat_bim_view_form" model="ir.ui.view">
+            <field name="name">chat.bim.view.form</field>
+            <field name="model">chat.bim</field>
+            <field name="arch" type="xml">
+                <form string="Chat BIM">
+                    <header>
+                        <button class="oe_highlight" invisible="state != 'draft'"
+                                name="exe_done" string="Ejecutar" type="object"/>
+
+                        <button invisible="state != 'draft'"
+                                name="exe_cancel" string="Cancel" type="object"/>
+
+
+                        <button
+                                name="create_budget_from_json"
+                                confirm="Estas seguro de crear el los conceptos del presupuesto?"
+                                class="oe_highlight"
+                                string="Crear o Editar"
+                                invisible="state != 'ia'"
+                                type="object"/>
+
+                        <button invisible="state == 'draft'"
+                                confirm="Are you sure you want to reset to draft?"
+                                name="exe_draft" string="Draft" type="object"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button"  icon="fa-th-list" name="action_open_documentation" string="Documentations" type="object">
+                                <div class="o_form_field o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="documentation_count" nolabel="1" widget="statinfo"/>
+                                    </span>
+                                    <span class="o_stat_text">
+                                        Documentations
+                                    </span>
+                                </div>
+                            </button>
+                    </div>
+
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="budget_id" required="1"/>
+                                <field name="type" required="1"/>
+                                <field name="model_ai" required="1"/>
+                                <field name="bim_ai_model_id"
+                                       invisible="model_ai != 'other'"
+                                       required="model_ai == 'other'"/>
+                                <field name="prompt_sample_id"/>
+                            </group>
+                            <group>
+
+                                <field name="create_product"/>
+                                <field name="max_tokens"/>
+                                <field name="exit_file" invisible="exit_file == False"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Prompt" string="Prompt">
+                                <group>
+                                    <field name="prompt"
+                                           widget="code"
+                                           readonly="state != 'draft'" required="1"/>
+                                </group>
+                            </page>
+                            <page name="Presupuesto Actual" string="Edit Json">
+                                <group>
+                                    <field name="edit_json" widget="code" />
+                                </group>
+                            </page>
+                            <page name="Response" string="Response">
+                                <group>
+                                    <field name="response"
+                                           widget="code"
+                                           />
+                                </group>
+                            </page>
+                            <page name="Other" string="Other">
+                                <group>
+                                    <field name="company_id" readonly="1"/>
+                                    <field name="user_id" readonly="1"/>
+                                    <field name="create_date" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+
+
+        <record id="chat_bim_action" model="ir.actions.act_window">
+            <field name="name">Chat bim</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">chat.bim</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

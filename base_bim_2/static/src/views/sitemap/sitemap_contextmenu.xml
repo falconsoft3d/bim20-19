@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="base_bim_2.SitemapContextmenu">
+        <div class="osm_contextmenu" t-on-contextmenu.prevent.stop="">
+            <div class="list-group position-fixed" t-att-style="position" t-ref="bimSitemapContextmenu">
+                <button t-on-click="actionOpen" class="list-group-item list-group-item-action" type="button">
+                    <i class="fa fa-fw fa-external-link"/>
+                    <span>Open</span>
+                </button>
+                <button t-on-click="actionCreate" class="list-group-item list-group-item-action" type="button">
+                    <i class="fa fa-fw fa-plus"/>
+                    <span>Add child</span>
+                </button>
+                <button t-on-click="actionCopy" class="list-group-item list-group-item-action" type="button">
+                    <i class="fa fa-fw fa-chevron-right"/>
+                    <span>Add same level</span>
+                </button>
+                <button t-on-click="actionDeleteItem" class="list-group-item list-group-item-action" type="button">
+                    <i class="fa fa-fw fa-trash-o"/>
+                    <span>Remove</span>
+                </button>
+                <button t-on-click="actionCertMassive" class="list-group-item list-group-item-action" type="button">
+                    <i class="fa fa-fw fa-bookmark-o"/>
+                    <span>Massive Cert</span>
+                </button>
+                <button t-on-click="actionDeepCopy" class="list-group-item list-group-item-action border-bold-top" type="button">
+                    <i class="fa fa-fw fa-copy"/>
+                    <span>Copy</span>
+                </button>
+                <button t-on-click="actionDeepCut" class="list-group-item list-group-item-action " type="button">
+                    <i class="fa fa-fw fa-scissors"/>
+                    <span>Cut</span>
+                </button>
+                <button t-on-click="actionDeepPaste" class="list-group-item list-group-item-action" type="button" t-if="this.state.pastebin">
+                    <i class="fa fa-fw fa-paste"/>
+                    <span>Paste</span>
+                </button>
+                <button t-on-click="actionMoveUp" class="list-group-item list-group-item-action border-bold-top" type="button">
+                    <i class="fa fa-fw fa-chevron-up"/>
+                    <span>Move up</span>
+                </button>
+                <button t-on-click="actionMoveDown" class="list-group-item list-group-item-action" type="button">
+                    <i class="fa fa-fw fa-chevron-down"/>
+                    <span>Move down</span>
+                </button>
+                <button t-on-click="actionUpdateConcept" class="list-group-item list-group-item-action border-bold-top" type="button">
+                    <i class="fa fa-fw fa-refresh"/>
+                    <span>Update</span>
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_partner_attendance" model="ir.ui.view">
+        <field name="name">view.form.partner.attendance</field>
+        <field name="model">partner.attendance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id"
+                                   string="Partner Employee"
+                                   options="{'no_open': True, 'no_create': True}"/>
+
+                            <field name="project_ids" widget="many2many_tags"
+                                    invisible="1"
+                                    options="{'no_create': True}"/>
+
+                            <field name="project_id"
+                                   domain="[('id', 'in', project_ids)]"
+                                   options="{'no_open': True, 'no_create': True}"/>
+
+
+                            <field name="check_in"  />
+                            <field name="check_out"  />
+                            <field name="include_in_bim"/>
+
+                            <field name="partner_attendance_contract_ids" widget="many2many_tags"
+                                    options="{'no_create': True}"
+                                    invisible="1"/>
+
+                            <field name="partner_attendance_contract_id"
+                                   domain="[('id', 'in', partner_attendance_contract_ids)]"
+                                   />
+
+
+                        </group>
+                        <group>
+                            <field name="hourly_rate"/>
+                            <field name="hours_of_rest"/>
+                            <field name="fixed_cost"/>
+
+                            <field name="attendance_duration"/>
+                            <field name="currency_id"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="balance"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form></field>
+    </record>
+
+    <record id="view_tree_partner_attendance" model="ir.ui.view">
+        <field name="name">view.tree.partner.attendance</field>
+        <field name="model">partner.attendance</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="partner_id"  optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="check_in"  optional="show"/>
+                <field name="check_out"  optional="show" />
+                <field name="include_in_bim" optional="show"/>
+                <field name="hourly_rate" optional="show"/>
+                <field name="attendance_duration" sum="sum" optional="show"/>
+                <field name="currency_id" optional="show"/>
+                <field name="user_id" optional="hide" />
+                <field name="company_id" optional="hide"/>
+                <field name="partner_attendance_contract_id"  optional="hide"/>
+                <field name="balance" sum="sum" optional="show"/>
+            </list></field>
+    </record>
+
+
+    <record id="action_partner_attendance" model="ir.actions.act_window">
+        <field name="name">Partner Attendance</field>
+        <field name="res_model">partner.attendance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

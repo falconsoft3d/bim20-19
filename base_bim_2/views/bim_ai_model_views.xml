@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_ai_model" model="ir.ui.view">
+        <field name="name">view.form.bim.ai.model</field>
+        <field name="model">bim.ai.model</field>
+        <field name="arch" type="xml">
+            <form string="Bim AI Model">
+                <header>
+                    <button name="do_test_connection" string="Test"
+                            type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                             <field name="key" password="True"/>
+                             <field name="company_id"/>
+                        </group>
+                    </group>
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_ai_model" model="ir.ui.view">
+        <field name="name">view.tree.bim.ai.model</field>
+        <field name="model">bim.ai.model</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_ai_model" model="ir.actions.act_window">
+        <field name="name">Bim AI Model</field>
+        <field name="res_model">bim.ai.model</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Bim AI Model
+            </p>
+        </field>
+    </record>
+
+    </data>
+
+</odoo>

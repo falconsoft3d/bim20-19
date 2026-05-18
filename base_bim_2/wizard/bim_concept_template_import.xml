@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- bim.file.import form view -->
+    <record id="bim_concept_template_import_view_form" model="ir.ui.view">
+        <field name="name">bim.concept.template.import.view.form</field>
+        <field name="model">bim.concept.template.import</field>
+        <field name="arch" type="xml">
+            <form string="Bim Concept Template Import">
+                <group>
+                    <field invisible="import_type != 'apu_url'"
+                           name="csv_url"
+                           required="import_type == 'apu_url'"/>
+                    <field invisible="True" name="company_id"/>
+                </group>
+                <hr/>
+                <group>
+                    <group>
+                        <field name="import_type"/>
+                        <field invisible="import_type != 'budget'" name="project_id" options="{'no_create': True}" required="import_type == 'budget'"/>
+                        <field invisible="True" name="filename"/>
+                        <field filename="filename" invisible="import_type == 'concept_template'"
+                               name="csv_file" required="import_type != 'apu_url'"/>
+                    </group>
+                    <group>
+                        <field force_save="1" name="action_type" readonly="import_type == 'product'"/>
+                        <field invisible="action_type != 'import_resource'" name="product_id" options="{'no_create': True}" required="action_type == 'import_resource'"/>
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-secondary" name="cancel" special="cancel" string="Cancel"/>
+                    <button class="btn-primary" name="import_csv_from_url" string="Import" type="object"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_concept_template_import_action" model="ir.actions.act_window">
+        <field name="name">Bim Concept Template Import</field>
+        <field name="res_model">bim.concept.template.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">form</field>
+    </record>
+    <menuitem action="bim_concept_template_import_action" id="bim_concept_template_import_menu" name="Concept Template Import" parent="menu_bim_import_apu" sequence="70"/>
+</odoo>

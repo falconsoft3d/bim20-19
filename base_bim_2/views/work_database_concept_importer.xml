@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="work_database_concept_importer_view_tree" model="ir.ui.view">
+            <field name="name">work_database.concept.importer.view.tree</field>
+            <field name="model">work.database.concept.importer</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'to_execute'" decoration-info="state == 'ongoing'">
+                    <field name="name" optional="show"/>
+                    <field name="version" optional="show"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id" optional="show"/>
+
+                    <field name="user_id" optional="show"/>
+                    <field name="create_date" optional="show"/>
+                    <field name="company_id"
+                           optional="hide"/>
+                    <field name="state" widget="badge"
+                           optional="show"
+                           decoration-danger="state == 'to_execute'"
+                           decoration-info="state == 'ongoing'"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="work_database_concept_importer_view_form" model="ir.ui.view">
+            <field name="name">work.database.concept.importer.view.form</field>
+            <field name="model">work.database.concept.importer</field>
+            <field name="arch" type="xml">
+                <form string="Work">
+                    <header>
+                        <button invisible="state not in ['to_execute']"
+                                name="action_import_concepts"
+                                string="Import" type="object"
+                                class="oe_highlight"/>
+
+                        <button invisible="state in ['to_execute']"
+                                name="action_to_execute" string="To Execute" type="object"/>
+
+                        <button invisible="state in ['canceled']"
+                                name="action_to_cancel" string="To Cancel" type="object"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field force_save="1" name="name" readonly="state != 'to_execute'"/>
+                                <field name="version" readonly="state != 'to_execute'"/>
+                                <field name="project_id" options='{"no_create": 1}'
+                                       readonly="state != 'to_execute'"
+                                       required="version != '2000-APU'"/>
+                                <field name="template_id" invisible="version != 'template_xls'"/>
+                                <field filename="filename" name="excel_file" readonly="state != 'to_execute'" string="Excel File"/>
+                                <field invisible="True" name="filename" readonly="state != 'to_execute'"/>
+                                <field invisible="version not in ['2000-APU', '2000']"
+                                       name="create_all_products"
+                                       readonly="state != 'to_execute'"/>
+                            </group>
+                            <group>
+                                <field name="create_date" readonly="1"/>
+                                <field name="user_id" readonly="1"/>
+                                <field force_save="1" name="budget_id" readonly="1"/>
+                                <field name="budget_name" readonly="state != 'to_execute'"/>
+                                <field invisible="create_all_products == False" name="product_cost_or_price" readonly="state != 'to_execute'" required="create_all_products == True"/>
+                                <field invisible="version != '2000' or create_all_products == True" name="product_id" options="{'no_open': True, 'no_create': True}" readonly="state != 'to_execute'"/>
+                                <field name="uom_id"
+                                       readonly="state != 'to_execute'"
+                                       options='{"no_create": 1}'/>
+                                <field name="company_id"
+                                       readonly="state != 'to_execute'"
+                                       options='{"no_create": 1}'/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+
+
+        <record id="work_database_concept_importer_action" model="ir.actions.act_window">
+            <field name="name">Work Database Concept Importer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.database.concept.importer</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem action="work_database_concept_importer_action"
+                  id="work_database_concept_importer_act" name="Work Database Concept Importer"
+                  parent="base_bim_2.menu_bim_import_concept" sequence="99"/>
+    </data>
+</odoo>

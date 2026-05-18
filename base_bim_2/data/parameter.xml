@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="update_project_step" model="ir.config_parameter">
+        <field name="key">update.project.step</field>
+        <field name="value">10</field>
+    </record>
+    <record id="update_project_position" model="ir.config_parameter">
+        <field name="key">update.project.position</field>
+        <field name="value">0</field>
+    </record>
+</odoo>

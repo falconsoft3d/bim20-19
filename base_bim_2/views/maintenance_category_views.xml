@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_maintenance_category" model="ir.ui.view">
+         <field name="name">view.form.maintenance.category</field>
+         <field name="model">maintenance.category</field>
+         <field name="arch" type="xml">
+            <form>
+              <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="parent_id"/>
+                        </group>
+                    </group>
+               </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_maintenance_category" model="ir.ui.view">
+         <field name="name">view.tree.maintenance.category</field>
+         <field name="model">maintenance.category</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="name"/>
+                 <field name="parent_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_maintenance_category" model="ir.actions.act_window">
+        <field name="name">Categories</field>
+        <field name="res_model">maintenance.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

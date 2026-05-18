@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+        <record id="sql1" model="bim.sql.report">
+           <field name="description">Proyectos</field>
+           <field name="select_sql">SELECT * FROM bim_project</field>
+        </record>
+
+        <record id="sql2" model="bim.sql.report">
+           <field name="description">Presupuestos</field>
+           <field name="select_sql">SELECT * FROM bim_budget</field>
+        </record>
+
+        <record id="sql3" model="bim.sql.report">
+           <field name="description">Conceptos</field>
+           <field name="select_sql">SELECT * FROM bim_concepts</field>
+        </record>
+
+        <record id="sql3" model="bim.sql.report">
+           <field name="description">Conceptos</field>
+           <field name="select_sql">SELECT * FROM bim_concepts</field>
+        </record>
+
+        <record id="sql4" model="bim.sql.report">
+           <field name="description">Proyectos y Presupuestos</field>
+           <field name="select_sql">SELECT * FROM bim_project p INNER JOIN bim_budget b ON p.id = b.project_id</field>
+        </record>
+
+        <record id="sql5" model="bim.sql.report">
+           <field name="description">Compras con proyectos</field>
+           <field name="select_sql">SELECT * FROM purchase_order WHERE project_id IS NOT NULL</field>
+        </record>
+
+        <record id="sql6" model="bim.sql.report">
+           <field name="description">Conceptos que tengan como producto un código</field>
+           <field name="select_sql">SELECT bc.* FROM bim_concepts bc INNER JOIN product_product pp ON bc.product_id = pp.id WHERE pp.default_code = 'EPAGOMANT'</field>
+        </record>
+
+        <record id="sql7" model="bim.sql.report">
+           <field name="description">Tickets Soporte</field>
+           <field name="select_sql">SELECT * FROM ticket_pro</field>
+        </record>
+
+
+  </data>
+</odoo>

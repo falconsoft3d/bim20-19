@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record id="wzd_invoice_from_picking_mass_view_form" model="ir.ui.view">
+           <field name="name">wzd_invoice_from_picking_mass_view_form</field>
+           <field name="model">invoice.from.picking.mass.wzd</field>
+           <field name="arch" type="xml">
+               <form >
+                   <sheet>
+                       <group>
+                           <group>
+                               <field name="type" />
+                           </group>
+                       </group>
+                       <div class="alert alert-warning oe_button_box text-center" role="alert">
+                           <p>Confirme si desea facturar los albaranes seleccionados</p>
+                       </div>
+                       <footer>
+                        <button name="action_create_ifpm" string="Confirmar" type="object" class="oe_highlight"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel" />
+                    </footer>
+                   </sheet>
+               </form>
+           </field>
+       </record>
+
+        <record id="create_invoicer_action" model="ir.actions.act_window">
+            <field name="name">Facturar Albaranes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">invoice.from.picking.mass.wzd</field>
+            <field name="view_id" ref="wzd_invoice_from_picking_mass_view_form"/>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking" />
+            <field name="binding_view_types">list,form</field>
+        </record>
+    </data>
+</odoo>

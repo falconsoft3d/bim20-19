@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="base_bim_2.action_bim_concepts" model="ir.actions.act_window">
+        <field name="name">Concepto</field>
+        <field name="res_model">bim.concepts</field>
+        <field name="view_mode">sitemap,folder,list,form,gantt</field>
+    </record>
+
+    <record id="bim_concept_view_task_gantt" model="ir.ui.view">
+        <field name="name">bim.concepts.gantt.view</field>
+        <field name="model">bim.concepts</field>
+        <field name="arch" type="xml">
+            <gantt  date_start="acs_date_start"
+                    date_stop="acs_date_end"
+                    color="color"
+                    default_group_by="name"
+                    default_scale="month"
+                    precision="{'day': 'hour:quarter', 'week': 'day:full', 'month': 'day:quarter'}"
+                    string="Task Gantt View">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="parent_id"/>
+            </gantt>
+        </field>
+    </record>
+
+</odoo>

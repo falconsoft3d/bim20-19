@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="update_stock_picking" model="ir.actions.server">
+                        <field name="name">Actualizar Costo Total</field>
+                        <field name="model_id" ref="picking_standard_price.model_stock_picking"/>
+                        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+                        <field name="binding_view_types">list,form</field>
+                        <field name="state">code</field>
+                        <field name="code">
+                        if records:
+                            res = records.action_update_total()
+                        </field>
+        </record>
+
+
+        <record id="view_picking_form_standard_price" model="ir.ui.view">
+            <field name="name">view.picking.form.standard.price</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+
+                <field name="user_id" position="after">
+                    <field name="use_standard_price"/>
+                </field>
+
+
+                <xpath expr="//notebook" position="after">
+                    <group name="cost_group" col="6" groups="picking_standard_price.group_picking_cost">
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="picking_total">
+                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                <label for="total_cost" />
+                            </div>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="total_cost"
+                                    force_save="1" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary'/>
+                        </group>
+                    </group>
+                </xpath>
+               <xpath expr="//header" position="inside">
+                   <button type="object" name="update_picking_total_cost" string="Update Cost" groups="picking_standard_price.group_picking_cost"/>
+               </xpath>
+               <xpath expr="//field[@name='move_ids_without_package']/list/field[@name='lot_ids']" position="after">
+                   <field name="assets_qty" groups="picking_standard_price.group_picking_cost" force_save="1" optional="hide"/>
+                   <field name="product_cost"
+                          groups="picking_standard_price.group_picking_cost" widget="monetary"
+                          force_save="1"/>
+                   <field name="subtotal" groups="picking_standard_price.group_picking_cost" widget="monetary" force_save="1"/>
+                   <field name="purchase_id" optional="hide"/>
+               </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

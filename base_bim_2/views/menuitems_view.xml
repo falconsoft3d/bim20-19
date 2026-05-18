@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="main_bim_employee_doc_father"
+                  name="E. Documents"
+                  web_icon="base_bim_2,static/description/employee_documentation.png"
+                  groups="base_bim_2.group_user_bim_employee_doc"
+                  sequence="21">
+
+            <menuitem id="main_bim_employee_doc_main"
+                  name="Main" sequence="10">
+
+                <menuitem id="main_bim_employee_doc"
+                          action="action_my_employee_documentation"
+                          name="Documentations" sequence="10" />
+
+            </menuitem>
+
+            <menuitem id="main_bim_employee_doc_config"
+                  name="Config" sequence="20">
+
+                <menuitem id="main_bim_employee_doc_category"
+                          action="action_employee_dcategory"
+                          name="Categories" sequence="10" />
+
+            </menuitem>
+
+        </menuitem>
+
+        <menuitem id="main_bim_expense_father"
+                  name="Bim Expense"
+                  web_icon="base_bim_2,static/description/company_expense.png"
+                  groups="base_bim_2.group_user_bim_expense,base_bim_2.group_user_bim_expense_all"
+                  sequence="10">
+
+            <menuitem id="my_bim_expense"
+                      action="action_my_bim_expense"
+                      name="My Expense"
+                      groups="base_bim_2.group_user_bim_expense,base_bim_2.group_user_bim_expense_all"
+                      sequence="10" />
+
+            <menuitem id="all_bim_expense_son"
+                      action="action_bim_expense"
+                      name="Bim Expense"
+                      groups="base_bim_2.group_user_bim_expense_all"
+                      sequence="20" />
+        </menuitem>
+
+        <menuitem id="main_ps_parts"
+                  name="Diary Parts"
+                  web_icon="base_bim_2,static/src/img/odoo_pd.png"
+                  groups="base_bim_2.group_diary_part"
+                  sequence="10">
+
+            <menuitem id="main_ps_son_parts"
+                      action="action_diary_part"
+                      name="Diary Parts"
+                      groups="base_bim_2.group_diary_part"
+                      sequence="2" />
+        </menuitem>
+
+        <menuitem id="main_trips"
+                  name="Trips"
+                  web_icon="base_bim_2,static/img/tms-shipment.png"
+                  groups="base_bim_2.group_bim_trips"
+                  sequence="10">
+
+            <menuitem id="main_trips_shipment"
+                      action="action_bim_tms_shipment"
+                      name="Trips"
+                      sequence="1" />
+
+        </menuitem>
+
+        <menuitem id="main_base_menu_bim"
+                  name="BIM"
+                  web_icon="base_bim_2,static/description/menu_icon.png"
+                  groups="base_bim_2.group_user_bim"
+                  sequence="100"/>
+
+        <menuitem id="main_purchase_requisition"
+                  name="Purchase Requisition"
+                  web_icon="base_bim_2,static/description/menu_solpe.png"
+                  groups="base_bim_2.group_bim_menu_solpe_mat,base_bim_2.group_bim_menu_solpe_service"
+                  sequence="31">
+
+                    <menuitem id="main_purchase_requisition_mat"
+                      name="Material Request"
+                      groups="base_bim_2.group_bim_menu_solpe_mat"
+                      action="action_bim_purchase_requisition"
+                      sequence="10"/>
+
+                    <menuitem id="main_purchase_requisition_service"
+                      name="Service Request"
+                      groups="base_bim_2.group_bim_menu_solpe_service"
+                      action="action_bim_purchase_services"
+                      sequence="20"/>
+
+        </menuitem>
+
+        <menuitem id="menu_execution_bim" name="Execution"  sequence="20" parent="main_base_menu_bim">
+
+            <menuitem id="bim_programming_resource_menu" name="Programming" sequence="7">
+                            <menuitem id="bim_resource_template_submenu"
+                                name="Resource Template" action="bim_resource_template_action" sequence="1"/>
+                            <menuitem id="work_resources_contractsubmenu"
+                                name="Work Resources Contract" action="action_work_resources_contract" sequence="2"/>
+                            <menuitem id="bim_mto_menu"
+                                name="MTOs" action="action_bim_mto" sequence="3"/>
+
+                            <menuitem id="resource_analysis_menu"
+                                name="Resource Analysis" action="action_resource_analysis" sequence="7"/>
+                            <menuitem id="bim_rfi_menu"
+                                name="RFIs" action="action_bim_rfi" sequence="8"/>
+
+                            <menuitem id="bim_rq_menu"
+                                name="RQs" action="action_bim_rq" sequence="8"/>
+
+                            <menuitem id="bim_element_type_menu"
+                                name="Elements Type" action="action_bim_element_type" sequence="9"/>
+
+                            <menuitem id="bim_element_menu"
+                                name="Elements" action="action_bim_element" sequence="10"/>
+
+                            <menuitem id="bim_boq_menu"
+                                name="BOQs" action="action_bim_boq" sequence="11"/>
+
+                            <menuitem id="resource_demand_menu"
+                                name="Resource Demands" action="action_resource_demand" sequence="12"/>
+
+                            <menuitem id="income_statement_summary_menu"
+                                name="Income Statement Summary" action="action_income_statement_summary" sequence="52"/>
+
+             </menuitem>
+
+             <menuitem id="bim_daily_part_main" name="Daily Parts" sequence="8">
+
+                 <menuitem id="diary_part_menu"
+                                name="Daily Parts" action="action_diary_part" sequence="10"/>
+
+                 <menuitem id="diary_part_e_lines_menu"
+                                name="Daily Parts Lines" action="action_diary_part_e_line" sequence="20"/>
+
+                 <menuitem id="lost_hour_menu"
+                                name="Lost Hours" action="lost_hour_action" sequence="30"/>
+
+                 <menuitem id="daily_part_report_menu"
+                                name="Daily Parts Reports" action="daily_part_report_action" sequence="40"/>
+
+                 <menuitem action="daily_part_liquidation_action" id="menu_daily_part_liquidation"
+                      name="Daily Parts Liquidation" sequence="50"/>
+
+                 <menuitem id="cost_date_menu"
+                                name="Costs Date" action="action_cost_date" sequence="99"/>
+
+             </menuitem>
+
+
+
+                <menuitem id="menu_ticket_bim" name="Tickets" sequence="100">
+                    <menuitem action="action_ticket_bim" id="menu_ticket_bim_son" name="Tickets" sequence="30"/>
+                    <menuitem id="menu_ticket_category"
+                                    name="Categories"
+                                    sequence="40"
+                                    action="action_ticket_bim_category" />
+
+                </menuitem>
+
+
+
+
+
+            <menuitem id="menu_bim_cash_flow"  name="Cash Flow" sequence="10">
+
+                    <menuitem action="action_bim_cash_flow" id="menu_bim_cash_flow_son"
+                              name="Cash Flow" />
+
+                    <menuitem action="action_bim_cash_flow_generator" id="menu_bim_cash_flow_generator"
+                              name="Cash Flow Generator" />
+
+                    <menuitem action="action_bim_cash_flow_category" id="menu_bim_cash_flow_category"
+                              name="Cash Flow Category" />
+                </menuitem>
+
+                <menuitem action="action_other_expense" id="menu_other_expense"
+                          name="Other Expenses"
+                          sequence="20"/>
+
+        </menuitem>
+
+        <menuitem id="menu_contrator_bim_contract" name="Contracts"  sequence="21" parent="main_base_menu_bim">
+                <menuitem action="action_contractor_contract_generator" id="menu_contractor_contracts_generator" name="Contracts Generator" sequence="20"/>
+                <menuitem action="action_contractor_contract" id="menu_contractor_contracts" name="Contracts" sequence="50"/>
+                <menuitem action="action_contractor_contract_progress_capture" id="menu_progress_captures" name="Progress Captures" sequence="60"/>
+                <menuitem action="action_contractor_contract_analysis" id="menu_progress_analysis_bim" name="Contract Analysis" sequence="70"/>
+        </menuitem>
+
+
+        <menuitem id="menu_bim" name="Home" parent="main_base_menu_bim" sequence="4" >
+            <menuitem id="submenu_bim_project" name="Projects" sequence="1"/>
+            <menuitem id="submenu_bim_certification" name="Certifications" sequence="2"/>
+
+
+            <menuitem id="submenu_bim_management" name="Management" sequence="2">
+
+                <menuitem id="menu_bim_assistance" name="Employee Attendance" sequence="77"
+                  action="hr_attendance.hr_attendance_action" groups="base_bim_2.group_attendance_bim"
+                />
+                <menuitem id="checklist_act" name="Checklist" action="bim_checklist_action" sequence="410"/>
+
+                <menuitem id="menu_analitic_account_control"
+                    name="Analitic Account Control"
+                    action="action_analitic_account_control_orders"
+                    sequence="99" />
+            </menuitem>
+        </menuitem>
+
+        <menuitem action="cost_settlement_action" id="menu_cost_settlement"
+                      parent="submenu_bim_certification"
+                      name="Cost Settlements" sequence="1"/>
+
+
+         <menuitem id="menu_framework_contract" name="Frameworks Contracts"
+                   action="action_framework_contract"
+                   parent="submenu_bim_project" sequence="3"/>
+
+
+        <menuitem id="menu_resource_balancing" name="Balanceo de Recursos"
+                   action="action_resource_balancing"
+                   parent="submenu_bim_project" sequence="4"/>
+
+        <menuitem id="menu_bim_templates" name="Template" parent="main_base_menu_bim" sequence="99"/>
+
+        <menuitem id="menu_hyd" name="Assets and Discounts" parent="main_base_menu_bim" sequence="16"/>
+
+        <menuitem id="menu_bim_config" name="Configuration"
+                  parent="main_base_menu_bim" sequence="200" groups="base_bim_2.group_manager_bim">
+
+            <menuitem id="menu_tags_categ" name="Tags" sequence="100"/>
+            <menuitem id="menu_bim_opening_balance_action"  name="Accounting" sequence="70" >
+                <menuitem id="sub_bim_opening_balance_action"  name="Opening Balance" action="action_bim_opening_balance" sequence="1" />
+                <menuitem id="bim_menu_closing_expenses"  name="Closing Expenses" action="action_closing_expenses" sequence="1" />
+            </menuitem>
+            <menuitem id="menu_bim_fuel_cost" name="Equipments" sequence="71">
+                <menuitem id="bim_transport_equipment_brand_menu" name="Brand Equipment"
+                      sequence="101" action="action_bim_transport_equipment_brand"/>
+                <menuitem id="bim_transport_equipment_model_menu" name="Model Equipment"
+                      sequence="101" action="action_bim_transport_equipment_model"/>
+            </menuitem>
+             <menuitem id="menu_bim_epi" name="EPIs" sequence="72">
+                 <menuitem id="deliver_motive_menu" name="Withdrawal motive"  sequence="1" action="action_deliver_products_motive" />
+                 <menuitem id="hr_size" name="Hr size"  sequence="2" action="action_hr_size" />
+            </menuitem>
+
+            <menuitem id="menu_bim_hr" name="Employee" sequence="82">
+                 <menuitem id="hr_level_study" name="Hr level study"  sequence="2" action="action_hr_level_study" />
+            </menuitem>
+
+            <menuitem id="menu_update" name="Updates" sequence="200">
+                    <menuitem id="menu_update_son" name="Updates"  sequence="2" action="action_bim_update" />
+            </menuitem>
+
+            <menuitem id="menu_general_config"
+                      groups="base_bim_2.group_manager_bim"
+                      name="General Config" sequence="210">
+
+                <menuitem id="menu_bim_mass" name="BIM Edición Masiva" sequence="97" action="action_bim_mass"/>
+                <menuitem id="menu_bim_calendar" name="BIM Calendar" sequence="99" action="action_bim_calendar"/>
+                <menuitem id="menu_general_config_son" name="General Config"  sequence="2"
+                              action="action_bim_general_config" />
+
+            </menuitem>
+
+
+
+        </menuitem>
+
+        <record id="product_normal_action_bim" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,list,form,activity</field>
+            <field name="search_view_id" ref="product.product_template_search_view"/>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new product
+              </p><p>
+                You must define a product for everything you sell or purchase,
+                whether it's a storable product, a consumable or a service.
+              </p>
+            </field>
+        </record>
+
+        <record id="product_product_action_bim" model="ir.actions.act_window">
+            <field name="name">Product Variants</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">list,kanban,form,activity</field>
+            <field name="search_view_id" ref="product.product_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new product variant
+              </p><p>
+                You must define a product for everything you sell or purchase,
+                whether it's a storable product, a consumable or a service.
+              </p>
+            </field>
+        </record>
+
+
+
+        <menuitem id="bim_bi" parent="main_base_menu_bim"
+                      groups="base_bim_2.group_bi_bim,base_bim_2.group_bi_bim_admin"
+                      name="BI"
+                      sequence="99">
+
+            <menuitem id="bim_bi_son" name="BI"
+                      groups="base_bim_2.group_bi_bim,base_bim_2.group_bi_bim_admin"
+                      sequence="01">
+
+                <menuitem id="bim_bi_ro" name="BI RO"
+                              action="action_bi_ro"
+                              groups="base_bim_2.group_bi_bim,base_bim_2.group_bi_bim_admin"
+                              sequence="10"/>
+
+                <menuitem id="bim_result_table" name="Result Table"
+                              action="action_result_table"
+                              groups="base_bim_2.group_bi_bim,base_bim_2.group_bi_bim_admin"
+                              sequence="10"/>
+            </menuitem>
+        </menuitem>
+
+
+        <menuitem id="bim_ai" parent="main_base_menu_bim"
+                      groups="base_bim_2.group_ia_bim"
+                      name="AI"
+                      sequence="100">
+
+             <menuitem id="ia_basic" name="Basic"
+                      groups="base_bim_2.group_ia_bim"
+                      sequence="01">
+
+                     <menuitem id="chat_bim_menu" name="ChatBim"
+                              action="chat_bim_action"
+                              groups="base_bim_2.group_ia_bim"
+                              sequence="10"/>
+
+
+             </menuitem>
+
+             <menuitem id="ia_advanced" name="Advanced"
+                      groups="base_bim_2.group_ia_bim"
+                      sequence="02">
+
+                     <menuitem id="menu_bim_ai_model" name="Models"
+                              action="action_bim_ai_model"
+                              groups="base_bim_2.group_ia_bim"
+                              sequence="10"/>
+             </menuitem>
+
+
+             <menuitem id="ia_data" name="Data"
+                      groups="base_bim_2.group_ia_bim"
+                      sequence="03">
+
+                     <menuitem id="chat_bim_prompt_menu" name="Sample Prompt"
+                              action="chat_bim_prompt_action"
+                              groups="base_bim_2.group_ia_bim"
+                              sequence="20"/>
+             </menuitem>
+
+         </menuitem>
+
+
+        <menuitem id="menu_bim_maintenance_main" name="Mantenimiento"
+                  groups="base_bim_2.group_bim_maintenance"
+                  parent="main_base_menu_bim" sequence="41">
+            <menuitem id="menu_maintenance_main" name="Inicio" sequence="10" >
+                 <menuitem id="menu_maintenance_task_plan" name="Task Plans"  action="action_maintenance_task_plan"
+                      sequence="50" />
+                 <menuitem id="menu_maintenance_task" name="Tasks"  action="action_maintenance_task" sequence="50" />
+                 <menuitem id="menu_maintenance_sub_task" name="Sub Tasks"  action="action_sub_task" sequence="60" />
+                 <menuitem id="menu_maintenance_resource" name="Resources"  action="action_maintenance_resource" sequence="70" />
+                 <menuitem id="menu_maintenance_measure" name="Measures"  action="action_maintenance_measure" sequence="80" />
+                 <menuitem id="menu_maintenance_work_request" name="Work Request"  action="action_maintenance_work_request" sequence="90" />
+
+             </menuitem>
+
+             <menuitem id="menu_maintenance_data" name="Data" sequence="20" >
+                 <menuitem id="menu_maintenance_type_task" name="Types of Tasks"  action="action_maintenance_type_task"
+                      sequence="50" />
+                 <menuitem id="menu_maintenance_category" name="Categories"  action="action_maintenance_category"
+                      sequence="60" />
+                 <menuitem id="menu_maintenance_location" name="Locations"  action="action_maintenance_location"
+                      sequence="70" />
+                 <menuitem id="menu_maintenance_part" name="Parts"  action="action_maintenance_part"
+                      sequence="80" />
+                 <menuitem id="menu_maintenance_assets" name="Assets"  action="action_maintenance_asset"
+                      sequence="80" />
+             </menuitem>
+        </menuitem>
+
+
+        <menuitem id="menu_bim_stock" name="Inventory" parent="main_base_menu_bim" sequence="40" groups="stock.group_stock_user" >
+            <menuitem id="product_normal_menu_bim" name="Products"  action="product_normal_action_bim"  sequence="3" />
+            <menuitem id="product_product_menu_bim" name="Product Variants" action="product_product_action_bim" sequence="5" />
+            <menuitem id="menu_picking_analysis" name="Picking Analysis" sequence="6" action="action_picking_analysis" />
+            <menuitem id="menu_budget_exit_all" name="Budget Exit" sequence="6" action="action_budget_exit" />
+
+            <menuitem id="product_virtual_menu" name="Virtual Products" >
+                <menuitem id="product_virtual_menu_bim" name="Virtual Products"  action="virtual_product_action_window"  sequence="4" />
+                <menuitem id="product_virtual_categ_menu_bim" name="Virtual Product Category"  action="action_virtual_product_category"  sequence="4" />
+            </menuitem>
+
+            <menuitem id="menu_bim_cost_list"  name="BIM Cost List"  action="action_bim_cost_list" sequence="18" />
+            <menuitem id="menu_bim_product_group_submenu"  action="action_bim_product_group"  sequence="20" />
+            <menuitem id="menu_bim_rubro_submenu"  action="action_bim_rubro"  sequence="19" name="Rubros"/>
+
+            <menuitem id="menu_bim_purchase_requisition_parent"  name="Material Request"  sequence="20">
+                    <menuitem id="menu_bim_purchase_requisition"  name="Material Request" action="action_bim_purchase_requisition" sequence="10"/>
+                    <menuitem id="menu_bim_purchase_requisition_line"  name="Material Request Lines" action="action_tree_product_list_req" sequence="20"/>
+                    <menuitem id="menu_purchase_departure"  name="Purchase Departure" action="action_purchase_departure" sequence="30"/>
+            </menuitem>
+            <menuitem id="menu_bim_purchase_service_parent"  name="Service Request"  sequence="21">
+                <menuitem id="menu_bim_purchase_service"  name="Service Request" action="action_bim_purchase_services"  sequence="10"/>
+                <menuitem id="menu_bim_purchase_service_line"  name="Service Request Lines" action="action_tree_product_serv_list_req" sequence="20"/>
+
+            </menuitem>
+            <menuitem id="menu_bim_mobile_warehouse"  name="Mobile Warehouse"  action="action_bim_mobile_warehouse" sequence="120"/>
+
+            <!--Deliver products-->
+            <menuitem id="product_deliver_menu" groups="base_bim_2.group_deliver_products_user"  name="EPIs" sequence="100">
+                <menuitem id="epi_deliveries" name="Deliveries" sequence="1" action="action_deliver_epis"/>
+                <menuitem id="epi_withdrawal" name="Withdrawals" sequence="2" action="action_withdrawal_epis"/>
+                <menuitem id="epi_transfer" name="Transfers" sequence="3" action="action_transfer_epi"/>
+                <menuitem id="epi_delivery_lines"  name="Operations lines" sequence="4" action="action_epi_operation_lines"/>
+                <menuitem id="massive_epi_delivery" name="Massive deliveries" sequence="5" action="massive_action_deliver_products"/>
+            </menuitem>
+
+
+
+        </menuitem>
+
+        <menuitem id="menu_bim_imports" name="INT" parent="main_base_menu_bim" sequence="150" groups="base_bim_2.group_bim_integrations">
+            <menuitem id="menu_bim_import_bc3" name="Budget Importer" sequence="1" groups="base_bim_2.group_bim_integrations"/>
+            <menuitem id="menu_bim_import_concept" name="Concepts importer" sequence="2" groups="base_bim_2.group_bim_integrations"/>
+            <menuitem id="menu_bim_import_apu" name="APU importer" sequence="2" groups="base_bim_2.group_bim_integrations"/>
+            <menuitem id="menu_bim_import_bim" name="BIM importer" sequence="2" groups="base_bim_2.group_bim_integrations"/>
+
+            <menuitem id="bim_integration_main" name="Bim"  sequence="80">
+                <menuitem id="bim_integration_server" name="Server"  action="action_bim_server"  sequence="10"/>
+                <menuitem id="bim_integration_bucker"  name="Bucker"   action="action_bim_bucket"  sequence="40"/>
+                <menuitem id="bim_integration_model"  name="Model"   action="action_bim_model"  sequence="50"/>
+           </menuitem>
+
+            <menuitem id="bim_attendance_main" name="Attendance"  sequence="70">
+                <menuitem id="bim_attendance_import" name="Assistance Importer"  action="action_assistance_importer"  sequence="10"/>
+           </menuitem>
+
+        </menuitem>
+
+        <menuitem id="menu_bim_expenses_import"
+                name="Bim Expenses Import"
+                action="action_bim_expenses_import"
+                parent="menu_bim_import_bim"
+                sequence="121" />
+
+        <menuitem id="menu_revit_budget_import"
+                name="Revit Budget Import"
+                action="action_revit_budget_import"
+                parent="menu_bim_import_bim"
+                sequence="122" />
+
+        <record id="action_bim_product_equipment" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,list,form,activity</field>
+            <field name="domain">[('resource_type','=','Q')]</field>
+            <field name="context">{'default_resource_type': 'Q','default_type': 'service'}</field>
+            <field name="search_view_id" ref="product.product_template_search_view"/>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new equipment!
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_bim_2_equipment" name="Equipments" parent="base_bim_2.main_base_menu_bim" sequence="19" >
+
+             <menuitem id="submenu_menu_bim_22_equipment" name="Equipments" sequence="1" >
+                <menuitem id="submenu_menu_bim_2_equipment"  name="Equipments"
+                          action="fleet.fleet_vehicle_action"  sequence="1"/>
+
+                <menuitem id="submenu_menu_fleet_vehicle_price"  name="Fleet Vehicle Price"
+                          action="action_fleet_vehicle_price"  sequence="2"/>
+            </menuitem>
+            <menuitem id="menu_bim_2_rent" name="Rents" sequence="3" >
+                 <menuitem id="menu_bim_tool_rent" name="Tool rent" action="action_bim_tool_rent_orders" sequence="1" />
+                 <menuitem id="menu_bim_equipment_rents" name="Equipment" action="action_bim_rent_orders" sequence="2" />
+            </menuitem>
+
+            <menuitem id="bim_tms_menu"  name="TMS" sequence="106">
+
+                <menuitem id="bim_tms_shipment_menu" name="Shipment"
+                          sequence="1" action="action_bim_tms_shipment"/>
+
+                <menuitem id="bim_tms_expense_record_menu" name="Expense record"
+                          sequence="2" action="action_tms_expense_record"/>
+
+                <menuitem id="bim_transportation_expenses_menu" name="Transportation expenses"
+                          sequence="102" action="action_bim_transportation_expenses"/>
+            </menuitem>
+        </menuitem>
+
+        <record id="action_contacts_bim" model="ir.actions.act_window">
+            <field name="name">Contacts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,list,form,activity</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="context">{'default_is_company': True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a contact in your address book
+              </p><p>
+                Odoo helps you to easily track all activities related to a customer.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_bim_data" name="Data" parent="base_bim_2.main_base_menu_bim" sequence="20">
+
+
+            <menuitem id="cost_bim" name="Costs" sequence="0" >
+                <menuitem id="menu_bim_part2" name="Reports" action="action_bim_part" sequence="-1"/>
+                <menuitem id="menu_bim_bim_extra_hour_action"  name="Extra Hour"  action="action_bim_extra_hour" sequence="100" />
+            </menuitem>
+
+             <menuitem id="submenu_hr_attendance_mass_bim" name="Attendance" sequence="1" groups="hr_attendance.group_hr_attendance_own_reader" >
+
+                <menuitem id="submenu_bim_client_hour" name="Hourly price list"
+                          action="action_bim_client_hour"
+                          sequence="1" groups="hr_attendance.group_hr_attendance_own_reader"/>
+
+                <menuitem id="menu_hr_attendance_attendances_bim" name="Attendances" sequence="0"
+                          groups="hr_attendance.group_hr_attendance_own_reader"
+                          action="hr_attendance.hr_attendance_action"/>
+
+
+                <menuitem id="hr_attendance_mass_menu" action="action_hr_attendance_mass" sequence="2" groups="hr_attendance.group_hr_attendance_own_reader"/>
+                <menuitem id="hr_attendance_mass_summary_menu" action="action_hr_attendance_mass_summary"
+                          sequence="4" groups="hr_attendance.group_hr_attendance_own_reader"/>
+
+
+
+
+             </menuitem>
+
+             <menuitem id="submenu_hr_partner_attendance_bim" name="Partner Attendances" sequence="2"  >
+                 <menuitem action="action_partner_attendance_contract'"
+                           id="partner_attendance_contract'" name="Partner Contract"
+                            sequence="10"/>
+
+                 <menuitem id="menu_hr_attendance_partner_bim" name="Attendances" sequence="20"
+                          action="action_partner_attendance"/>
+
+             </menuitem>
+
+
+            <menuitem id="submenu_calculation_bim" name="Calculation sheet" sequence="3" >
+               <menuitem id="bim_assets_menu2" action="bim_assets_action" sequence="1"/>
+               <menuitem id="bim_assets_template_menu" name="Template Assets and Discounts" action="bim_assets_template_action" sequence="80"/>
+            </menuitem>
+
+
+            <menuitem id="submenu_bim_general_data" name="Generals" sequence="3" >
+               <menuitem id="contacts_bim" name="Contacts"  action="action_contacts_bim" sequence="0" />
+               <menuitem id="master_checklist_act" name="Checklist Template" action="bim_master_checklist_action" sequence="30"/>
+               <menuitem id="menu_bim_specialty"  name="BIM Specialty" action="action_bim_specialty" sequence="55"/>
+               <menuitem id="menu_bim_departments"  name="Departments" action="action_bim_department" sequence="100" />
+               <menuitem id="menu_bim_category"  name="Budget Categories"
+                         action="action_budget_category" sequence="101" />
+               <menuitem id="menu_bim_category"  name="Budget Categories"
+                         action="action_budget_category" sequence="102" />
+               <menuitem id="menu_concept_phase"  name="Concepts Phase"
+                         action="action_concept_phase" sequence="103" />
+                <menuitem id="menu_concept_specialty"  name="Concepts Specialty"
+                         action="action_concept_specialty" sequence="104" />
+
+                <menuitem id="menu_pcp"  name="PCP"
+                         action="action_bim_pcp" sequence="105" />
+
+                <menuitem id="work_breakdown_menu"  name="Work Breakdown"
+                         action="action_work_breakdown" sequence="106" />
+            </menuitem>
+
+            <menuitem id="submenu_other_reports_data" name="Others Reports" sequence="12" >
+               <menuitem id="menu_bim_sql_report"  name="BIM SQL Reports"
+                         groups="base_bim_2.group_bim_sql_report_user"
+                         action="action_bim_sql_reports" sequence="102" />
+            </menuitem>
+
+
+
+            <menuitem id="submenu_bim_budget_template" name="Budget templates" sequence="4" >
+                <menuitem id="menu_bim_formula" name="Formulas" action="action_bim_formula" sequence="50" />
+                <menuitem id="menu_bim_ite_action" name="ITE ( Economic Technical Indices )" action="action_bim_ite"  sequence="120" />
+                <menuitem id="menu_bim_apu_template" name="APU templates"  action="action_bim_apu_template" sequence="130"/>
+            </menuitem>
+
+
+        </menuitem>
+
+        <menuitem id="menu_bim_product_group" parent="stock.menu_stock_inventory_control"  action="action_bim_product_group" sequence="120" />
+        <menuitem id="menu_purchase_requisition_view" name="Material Request"  parent="purchase.menu_procurement_management"  action="action_bim_purchase_requisition"
+                  sequence="50"
+                  />
+        <menuitem id="menu_purchase_service_view"  name="Service Request"  parent="purchase.menu_procurement_management"  action="action_bim_purchase_services"
+              sequence="50"/>
+
+
+         <menuitem id="purchase_valuation_menu"
+              name="Purchase Valuation"
+              parent="purchase.menu_procurement_management"
+              sequence="100"
+              groups="base_bim_2.group_bim_valuation"
+              action="purchase_valuation_action" />
+
+        <menuitem id="bim_purchase_report_menu"
+              name="Bim Purchase Report"
+              parent="purchase.menu_procurement_management"
+              sequence="101"
+              groups="base_bim_2.group_bim_valuation"
+              action="action_bim_purchase_report_orders" />
+
+
+        <menuitem action="action_bim_change_order"
+                  id="menu_bim_change_order"
+                  name="Change Order"
+                  parent="base_bim_2.submenu_bim_project"
+                  sequence="16"/>
+
+
+    </data>
+</odoo>

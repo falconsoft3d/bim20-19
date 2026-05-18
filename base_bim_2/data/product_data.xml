@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="default_product" model="product.product">
+            <field name="name">Material Various</field>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="resource_type">M</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+
+        <record id="default_product_v" model="product.product">
+            <field name="name">Virtual Product</field>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">consu</field>
+            <field name="resource_type">P</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="product_expense_invoice" model="product.product">
+            <field name="name">Product expense invoice</field>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="standard_price">0</field>
+            <field name="list_price">0</field>
+            <field name="type">service</field>
+            <field name="sale_line_warn">no-message</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+            <field name="description">Product for invoicing expenses</field>
+            <field name="default_code">PEXPINV</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="folder_view.ListRenderer.RecordRow" t-inherit="web.ListRenderer.RecordRow" t-inherit-mode="primary">
+        <xpath expr="//t[@t-if='props.onOpenFormView']/td/button" position="replace">
+            <button class="btn btn-link text-end"
+                name="Open in form view"
+                aria-label="Open in form view"
+                tabindex="-1">
+                <i class="oi oi-launch"/>
+            </button>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="base_bim_2.purchase_valuation_report">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+            <t t-set="address">
+                <div t-field="o.partner_id"
+                     t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+            </t>
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <h2 class="mt-4">Purchase Valuation <span t-field="o.name"/></h2>
+
+                <table class="table table-sm mt-4">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_description"><strong>Description</strong></th>
+                            <th name="th_quantity" class="text-end"><strong>Qty</strong></th>
+                            <th name="th_price_unit" class="text-center"><strong>Price Unit</strong></th>
+                            <th name="th_discount" class="text-center"><strong>Discount</strong></th>
+                            <th name="th_taxes" class="text-center"><strong>Taxes</strong></th>
+                            <th name="th_total" class="text-end"><strong>Total</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.line_ids" t-as="order_line">
+                            <tr t-att-class="'bg-200 fw-bold o_line_section'">
+                                <td id="product">
+                                    <span t-field="order_line.description"/>
+                                </td>
+                                <td class="text-end">
+                                    <span t-field="order_line.product_qty"/>
+                                    <span t-field="order_line.product_uom_id" />
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="order_line.price_unit"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="order_line.discount"/>%
+                                </td>
+                                <td class="text-end">
+                                    <span t-field="order_line.tax_subtotal"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="order_line.price_total"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <div class="oe_row">
+                    <div class="offset-6 col-6">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Subtotal</strong></td>
+                                    <td class="text-end">
+                                        <span t-field="o.price_subtotal"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Taxes</strong></td>
+                                    <td class="text-end">
+                                        <span t-field="o.tax_subtotal"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-end">
+                                        <span t-field="o.price_total"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="base_bim_2.report_purchase_valuation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="base_bim_2.purchase_valuation_report" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

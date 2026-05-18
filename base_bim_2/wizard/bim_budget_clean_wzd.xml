@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="bim_budget_clean_wzd_form" model="ir.ui.view">
+            <field name="name">bim.budget.clean.wzd</field>
+            <field name="model">bim.budget.clean.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Update Concept Template Massively">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="budget_id" force_save="1"/>
+                                <field name="labor"/>
+                                <field name="material"/>
+                            </group>
+                            <group>
+                                <field name="equipment"/>
+                                <field name="aux"/>
+                                <field name="empty_concepts"/>
+                            </group>
+                        </group>
+                        <footer>
+                            <button string='Clean' name="action_clean_budget" type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_clean_budget" model="ir.actions.act_window">
+            <field name="name">Clean Budget</field>
+            <field name="res_model">bim.budget.clean.wzd</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="bim_budget_clean_wzd_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

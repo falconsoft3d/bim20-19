@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- bim.budget.compare.wizard form view -->
+    <record id="bim_budget_history_compare_wizard_view_form" model="ir.ui.view">
+        <field name="name">bim.budget.history.compare.wizard.view.form</field>
+        <field name="model">bim.budget.history.compare.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget History Compare">
+                <group name="main">
+                    <group name="left">
+                        <field name="origin_budget_id" force_save="1"/>
+                        <label for="switch_budgets" string=""/>
+                        <div class="o_row">
+                            <button name="switch_budgets" type="object"
+                                    string="Switch"
+                                    class="btn-link" icon="fa-exchange" help="Exchange budgets"/>
+                        </div>
+                        <field name="compare_budget_id" force_save="1"/>
+                        <separator/>
+                        <field name="compare" widget="radio"/>
+                    </group>
+                    <group name="left" string="Data to compare">
+                        <field name="price"/>
+                        <field name="quantity"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="cancel" string="Cancel" special="cancel" class="btn-secondary"/>
+                    <button name="print_excel" type="object" string="Print Comparison" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="bim_budget_history_compare_wizard_action" model="ir.actions.act_window">
+        <field name="name">Compare Budget History</field>
+        <field name="res_model">bim.budget.history.compare.wizard</field>
+        <field name="binding_model_id" ref="model_bim_budget_history"/>
+        <field name="binding_view_types">list</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

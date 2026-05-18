@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="daily_part_report_view_tree" model="ir.ui.view">
+            <field name="name">daily.part.report.view.tree</field>
+            <field name="model">daily.part.report</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'draft'" decoration-muted="state == 'cancel'">
+                    <field name="name"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="create_date" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="state" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="daily_part_report_view_form" model="ir.ui.view">
+            <field name="name">daily.part.report.view.form</field>
+            <field name="model">daily.part.report</field>
+            <field name="arch" type="xml">
+                <form string="Daily Part Report">
+                    <header>
+
+                        <button class="oe_highlight" invisible="state not in ['draft']"
+                                name="action_read" string="Read"
+                                icon="fa-eye"
+                                type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['read']" name="action_done" string="To Done" type="object"/>
+                        <button confirm="Are you sure you want to set to draft?"
+                                invisible="state in ['draft']"
+                                name="action_draft" string="Draft" type="object"/>
+
+                         <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date" required="1"/>
+                            </group>
+                            <group>
+                                <field name="user_id" readonly="state in 'done'"/>
+                                <field name="create_date" readonly="state in 'done'"/>
+                                <field name="company_id" readonly="state in 'done'"/>
+                            </group>
+                        </group>
+
+
+
+                        <notebook>
+                            <page name="lines" string="Lines">
+                                <field name="line_ids" nolabel="1" readonly="1">
+                                    <list editable="bottom"
+                                          decoration-danger="dif_hh != 0"
+                                          decoration-muted="is_active == False">
+                                        <field name="diary_part_id" widget="many2one" optional="show"/>
+                                        <field name="bim_resource_template_id" optional="show"/>
+                                        <field name="hr_employee_id" optional="show"/>
+                                        <field name="sup_hr_employee_id" optional="show"/>
+                                        <field name="superintendent_hr_employee_id" optional="show"/>
+                                        <field name="employee_location_id" optional="show"/>
+                                        <field name="employee_discipline_id" optional="show"/>
+                                        <field name="employee_area_id" optional="show"/>
+                                        <field name="is_active" string="Estatus" optional="show"/>
+                                        <field name="hh" optional="show" sum="sum"/>
+                                        <field name="hhr" optional="show" sum="sum"/>
+                                        <field name="dif_hh" optional="show" sum="sum"/>
+                                        <field name="state" optional="show" />
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+
+        <record id="daily_part_report_action" model="ir.actions.act_window">
+            <field name="name">Daily Part Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">daily.part.report</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

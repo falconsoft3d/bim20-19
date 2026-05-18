@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_analysis_wizard_form" model="ir.ui.view">
+        <field name="name">bim.analysis.wizard.form</field>
+        <field name="model">bim.analysis.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Analysis">
+                <group name="main">
+                    <group name="left">
+                        <field invisible="True" name="budget_id"/>
+                        <field name="type" required="1"/>
+                    </group>
+                    <group name="right">
+                    </group>
+                </group>
+                <footer>
+                    <button class="btn-default" special="cancel" string="Cancel"/>
+                    <button class="btn-primary" name="report_xls" string="Print Excel" type="object"/>
+                </footer>
+            </form></field>
+    </record>
+    <record id="bim_analysis_wizard_action" model="ir.actions.act_window">
+        <field name="name">Analysis</field>
+        <field name="res_model">bim.analysis.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

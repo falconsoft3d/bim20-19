@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_project_state" model="ir.ui.view">
+        <field name="name">view.form.bim.project.state</field>
+        <field name="model">bim.project.state</field>
+        <field name="arch" type="xml">
+            <form string="Report" delete="0" >
+                <sheet>                    
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                        <field name="user_ids" widget="many2many_tags"/>
+                        <field name="required_fields" placeholder="name,project_user_id"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="include_in_attendance"/>
+                            <field name="create_purchase_order"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="sequence"  invisible="True"/>
+                            <field name="is_new" invisible="True"/>
+                        </group>
+                        <group>
+                            <field name="is_done" invisible="True"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Budget">
+                            <group>
+                                <group>
+                                    <field name="set_budget_state_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+
+
+    <record id="view_tree_bim_project_state" model="ir.ui.view">
+        <field name="name">view.tree.bim.project.state</field>
+        <field name="model">bim.project.state</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle" />
+                <field name="name"/>
+                <field name="include_in_attendance"/>
+                <field name="is_new" invisible="True"/>
+                <field name="is_done" invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_project_state" model="ir.actions.act_window">
+        <field name="name">Project states</field>
+        <field name="res_model">bim.project.state</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Project state!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_bim_project_state"
+        name="States"
+        parent="base_bim_2.menu_bim_config"
+        sequence="70" />
+
+    <menuitem id="menu_bim_project_quality"
+        name="Quality"
+        parent="base_bim_2.menu_bim_config"
+        sequence="71" />
+
+    <menuitem id="submenu_bim_project_state"
+        name="Project states"
+        parent="base_bim_2.menu_bim_project_state"
+        action="action_bim_project_state"
+        sequence="1" />
+    </data>
+
+</odoo>

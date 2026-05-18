@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="budget_request_view_tree" model="ir.ui.view">
+            <field name="name">budget.request.view.tree</field>
+            <field name="model">budget.request</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state == 'draft'" decoration-muted="state == 'cancel'" decoration-primary="state == 'approved'" delete="0">
+                    <field name="name"/>
+                    <field name="partner_id" optional="show"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="a_user_id" optional="show"/>
+                    <field name="create_date" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="type" optional="show"/>
+                    <field name="state" optional="show"/>
+                </list></field>
+        </record>
+        <record id="budget_request_view_form" model="ir.ui.view">
+            <field name="name">budget.request.view.form</field>
+            <field name="model">budget.request</field>
+            <field name="arch" type="xml">
+                <form string="Budget Request">
+                    <header>
+                        <button class="oe_highlight" invisible="state not in ['draft']" name="action_request" string="Request" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['requested']" name="action_approve" string="Approve" type="object"/>
+                        <button class="oe_highlight" invisible="state not in ['approved']" name="action_done" string="Done" type="object"/>
+                        <button invisible="state in ['draft']"
+                                name="action_draft" string="To Draft" type="object"/>
+                         <button invisible="state in ['draft']"
+                                name="create_budget"
+                                 confirm="Are you sure you want to create the budget?"
+                                 string="Create Budget" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"  icon="fa-money" name="action_view_budgets" string="Budgets" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="budget_count" nolabel="1" options="{'currency_field': 'currency_id'}" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Presupuestos
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+
+
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in 'draft'"/>
+                                <field name="department_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in 'draft'"/>
+                                <field name="type"  readonly="state not in 'draft'"/>
+                                <field name="project_id" options='{"no_open": 1}'/>
+                            </group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="a_user_id"/>
+                                <field name="create_date"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="lines"
+                                  invisible="type != 'generic'"
+                                  string="Lines">
+                                <field name="lines_ids" nolabel="1" readonly="state not in 'draft'">
+                                    <list editable="bottom">
+                                        <field name="name" optional="show" options='{"no_create": 1, "no_open": 1}'/>
+                                        <field name="type" optional="show"/>
+                                        <field name="description" optional="show"/>
+
+                                        <field name="qty" optional="show" sum="sum"/>
+                                        <field name="x" optional="show" sum="sum"/>
+                                        <field name="y" optional="show" sum="sum"/>
+                                        <field name="z" optional="show" sum="sum"/>
+                                        <field name="amount_subtotal" optional="show" sum="sum"/>
+
+                                        <field name="uom_id" optional="show"/>
+                                    </list>
+                                </field>
+                            </page>
+
+
+                            <page name="lines" string="Lines by APUs"
+                                    invisible="type != 'apu'">
+                                <field name="lines_apu_ids" nolabel="1" readonly="state not in 'draft'">
+                                    <list editable="bottom">
+                                        <field name="bim_concept_template_id"
+                                               optional="show" options='{"no_create": 1}'/>
+
+                                        <field name="qty" optional="show" sum="sum"/>
+                                        <field name="x" optional="show" sum="sum"/>
+                                        <field name="y" optional="show" sum="sum"/>
+                                        <field name="z" optional="show" sum="sum"/>
+                                        <field name="amount_subtotal" optional="show" sum="sum"/>
+
+                                        <field name="description" optional="show"/>
+                                    </list>
+                                </field>
+                            </page>
+
+
+                        </notebook>
+
+                     <field name="obs"
+                           widget="html"
+                           placeholder="Observations"/>
+
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="budget_request_action" model="ir.actions.act_window">
+            <field name="name">Budget Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">budget.request</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem action="budget_request_action"
+                  id="menu_bim_budget_request"
+                  name="Budget Request"
+                  parent="base_bim_2.submenu_bim_project"
+                  sequence="16"/>
+    </data>
+</odoo>

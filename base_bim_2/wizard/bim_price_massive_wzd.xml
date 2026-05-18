@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="bim_price_massive_wzd" model="ir.ui.view">
+            <field name="name">bim.price.massive.wzd</field>
+            <field name="model">bim.price.massive.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Update price massively">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="budget_id"/>
+                            <h1>
+                                <field name="budget_id"
+                                       placeholder="Buget" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="type_update"/>
+                                <field name="file_xls" invisible="type_update not in ['import_mass_resources']"/>
+                                <field name="product_exists" invisible="type_update not in ['import_mass_resources']"/>
+                                <field name="duplicate"/>
+                            </group>
+                            <group>
+                                <field invisible="type_update not in ['pricelist']" name="pricelist_id" options="{'no_create_edit':True}" required="type_update == 'pricelist'"/>
+                                <field invisible="type_update not in ['manual']"
+                                       name="product_id"
+                                       options='{"no_create": 1}'
+                                       required="type_update == 'manual'"/>
+                                <field invisible="type_update not in ['manual']" name="type_price" required="type_update == 'manual'"/>
+                                <field invisible="type_update not in ['manual']" name="new_price" required="type_update == 'manual'"/>
+                                <field domain="[('budget_id', '=', budget_id),('type', 'in', ['chapter'])]" invisible="type_update not in ['delete_parent']" name="concept_id" options="{'no_create_edit':True}" required="type_update == 'delete_parent'"/>
+                                <field invisible="type_update not in ['manual_departure']" name="departure_code" required="type_update == 'manual_departure'"/>
+                                <field invisible="type_update not in ['manual_departure']" name="new_cost" required="type_update == 'manual_departure'"/>
+
+                                <field invisible="type_update not in ['update_resources_in_departure']"
+                                       options='{"no_create": 1}'
+                                       name="which_departure" required="type_update == 'update_resources_in_departure'"/>
+                                <field invisible="type_update not in ['update_resources_in_departure']"
+                                       name="which_resource"
+                                       options='{"no_create": 1}'
+                                       required="type_update == 'update_resources_in_departure'"/>
+                                <field invisible="type_update not in ['update_resources_in_departure']"
+                                       name="which_qty"/>
+
+                                <field invisible="type_update not in ['update_resources_in_departure']"
+                                       name="which_new_qty"/>
+
+                                <field invisible="type_update not in ['update_resources_in_departure']"
+                                       name="which_new_percent"/>
+
+
+                                <!-- product_to_change_id, product_new_id-->
+                                <field invisible="type_update not in ['change_product_in_budget']"
+                                       name="product_to_change_id"
+                                       options='{"no_create": 1}'
+                                       required="type_update == 'change_product_in_budget'"/>
+
+                                <field invisible="type_update not in ['change_product_in_budget', 'add_product_to_budget']"
+                                       name="product_new_id"
+                                       options='{"no_create": 1}'
+                                       required="type_update in ['change_product_in_budget', 'add_product_to_budget']"/>
+
+                                <field invisible="type_update not in ['change_product_in_budget', 'add_product_to_budget', 'delete_product_in_budget']"
+                                       name="departures_ids"
+                                       options='{"no_create": 1}'
+                                       widget="many2many_tags"
+                                       />
+
+                                <field invisible="type_update not in ['delete_product_in_budget']"
+                                       name="products_ids"
+                                       options='{"no_create": 1}'
+                                       widget="many2many_tags"
+                                       />
+
+                                <field name="allowed_product_ids" invisible="1" widget="many2many_tags"/>
+
+                                <field name="name_field" invisible="type_update not in ['update_fields']"/>
+                                <field name="value_field" invisible="type_update not in ['update_fields']"/>
+
+                                <field invisible="type_update not in ['add_product_to_budget']" name="qty_to_add" />
+
+                            </group>
+                        </group>
+                        <footer>
+                            <button class="btn-primary" name="update_price" string="Update" type="object"/>
+                            <button class="btn-default" special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form></field>
+        </record>
+        <record id="action_price_massive_wzd" model="ir.actions.act_window">
+            <field name="name">Update price massively</field>
+            <field name="res_model">bim.price.massive.wzd</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="bim_price_massive_wzd"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

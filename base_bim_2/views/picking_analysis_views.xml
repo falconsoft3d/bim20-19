@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+    <data>
+    <record id="view_form_picking_analysis" model="ir.ui.view">
+         <field name="name">view.form.picking.analysis</field>
+         <field name="model">picking.analysis</field>
+         <field name="arch" type="xml">
+            <form string="Category List">
+              <header>
+
+                        <button name="action_load"
+                                confirm="¿Estás seguro de que desea calcular las filas, al calcular se eliminarán las filas existentes y se volverán a llenarlas?"
+                                string="Load" type="object"/>
+
+              </header>
+              <sheet>
+                  <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                  </div>
+
+                  <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"  icon="fa-th-list" name="action_view_lines" string="Líneas" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="line_count" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Líneas
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+
+                  <group>
+                      <group>
+                          <field name="project_id" required="1"
+
+                          />
+                          <field name="end_date" required="1"
+
+                          />
+                          <field name="type" required="1"
+
+                            />
+
+                          <field name="include_for_bim" />
+
+                       </group>
+                      <group>
+                          <field name="user_id" />
+                          <field name="create_date" />
+                          <field name="company_id" />
+                          <field name="currency_id" />
+                       </group>
+                  </group>
+
+                  <notebook>
+                            <page name="lines" string="Lines">
+                                <field name="lines_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="name" optional="show"  widget="many2one" />
+                                        <field name="note" optional="show" />
+                                        <field name="purchase_id" optional="show"  widget="many2one" />
+                                        <field name="product_id" optional="show"  widget="many2one" />
+                                        <field name="product_category_id" optional="show"  widget="many2one" />
+                                        <field name="product_uom_id" optional="show" />
+                                        <field name="stock_move_id" optional="hide" />
+                                        <field name="date" optional="show" />
+                                        <field name="product_cost" optional="show"
+                                               widget="monetary" options="{'currency_field': 'currency_id'}"
+                                               readonly="name"/>
+                                        <field name="product_qty"
+                                               readonly="1"
+                                               optional="show"  sum="sum"/>
+
+                                        <field name="subtotal_picking"
+                                               widget="monetary" options="{'currency_field': 'currency_id'}"
+                                               readonly="1"
+                                               optional="show" sum="sum"/>
+
+                                        <field name="assets_qty" optional="show" sum="sum"/>
+                                        <field name="currency_id" optional="hide" sum="sum"/>
+                                        <field name="subtotal"
+                                               widget="monetary" options="{'currency_field': 'currency_id'}"
+                                               optional="show" sum="sum"/>
+
+                                        <field name="oenc" />
+
+                                    </list></field>
+                            </page>
+                  </notebook>
+
+               </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+        <record id="view_tree_picking_analysis" model="ir.ui.view">
+         <field name="name">view.tree.picking.analysis</field>
+         <field name="model">picking.analysis</field>
+         <field name="arch" type="xml">
+            <list delete="0">
+                <field name="name" optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="type" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="create_date" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="subtotal" sum="1" optional="show" widget="monetary" options="{'currency_field': 'currency_id'}" />
+                <field name="include_for_bim" />
+            </list>
+        </field>
+        </record>
+
+        <record id="action_picking_analysis" model="ir.actions.act_window">
+            <field name="name">Picking Analysis</field>
+            <field name="res_model">picking.analysis</field>
+            <field name="view_id" ref="view_tree_picking_analysis"/>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Create a new Picking Analysis!
+              </p>
+           </field>
+        </record>
+
+
+        <record id="view_tree_picking_analysis_line" model="ir.ui.view">
+             <field name="name">view.tree.picking.analysis.line</field>
+             <field name="model">picking.analysis.line</field>
+             <field name="arch" type="xml">
+                <list delete="0">
+                    <field name="name" optional="show"  widget="many2one" />
+                    <field name="note" optional="show" />
+                    <field name="purchase_id" optional="show"  widget="many2one" />
+                    <field name="product_id" optional="show"  widget="many2one" />
+                    <field name="product_category_id" optional="show"  widget="many2one" />
+                    <field name="product_uom_id" optional="show" />
+                    <field name="stock_move_id" optional="hide" />
+                    <field name="date" optional="show" />
+                    <field name="product_cost" optional="show"
+                           widget="monetary" options="{'currency_field': 'currency_id'}"
+                           readonly="name"/>
+                    <field name="product_qty"
+                           readonly="1"
+                           optional="show"  sum="sum"/>
+
+                    <field name="subtotal_picking"
+                           widget="monetary" options="{'currency_field': 'currency_id'}"
+                           readonly="1"
+                           optional="show" sum="sum"/>
+
+                    <field name="assets_qty" optional="show" sum="sum"/>
+                    <field name="currency_id" optional="hide" sum="sum"/>
+                    <field name="subtotal"
+                           widget="monetary" options="{'currency_field': 'currency_id'}"
+                           optional="show" sum="sum"/>
+                    <field name="oenc" />
+                </list>
+            </field>
+        </record>
+
+        <record id="action_picking_analysis_line" model="ir.actions.act_window">
+            <field name="name">Picking Analysis Line</field>
+            <field name="res_model">picking.analysis.line</field>
+            <field name="view_id" ref="view_tree_picking_analysis_line"/>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Create a new Picking Analysis Line!
+              </p>
+           </field>
+        </record>
+
+
+
+     </data>
+</odoo>

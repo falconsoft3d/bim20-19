@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="bim_product_template_update_wzd" model="ir.ui.view">
+            <field name="name">bim.product.template.update.wzd</field>
+            <field name="model">bim.product.update.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Update Concept Template Massively">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="region"/>
+                            </group>
+                        </group>
+                        <field name="template_ids" invisible="True"/>
+                        <footer>
+                            <button string='Update' name="action_update_product_from_master" type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_update_product_from_master" model="ir.actions.act_window">
+            <field name="name">Update Product From Master</field>
+            <field name="res_model">bim.product.update.wzd</field>
+            <field name="binding_model_id" ref="model_product_template"/>
+            <field name="binding_view_types">list</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="bim_product_template_update_wzd"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

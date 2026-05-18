@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_income_statement_summary" model="ir.ui.view">
+        <field name="name">view.form.income.statement.summary</field>
+        <field name="model">income.statement.summary</field>
+        <field name="arch" type="xml">
+            <form delete="0" string="Report">
+                <header>
+                    <button class="btn-primary" invisible="state not in ['draft']" name="action_confirm" string="Validate" type="object"/>
+                    <button invisible="state not in ['draft','validated']"
+                            confirm="Are you sure you want to cancel this report? This action cannot be undone."
+                            name="action_cancel" string="Cancel" type="object"/>
+
+                    <button invisible="state not in ['draft']" name="calculate" string="Calculate" type="object"/>
+
+                    <button invisible="state not in ['validated','cancelled']" name="action_draft" string="Draft" type="object"/>
+
+                    <button invisible="state not in ['draft']" name="action_view_with_optimal_columns" type="object" icon="fa-eye" string="Optimize View"/>
+                    <button invisible="state not in ['draft']" name="export_lines_to_excel" type="object" icon="fa-download" string="Exportar Fórmulas"/>
+                    <button invisible="state not in ['draft']" name="export_report_to_excel" type="object" icon="fa-file-excel-o" string="Reporte"/>
+                    <button invisible="state not in ['draft']" name="import_lines_from_excel"  type="object" icon="fa-upload" string="Importar Fórmulas"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="title"
+                                   readonly="state not in ['draft']"/>
+                            <field name="currency_id"
+                                   readonly="state not in ['draft']"/>
+                            <field name="budget_id"
+                                   options="{'no_create':True}" readonly="state not in ['draft']"/>
+                        </group>
+                        <group>
+                            <field name="date_from" readonly="state not in ['draft']"/>
+                            <field name="date_to" readonly="state not in ['draft']"/>
+                            <field name="user_id" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Lines" name="lines_page">
+                            <field name="line_ids" nolabel="1" readonly="state not in ['draft']">
+                                <list editable="bottom"
+                                    decoration-danger="total &lt; 0"
+                                    decoration-muted="total == 0">
+
+                                    <field name="sequence" optional="hide" widget="handle"/>
+                                    <field name="description"/>
+                                    <field name="tecnical_name" optional="hide"/>
+                                    <field name="formula" optional="show" placeholder="e.g. bim.budget.amount_total_cd OR =VENTAS1+ITF OR [bim.budget],amount_total_cd OR [bim.budget],(HAD00007) OR =[bim.budget],(HAD00007)*2" style="background-color: #fffacd;"/>
+                                    <field name="formula_mat" optional="hide" placeholder="MAT formula (same syntax as main formula)" style="background-color: #fffacd;"/>
+                                    <field name="formula_mo" optional="hide" placeholder="MO formula (same syntax as main formula)" style="background-color: #fffacd;"/>
+                                    <field name="formula_eq" optional="hide" placeholder="EQ formula (same syntax as main formula)" style="background-color: #fffacd;"/>
+                                    <field name="formula_subc" optional="hide" placeholder="SUBC formula (same syntax as main formula)" style="background-color: #fffacd;"/>
+                                    <field name="total" optional="show"/>
+                                    <field name="percent_total" optional="show"/>
+
+                                    <field name="mo" optional="hide" invisible="context.get('hide_mo_columns', False)"/>
+                                    <field name="percent_mo" optional="hide" invisible="context.get('hide_mo_columns', False)"/>
+
+                                    <field name="mat" optional="hide" invisible="context.get('hide_mat_columns', False)"/>
+                                    <field name="percent_mat" optional="hide" invisible="context.get('hide_mat_columns', False)"/>
+
+                                    <field name="eq" optional="hide" invisible="context.get('hide_eq_columns', False)"/>
+                                    <field name="percent_eq" optional="hide" invisible="context.get('hide_eq_columns', False)"/>
+
+                                    <field name="subc" optional="hide" invisible="context.get('hide_subc_columns', False)"/>
+                                    <field name="percent_subc" optional="hide" invisible="context.get('hide_subc_columns', False)"/>
+                                </list>
+                            </field>
+                        </page>
+                        
+                        <page string="Formula Documentation" name="documentation_page">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-info" role="alert">
+                                        <h4><i class="fa fa-info-circle"/> Formula Documentation</h4>
+                                        <p>This Income Statement Calculator supports various types of formulas to calculate values dynamically.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5><i class="fa fa-calculator"/> Basic Model References</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p><strong>Direct model field access:</strong></p>
+                                            <div class="bg-light p-3 mb-3">
+                                                <code style="font-size: 14px;">bim.budget.amount_total_cd</code><br/>
+                                                <small class="text-muted">Access field directly from model</small>
+                                            </div>
+                                            
+                                            <p><strong>Bracket syntax for model fields:</strong></p>
+                                            <div class="bg-light p-3 mb-3">
+                                                <code style="font-size: 14px;">[bim.budget],amount_total_cd</code><br/>
+                                                <small class="text-muted">Bracket syntax to avoid comma conflicts</small>
+                                            </div>
+                                            
+                                            <p><strong>Asset-specific references:</strong></p>
+                                            <div class="bg-light p-3 mb-3">
+                                                <code style="font-size: 14px;">[bim.budget],(HAD00007)</code><br/>
+                                                <small class="text-muted">Reference specific asset by code</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5><i class="fa fa-code"/> Technical Formulas</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p><strong>Cross-reference between lines:</strong></p>
+                                            <div class="bg-light p-3 mb-3">
+                                                <code style="font-size: 14px;">=VENTAS1*1.2</code><br/>
+                                                <small class="text-muted">Use technical names from other lines</small>
+                                            </div>
+                                            
+                                            <p><strong>Combined technical + model references:</strong></p>
+                                            <div class="bg-light p-3 mb-3">
+                                                <code style="font-size: 14px;">=VENTAS1+[bim.budget],(HAD00007)</code><br/>
+                                                <small class="text-muted">Mix technical names with asset references</small>
+                                            </div>
+                                            
+                                            <p><strong>Mathematical operations with models:</strong></p>
+                                            <div class="bg-light p-3 mb-3">
+                                                <code style="font-size: 14px;">=[bim.budget],(HAD00007)*2</code><br/>
+                                                <small class="text-muted">Apply operations to model/asset values</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5><i class="fa fa-lightbulb-o"/> Advanced Examples</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6>Complex Mathematical Operations:</h6>
+                                                    <div class="bg-light p-3 mb-3">
+                                                        <code style="font-size: 13px;">([bim.budget],amount_total_cd + [bim.budget],(HAD00007)) * 1.21</code><br/>
+                                                        <small class="text-muted">Combine multiple references with operations</small>
+                                                    </div>
+                                                    
+                                                    <h6>Percentage Calculations:</h6>
+                                                    <div class="bg-light p-3 mb-3">
+                                                        <code style="font-size: 13px;">=[bim.budget],amount_total_cd*0.18</code><br/>
+                                                        <small class="text-muted">Calculate 18% of a model field</small>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <h6>Multi-line Dependencies:</h6>
+                                                    <div class="bg-light p-3 mb-3">
+                                                        <code style="font-size: 13px;">=(VENTAS1+VENTAS2)*FACTOR1</code><br/>
+                                                        <small class="text-muted">Reference multiple technical names</small>
+                                                    </div>
+                                                    
+                                                    <h6>Conditional Logic (with functions):</h6>
+                                                    <div class="bg-light p-3 mb-3">
+                                                        <code style="font-size: 13px;">sum([bim.budget],amount_total_cd)</code><br/>
+                                                        <small class="text-muted">Use aggregate functions</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5><i class="fa fa-columns"/> Column-Specific Formulas</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Each line can have separate formulas for different cost categories:</p>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul>
+                                                        <li><strong>Formula MAT:</strong> Materials cost calculation</li>
+                                                        <li><strong>Formula MO:</strong> Labor (Mano de Obra) cost calculation</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <ul>
+                                                        <li><strong>Formula EQ:</strong> Equipment cost calculation</li>
+                                                        <li><strong>Formula SUBC:</strong> Subcontract cost calculation</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-info mt-3" role="alert">
+                                                <strong>Note:</strong> These column formulas use the same syntax as the main formula and calculate percentages based on the first row value for each respective column.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <h6><i class="fa fa-exclamation-triangle"/> Important Notes:</h6>
+                                        <ul class="mb-0">
+                                            <li><strong>Technical Names:</strong> Automatically generated from line descriptions (uppercase, no spaces)</li>
+                                            <li><strong>Calculation Order:</strong> Model references → Technical names → Mathematical evaluation</li>
+                                            <li><strong>Percentages:</strong> All percentages calculated based on first line (typically Ventas)</li>
+                                            <li><strong>Asset Codes:</strong> Must exist in bim.assets and be linked to the selected budget</li>
+                                            <li><strong>Supported Operations:</strong> +, -, *, /, (), abs(), round(), min(), max()</li>
+                                            <li><strong>Column Formulas:</strong> Each column (MAT, MO, EQ, SUBC) can have independent formulas with separate percentage calculations</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form></field>
+    </record>
+    <record id="view_tree_income_statement_summary" model="ir.ui.view">
+        <field name="name">view.tree.income.statement.summary</field>
+        <field name="model">income.statement.summary</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'draft'"  decoration-muted="state == 'cancel'" delete="0">
+                <field name="name" optional="show"/>
+                <field name="title" optional="show"/>
+                <field name="budget_id" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="state" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_income_statement_summary" model="ir.actions.act_window">
+        <field name="name">Income Statement Summary</field>
+        <field name="res_model">income.statement.summary</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new attendance massive!
+            </p></field>
+    </record>
+
+</odoo>

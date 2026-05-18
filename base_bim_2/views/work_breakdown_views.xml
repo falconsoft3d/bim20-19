@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_work_breakdown" model="ir.ui.view">
+        <field name="name">view.form.work.breakdown</field>
+        <field name="model">work.breakdown</field>
+        <field name="arch" type="xml">
+            <form string="State">
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="description"/>
+                             <field name="percentage"/>
+                        </group>
+                        <group>
+                            <field name="bim_pcp_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_work_breakdown" model="ir.ui.view">
+        <field name="name">view.tree.work.breakdown</field>
+        <field name="model">work.breakdown</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="description"/>
+                <field name="percentage" sum="sum"/>
+                <field name="bim_pcp_id"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_work_breakdown" model="ir.actions.act_window">
+        <field name="name">Work Breakdown</field>
+        <field name="res_model">work.breakdown</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new work breakdown!
+            </p>
+        </field>
+    </record>
+
+    </data>
+
+
+</odoo>

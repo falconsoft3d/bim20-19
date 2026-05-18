@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="project_employee_attendance_wzd_from" model="ir.ui.view">
+            <field name="name">project.employee.attendance.wzd.from</field>
+            <field name="model">project.employee.attendance.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Load Project Attendance">
+                    <div class="alert alert-danger" invisible="show_alert == False" role="alert" style="margin-bottom:0px; margin:5px;">
+                        Date From can't be bigger than Date To...
+                    </div>
+                    <group>
+                        <group>
+                            <field force_save="1" name="project_id" readonly="1"/>
+                            <field groups="base_bim_2.group_budget_concept_documents" name="budget_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field groups="base_bim_2.group_budget_concept_documents" name="concept_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="calc"/>
+                        </group>
+                        <group>
+                            <field name="hour_start_job"/>
+                            <field name="minute_start_job"/>
+                            <field name="working_hours"/>
+                            <field name="bim_extra_hour_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="include_weekend"/>
+                            <field invisible="True" name="show_alert"/>
+                        </group>
+                    </group>
+                    <field name="description" nolabel="1" placeholder="Add description..."/>
+                    <field name="line_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="employee_id"/>
+                            <field name="hour_start_job"/>
+                            <field name="minute_start_job"/>
+                            <field name="working_hours"/>
+                            <field name="bim_extra_hour_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field invisible="True" name="employee_ids"/>
+                        </list></field>
+                    <footer>
+                        <button class="btn-primary" name="action_register_attendance" string="Register Attendance" type="object"/>
+                        <button class="btn-default" special="cancel" string="Cancel"/>
+                    </footer>
+                </form></field>
+        </record>
+        <record id="action_project_employee_attendance" model="ir.actions.act_window">
+            <field name="name">Project Employee Attendance</field>
+            <field name="res_model">project.employee.attendance.wzd</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="project_employee_attendance_wzd_from"/>
+            <field name="target">new</field>
+        </record>
+        <record id="view_project_employee_form_attendance" model="ir.ui.view">
+            <field name="name">view.project.employee.form.attendance</field>
+            <field name="model">bim.project</field>
+            <field name="inherit_id" ref="base_bim_2.view_form_bim_project"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button groups="base_bim_2.group_attendance_bim" name="%(action_project_employee_attendance)d" string="Register Attendance" type="action"/>
+                </xpath></field>
+        </record>
+    </data>
+</odoo>

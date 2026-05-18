@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="assets_backend" name="base bim backend assets" inherit_id="web.assets_backend">
+        <xpath expr="//link[last()]" position="after">
+            <link rel="stylesheet" type="text/scss" href="/base_bim_2/static/src/views/sitemap/sitemap_styles.scss"/>
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_bim_purchase_requisition" model="ir.ui.view">
+            <field name="name">view.form.bim.purchase.requisition</field>
+            <field name="model">bim.purchase.requisition</field>
+            <field name="arch" type="xml">
+                <form string="Material Request">
+                    <header>
+                        <button class="oe_highlight" confirm="Are you sure to request?"
+                                invisible="state not in ['nuevo']" name="action_request"
+                                string="Solicitar" type="object"/>
+
+                        <button class="oe_highlight" confirm="Are you sure to approve this request?"
+                                groups="base_bim_2.group_purchase_requisition_admin"
+                                invisible="state not in ['required_']" name="action_approve"
+                                string="Approve" type="object"/>
+
+                        <button class="oe_highlight" confirm="Are you sure to received?"
+                                invisible="state not in ['finalizado']" name="action_receive"
+                                string="Received" type="object"/>
+
+                        <button confirm="Are you sure to delete?"
+                                invisible="state not in ['nuevo']" name="action_clear" string="Clear" type="object"/>
+
+                        <button confirm="Are you sure to set to New?" invisible="state not in ['cancelled']"
+                                name="action_draft" string="Set to New" type="object"/>
+
+                        <button class="oe_highlight"  invisible="state not in ['aprobado']"
+                                name="%(base_bim_2.action_create_purchase_wizard)d" string="Purchase" type="action"/>
+
+                        <button invisible="state not in ['aprobado']" name="create_picking"
+                                string="Create Transfer" type="object"/>
+
+                        <button invisible="state not in ['nuevo']"
+                                name="%(base_bim_2.act_resource_requisition_wizard)d" string="Load Resources" type="action"/>
+
+                        <button confirm="Do you want to create a new rent?"
+                                invisible="state not in ['aprobado']" name="action_create_tools_rent" string="Tool Rent" type="object"/>
+
+                        <button confirm="Are you sure to finish this request?" invisible="state not in ['parcial-finalizado','aprobado']" name="action_done" string="Finish" type="object"/>
+
+                        <button confirm="Are you sure to cancel?" invisible="state not in ['aprobado','finalizado','nuevo','required_','received']" name="action_cancel" string="Cancel" type="object"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-cubes" invisible="picking_count == 0" name="action_view_pickings" type="object">
+                                <field name="picking_count" string="Transfers" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-shopping-basket" invisible="purchase_count == 0" name="action_view_purchases" type="object">
+                                <field name="purchase_count" string="Purchases" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-copy" invisible="agree_count == 0" name="action_view_agreement" type="object">
+                                <field name="agree_count" string="Purchase Agreements" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" icon="fa-shopping-basket" invisible="bim_tool_rent_count == 0" name="action_view_bim_tool_rents" type="object">
+                                <field name="bim_tool_rent_count" string="Rent" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="user_id" options='{"no_create": 1, "no_open": 1}' readonly="state not in ['nuevo', 'aprobado']" required="1"/>
+                                <field invisible="context.get('purchase') == True" name="project_id" options='{"no_create": 1}' readonly="state not in ['nuevo', 'aprobado']" required="context.get('purchase') == False"/>
+
+
+                                <field invisible="True" name="company_id"/>
+
+                            </group>
+                            <group>
+                                <field name="date_begin" readonly="state not in ['nuevo', 'aprobado']" required="1"/>
+                                <field name="date_prevista" readonly="state not in ['nuevo', 'aprobado']" required="1"/>
+                                <field force_save="1" invisible="True" name="warehouse_id" options='{"no_create": 1, "no_open": 1}'/>
+
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="listado_materiales" string="Material List">
+                                <field name="product_ids" readonly="state not in ['nuevo', 'aprobado']">
+                                    <list editable="bottom">
+                                        <field optional="hide"  name="project_id"/>
+                                        <field optional="hide"
+                                               domain="[('project_id','=',project_id)]"
+                                               name="budget_id" />
+
+                                        <field optional="hide" name="default_code" />
+
+                                        <field name="product_id" options='{"no_create": 1}' required="1"
+                                               domain="[('type','=','product'),('purchase_ok', '=', True)]"
+                                               optional="show"/>
+                                        <field name="obs" optional="hide"/>
+                                        <field name="um_id" optional="show" options="{'no_create_edit': True}" readonly="solo_lectura == True"/>
+                                        <field name="concept_phase_id"
+                                               options='{"no_create": 1}'
+                                               optional="hide" widget="many2one"/>
+                                        <field name="partner_ids" optional="hide" options='{"no_create": 1}' widget="many2many_tags"/>
+                                        <field name="analytic_id" optional="hide" options='{"no_create": 1, "no_open": 1}'/>
+                                        <field name="stock" optional="show"/>
+                                        <field name="quant" optional="show" readonly="solo_lectura == True" required="1" sum="qty"/>
+
+                                        <field name="cost" optional="hide"/>
+                                        <field name="subtotal" optional="hide" sum="subt"/>
+                                        <field name="despachado" optional="hide" sum="subt"/>
+                                        <field optional="hide" name="qty_done"/>
+                                        <field name="qty_to_process" optional="hide" sum="subt"/>
+                                        <field optional="hide" name="qty_purchase"/>
+                                        <field optional="hide"  name="sent_to_production"/>
+
+                                        <field name="done" optional="hide" sum="subt"/>
+                                        <field optional="hide"  name="solo_lectura"/>
+                                        <field optional="hide"  name="company_id"/>
+                                    </list></field>
+                            </page>
+                            <page string="Budgets" invisible="1">
+                                <field name="budget_ids" readonly="1"/>
+                            </page>
+                            <page string="Other">
+                                <group>
+                                    <group>
+                                        <field name="separate_tools"/>
+                                        <field groups="base.group_multi_company" name="company_id" readonly="state not in ['nuevo', 'aprobado']"/>
+                                        <field name="analytic_id" readonly="state not in ['nuevo', 'aprobado']"/>
+                                        <field name="buy_more" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                        <field name="obs" placeholder="Notes.." readonly="state not in ['nuevo', 'aprobado']"/>
+
+                        <group class="oe_right">
+                            <group class="oe_subtotal_footer">
+                                <field name="amount_total"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="view_tree_bim_purchase_requisition" model="ir.ui.view">
+            <field name="name">view.tree.bim.purchase.requisition</field>
+            <field name="model">bim.purchase.requisition</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="state=='nuevo'" decoration-muted="state=='cancelled'" delete="0">
+                    <field name="name"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="date_begin" optional="show"/>
+                    <field name="date_prevista" optional="show"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="amount_total" sum="sum" optional="show"/>
+                    <field name="state" optional="show"/>
+                </list></field>
+        </record>
+        <record id="action_bim_purchase_requisition" model="ir.actions.act_window">
+            <field name="name">Material Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.purchase.requisition</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_tree_bim_purchase_requisition"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new Material Request!
+                </p></field>
+        </record>
+        <!-- Lines -->
+        <record id="view_tree_product_list_req" model="ir.ui.view">
+            <field name="name">view.tree.product.list.req</field>
+            <field name="model">product.list</field>
+            <field name="arch" type="xml">
+                <list create="0" delete="0" edit="0"
+                       decoration-danger="state=='nuevo'" >
+                    <field name="project_id" optional="show" widget="many2one"/>
+                    <field name="budget_id" optional="show"
+                           domain="[('project_id','=',project_id)]"
+                           widget="many2one"/>
+                    <field name="requisition_id"
+                           string="Solicitud"
+                           optional="show" widget="many2one"/>
+                    <field name="product_id" optional="show" widget="many2one"/>
+                    <field name="concept_phase_id" optional="hide" widget="many2one"/>
+                    <field name="um_id" optional="show"/>
+                    <field name="partner_ids" optional="show" widget="many2many_tags"/>
+                    <field name="analytic_id" optional="hide"/>
+                    <field name="quant" optional="show" sum="qty"/>
+                    <field name="cost" optional="show"/>
+                    <field name="subtotal" optional="show" sum="subt"/>
+                    <field name="despachado" optional="show" sum="subt"/>
+                    <field name="qty_to_process" optional="show" sum="subt"/>
+                    <field name="obs" optional="hide"/>
+                    <field name="done" optional="hide" sum="subt"/>
+                    <field name="company_id" optional="hide" widget="many2one"/>
+                    <field name="state" optional="show"/>
+                </list></field>
+        </record>
+        <record id="action_tree_product_list_req" model="ir.actions.act_window">
+            <field name="name">Material Request lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.list</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_tree_product_list_req"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new Material Request!
+                </p></field>
+        </record>
+        <!-- Lines -->
+        <record id="view_tree_product_list" model="ir.ui.view">
+            <field name="name">view.tree.bim.product.list</field>
+            <field name="model">product.list</field>
+            <field name="arch" type="xml">
+                <list create="0" decoration-muted="done == True" delete="0" edit="0">
+                    <field name="product_id"/>
+                    <field name="um_id"/>
+                    <field name="quant"/>
+                    <field name="project_id"/>
+                    <field name="requisition_id"/>
+                    <field name="done"/>
+                </list></field>
+        </record>
+        <record id="view_product_list_search" model="ir.ui.view">
+            <field name="name">view.product.list.search</field>
+            <field name="model">product.list</field>
+            <field name="arch" type="xml">
+                <search string="Search Products">
+                    <field name="project_id"/>
+                    <field name="requisition_id"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by': 'project_id'}" name="group_project" string="Project"/>
+                        <filter context="{'group_by': 'requisition_id'}" name="group_requisition" string="Material Request"/>
+                    </group>
+                </search></field>
+        </record>
+    </data>
+</odoo>

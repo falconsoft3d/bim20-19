@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_root_product_menu_template"
+              name="Products" sequence="3"
+              web_icon="product_menu_template,static/description/icon.png"
+              groups="product_menu_template.group_product_menu_template"
+              action="product.product_template_action_all"/>
+
+</odoo>

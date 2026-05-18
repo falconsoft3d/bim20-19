@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_form_bim_department" model="ir.ui.view">
+            <field name="name">view.form.bim.department</field>
+            <field name="model">bim.department</field>
+            <field name="arch" type="xml">
+                <form string="Departments">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_bim_department" model="ir.ui.view">
+            <field name="name">view.tree.bim.department</field>
+            <field name="model">bim.department</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_bim_department" model="ir.actions.act_window">
+            <field name="name">Departmens</field>
+            <field name="res_model">bim.department</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new department!
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

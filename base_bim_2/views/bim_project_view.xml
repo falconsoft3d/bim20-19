@@ -1,0 +1,929 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_bim_project" model="ir.ui.view">
+        <field name="name">view.form.bim.project</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <form string="Project">
+                <header>
+                    <button help="Update Sale/Cost" icon="fa-refresh"
+                            class="oe_highlight"
+                            name="action_update_all" string="UPD" type="object"/>
+
+
+                    <button help="Sandbox"
+                            groups="base_bim_2.group_sand_box"
+                            icon="fa-cogs"
+                            string="Sandbox"
+                            name="%(base_bim_2.bim_sand_box_action)d" type="action"/>
+
+
+                    <button icon="fa-arrow-up" name="%(base_bim_2.bim_wizard_apu_action)d" string="Apu" type="action"/>
+                    <button groups="base_bim_2.group_user_bim" icon="fa-plus" name="%(base_bim_2.bim_clone_budget_wizard_action)d" string="Template" type="action"/>
+                    <button groups="stock.group_stock_user" invisible="stock_location_id == False" name="%(bim_project_stock_location_action)d" string="Output Mov." type="action"/>
+
+                    <button name="%(base_bim_2.action_load_template_checklist)d" string="Checklist" type="action"/>
+                    <button groups="base_bim_2.group_manager_bim,base_bim_2.group_see_cost_bim" name="%(base_bim_2.bim_stock_report_wizard_action)d" string="Output" type="action"/>
+                    <field name="state_id" options="{'clickable': '1'}" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <widget bg_color="bg-danger" invisible="active == True" name="web_ribbon" title="Archived"/>
+                    <widget bg_color="bg-warning" invisible="favorite == False" name="web_ribbon" title="Favorito" ribbon_icon="fa-star"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" groups="base_bim_2.group_user_bim" icon="fa-money" name="action_view_budgets" string="Budgets" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="budget_count" nolabel="1" options="{'currency_field': 'currency_id'}" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Presupuestos
+                                </span>
+                            </div>
+                        </button>
+
+                        <button class="oe_stat_button" groups="base_bim_2.group_employee_bim" icon="fa-users"
+                                name="action_view_employees" string="BIM Employees"
+                                invisible="employee_count == 0"
+                                type="object">
+                            <field name="employee_count" string="Employees" widget="statinfo"/>
+                        </button>
+
+
+                        <button name="action_view_employees_hr" type="object" class="oe_stat_button" icon="fa-users"
+                                invisible="employee_hr_count == 0"
+                                groups="base_bim_2.group_employee_bim"
+                                string="Employees">
+                            <field name="employee_hr_count" widget="statinfo" string="Employees"/>
+                        </button>
+
+
+                        <button class="oe_stat_button"
+                                groups="purchase.group_purchase_user"
+                                icon="fa-shopping-cart" name="action_view_purchases" string="Purchases" type="object">
+                            <field name="purchase_count" string="Purchases" widget="statinfo"/>
+                            <field invisible="True" name="purchase_ids"/>
+                        </button>
+
+                        <button class="oe_stat_button"
+                                icon="fa-dollar" name="action_view_bim_cash_flow" string="Cash Flow" type="object">
+                            <field name="bim_cash_flow_count" string="Cash Flow" widget="statinfo"/>
+                            <field invisible="True" name="bim_cash_flow_ids"/>
+                        </button>
+
+                        <button class="oe_stat_button" invisible="bim_element_count == 0"
+                                icon="fa-cogs"
+                                name="action_view_bim_element" string="Elements" type="object">
+                            <field name="bim_element_count" string="Elements" widget="statinfo"/>
+                            <field invisible="True" name="bim_cash_flow_ids"/>
+                        </button>
+
+                         <button class="oe_stat_button" icon="fa-solid fa-arrow-down"
+                                invisible="in_stock_picking_count == 0"
+                                name="action_view_in_stock_picking" string="Stock Picking In" type="object">
+                            <field name="in_stock_picking_count" string="Stock Picking In" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_stat_button"
+                                icon="fa-solid fa-arrow-down"
+                                invisible="picking_analysis_count == 0"
+                                name="action_view_bim_picking_analysis" string="Picking Analysis" type="object">
+                            <field name="picking_analysis_count" string="Picking Analysis" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_stat_button"
+                                icon="fa-file-text-o"
+                                name="action_view_bim_rq" string="RQs" type="object">
+                            <field name="bim_rq_count" string="RQs" widget="statinfo"/>
+                        </button>
+
+
+                        <button class="oe_stat_button"
+                                icon="fa-file" name="action_view_bim_rfi" string="RFIs" type="object">
+                            <field name="bim_rfi_count" string="RFIs" widget="statinfo"/>
+                        </button>
+
+
+
+
+                        <button class="oe_stat_button"
+                                icon="fa-truck" name="action_view_shipments" string="Shipments" type="object">
+                            <field name="shipment_count" string="Shipments" widget="statinfo"/>
+                        </button>
+
+
+
+                        <button class="oe_stat_button" groups="base_bim_2.group_attendance_bim" icon="fa-calendar" name="action_view_attendance" string="Asistencia" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="executed_attendance" nolabel="1" widget="statinfo"/>
+                                    <field name="attendance_cost" nolabel="1" widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Asistencias
+                                </span>
+                            </div>
+                        </button>
+
+                        <button class="oe_stat_button" icon="fa-calendar-o"
+                                name="action_view_partner_attendance" string="P. Attendance" type="object" invisible="partner_attendance_count == 0">
+                            <field name="partner_attendance_count" string="P. Attendance" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_stat_button" groups="base_bim_2.group_employee_bim" icon="fa-calendar-o"
+                                name="action_view_timesheets" string="Timesheets" type="object"
+                                invisible="timesheet_count == 0">
+                            <field name="timesheet_count" string="Timesheets" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_stat_button" icon="fa-wrench" name="action_view_tool_use" string="Tools Use"
+                                invisible="tool_use_total == 0"
+                                type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="tool_use_total" nolabel="1" widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Tools Use
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-shopping-basket"
+                                name="action_view_requisitions" string="Material Request" type="object">
+                            <field name="requisition_count" string="Material Request" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-truck"
+                                name="action_view_services_required" string="Service Request" type="object">
+                            <field name="services_required_count" string="Service Request" widget="statinfo"/>
+                        </button>
+
+
+
+
+                        <button class="oe_stat_button" icon="fa-dollar"
+                                invisible="other_expense_count == 0"
+                                name="action_view_other_expense" string="Other Expense" type="object">
+                            <field name="other_expense_count" string="Other Expense" widget="statinfo"/>
+                        </button>
+
+
+
+                        <button class="oe_stat_button" groups="account.group_account_invoice" icon="fa-file-text" invisible="out_invoice_count == 0" name="action_view_out_invoices" string="Sale Invoices" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="out_invoiced_amount" options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    <field name="out_invoice_count" nolabel="1"/>
+                                    Sale Invoices
+                                </span>
+                            </div>
+                        </button>
+
+                        <button class="oe_stat_button" groups="account.group_account_invoice" icon="fa-file-text" invisible="in_invoice_count == 0" name="action_view_in_invoices" string="Purchase Invoices" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="in_invoiced_amount" options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    <field name="in_invoice_count" nolabel="1"/>
+                                    Purchase Invoices
+                                </span>
+                            </div>
+                        </button>
+
+
+                        <button class="oe_stat_button"
+                                invisible="account_payment_count == 0"
+                                groups="base_bim_2.group_user_bim" icon="fa-pencil" name="action_view_account_payments" string="Payments" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="account_payment_count" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Payments
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-file-pdf-o" name="action_view_documents"
+                                string="Documents" type="object">
+                            <field name="count_docs" string="Documents" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-home" name="action_view_objects" string="Project Objects" type="object">
+                            <field name="count_objects" string="Project Objects" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button"
+                                icon="fa-clone" name="action_view_paidstate" string="Payment Status"
+                                invisible="paidstatus_count == 0"
+                                type="object">
+                            <field name="paidstatus_count" string="Payment Status" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_stat_button" groups="stock.group_stock_user" icon="fa-sticky-note" invisible="stock_location_id == False" name="action_view_quants" string="Inv. Value" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="inventory_valuation" options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Inv. Value
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" groups="stock.group_stock_user" icon="fa-share" invisible="stock_location_id == False" name="action_view_outgoings" string="Outgoing" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="outgoing_val" options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Outgoing
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-sticky-note" name="action_view_tasks" string="Tasks" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="task_done_count" nolabel="1" widget="statinfo"/><field name="count_tasks" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Tasks
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-bug"
+                                name="action_view_tickets" string="Tickets" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="count_tickets" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Tickets
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" groups="base_bim_2.group_user_bim"
+                                invisible="checklist_count == 0"
+                                icon="fa-check" name="action_view_checklist" string="Checklists" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="checklist_count" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Checklists
+                                </span>
+                            </div>
+                        </button>
+
+                        <button class="oe_stat_button" groups="base_bim_2.group_user_bim" icon="fa-dollar"
+                                name="action_view_incomes" string="Incomes"
+                                invisible="incomes_value == 0"
+                                type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="incomes_value" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Incomes
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" groups="base_bim_2.group_user_bim" icon="fa-pencil"
+                                name="action_view_expenses"
+                                string="Expenses"
+                                invisible="expenses_value == 0"
+                                type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="expenses_value" nolabel="1" widget="statinfo"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Expenses
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" groups="base_bim_2.group_manager_bim" icon="fa-book"
+                                invisible="opening_balance_total == 0"
+                                name="action_view_opening_balance" string="Opening Balance" type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="opening_balance_total" nolabel="1" widget="monetary"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Opening Balance
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" groups="base_bim_2.group_manager_bim" icon="fa-check-circle"
+                                name="action_view_quality_control_plan" string="Quality Control"
+                                invisible="quality_control_plan_count == 0"
+                                type="object">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="quality_control_plan_count" nolabel="1"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Quality Control
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <field invisible="True" name="id"/>
+                    <field invisible="True" name="active"/>
+                    <field invisible="True" name="analytic_created"/>
+                    <field invisible="True" name="in_invoice_count"/>
+                    <field invisible="True" name="out_invoice_count"/>
+                    <field class="oe_avatar" name="image_1920" options='{"preview_image": "image_128"}' widget="image"/>
+                    <field invisible="True" name="edit_code_project"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="edit_code_project == False"/>
+                        </h1>
+                    </div>
+                    <group col="3">
+                        <group string="Main Data">
+                            <field name="nombre" required="1"/>
+                            <field name="customer_id" required="1"/>
+                            <field domain="['|', ('parent_id', '=', customer_id), ('id', '=', customer_id)]" name="contact_id"/>
+
+                            <field name="customer_ids"
+                                   widget="many2many_tags"
+                                   readonly="1"
+                                   invisible="customer_ids == False"/>
+
+                            <field name="framework_contract_id"/>
+                            <field name="contractor_id"
+                                   string="Contratista"/>
+
+                            <field name="c_classification" optional="show"/>
+                            <field invisible="True" name="department_required"/>
+                            <field name="department_id" options='{"no_create": 1}'
+                                   required="department_required == True"/>
+                            <field name="street_id" options='{"no_create": 1}'/>
+
+                        </group>
+                        <group string="Secondary Data">
+                            <field name="favorite"/>
+                            <field name="parent_id" options="{'no_create_edit': True}"/>
+                            <field name="retention"/>
+                            <field invisible="0" name="currency_id"/>
+                            <field name="surface"/>
+                            <field name="balace_surface"/>
+                            <field invisible="True" name="project_state"/>
+                            <field name="offer_delivered_project"/>
+                            <field name="create_purchase_order" invisible="1"/>
+                            <field name="main_bim_budget_id"
+                                   domain="[('project_id', '=', id)]"
+                            />
+                        </group>
+                        <group string="User Data">
+                            <field name="user_id" required="1"/>
+                            <field name="project_user_id"/>
+                            <field name="sale_user_id"/>
+                            <field name="execution_manager"/>
+                            <field name="tag_ids" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags" widget="many2many_tags"/>
+                            <field name="priority"/>
+                            <field name="include_in_attendance" invisible="1"/>
+                            <field groups="base.group_multi_company" name="company_id"/>
+                            <field invisible="True" name="company_id"/>
+                        </group>
+                    </group>
+                    <group col="3">
+                        <group name="tender_data" string="Tender Data">
+                            <field name="expedient"/>
+                            <field name="adjudication_date"/>
+                            <field name="amount_tender"/>
+                            <field name="amount_award"/>
+                        </group>
+                        <group name="project_dates" string="Dates">
+                            <field name="date_contract"/>
+                            <field name="real_date_contract"/>
+                            <field name="date_ini" required="1"/>
+                            <field name="date_ini_real"/>
+                            <field name="date_end"/>
+                            <field name="date_end_real"/>
+                            <field name="warranty_end_date"/>
+                        </group>
+                            <group string="Costs" name="project_costs">
+                            <field name="balance"/>
+                            <field name="sale_total_project_cost" />
+                            <field name="total_project_cost" />
+                            <field name="project_profit" />
+                            <field name="project_margin"/>
+                            <field name="budgeted_hours" readonly="1" />
+                            <field name="real_hours" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <div class="text-muted pb-3">
+                                Project annotations
+                            </div>
+                            <field name="obs" widget="html"/>
+                        </page>
+                        <page string="Stock">
+                            <div class="text-muted pb-3">
+                                Configuration of project inventory management parameters
+                            </div>
+                            <group>
+                                <group>
+                                    <field domain="[                                                     ('company_id', '=', company_id)                                                     ]" invisible="0" name="warehouse_id"/>
+                                    <field domain="[                                                     ('usage','=','internal'),                                                     ('company_id', '=', company_id),                                                     ('warehouse_id', '=', warehouse_id)                                                     ]" invisible="warehouse_id == False" name="stock_location_id" options='{"no_create": 1}'/>
+                                </group>
+                                <group>
+                                    <field name="user_id" options='{"no_create": 1}' required="1"/>
+                                </group>
+                            </group>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button confirm="¿You are sure to create a winery for this work?" icon="fa-home" invisible="warehouse_id != False" name="create_warehouse" string="Warehouse" type="object"/>
+                                </div>
+                                <div class="col-6">
+                                    <button groups="stock.group_stock_user" icon="fa-arrows" name="%(base_bim_2.action_liquidate_stock)d" string="Liquidate Stock" type="action"/>
+                                </div>
+                            </div>
+                        </page>
+
+                        <page string="Purchase">
+                            <div class="text-muted pb-3">
+                                Configuration of project purchase management parameters
+                            </div>
+                            <group>
+                                <group>
+                                    <field name="requisition_user_ids"
+                                           widget="many2many_tags"/>
+                                </group>
+                                <group>
+                                </group>
+                             </group>
+                        </page>
+
+
+                        <page string="Accounting">
+                            <div class="text-muted pb-3">
+                                Configuration of project accounting management parameters
+                            </div>
+                            <group>
+                                <group>
+                                    <field name="paidstate_product" options='{"no_create": 1}'/>
+                                    <field name="retention_product" options='{"no_create": 1}'/>
+                                    <field invisible="True" name="use_cost_list"/>
+                                    <field name="cost_list_id" options='{"no_create": 1}'/>
+                                </group>
+                                <group>
+                                    <field name="customer_payment_mode_id" options='{"no_create": 1}'/>
+                                    <field name="invoice_address_id" options='{"no_create": 1}'/>
+                                    <field force_save="1" name="analytic_id" options='{"no_create": 1}'/>
+                                    <field name="update_date_all" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Agreed Prices">
+                            <group>
+                                <group>
+                                    <field
+                                            domain="[('project_id', '=', id)]"
+                                            name="search_bim_budget_id"/>
+                                </group>
+                                <group>
+                                    <button name="action_load_agreed_prices"
+                                            confirm="¿You are sure to load the agreed prices?"
+                                            string="Load" type="object"/>
+                                </group>
+                            </group>
+
+                            <field name="price_agreed_ids"><list editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Add a product"/>
+                                    </control>
+                                    <field name="product_id" required="1"/>
+                                    <field name="price_agreed" required="1"/>
+                                </list></field>
+                        </page>
+
+                        <page string="Parameters">
+                            <field name="parameter_ids">
+                                <list editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="value" required="1"/>
+                                    <field name="obs"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Sales">
+                            <div class="row pb-3">
+                                <div class="text-muted pb-3 col-10">
+                                    List of project's incomes
+                                </div>
+                                <div class="col-2">
+                                    <button class="btn-primary mt-2" name="update_sale_project_cost" string="Update Sales" type="object"/>
+                                </div>
+                            </div>
+                            <field name="sale_project_cost_ids" readonly="1">
+                                <list>
+                                    <field optional="hide" name="project_id"/>
+                                    <field name="type"/>
+                                    <field optional="hide" name="currency_id"/>
+                                    <field name="amount" sum="Total"/>
+                                </list></field>
+                        </page>
+                        <page groups="base_bim_2.group_manager_bim,base_bim_2.group_see_cost_bim"
+                              string="Project Cost">
+                            <div class="row pb-3 text-right">
+                                <div class="text-muted pb-3 col-10">
+                                    List of project's costs
+                                </div>
+                                <div class="col-2">
+                                    <button class="btn-primary mt-2" name="update_project_cost" string="Update Project Cost" type="object"/>
+                                </div>
+                            </div>
+                            <field name="project_cost_ids" readonly="1">
+                                <list>
+                                    <field optional="hide" name="project_id"/>
+                                    <field name="type"/>
+                                    <field optional="hide" name="currency_id"/>
+                                    <field name="amount" sum="sum"/>
+                                </list></field>
+                            <group col="6" name="note_group">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                    <field name="balance" options="{'currency_field': 'currency_id'}" string="Total Accepted Budget" widget="monetary"/>
+                                    <field name="total_project_cost" options="{'currency_field': 'currency_id'}" string="Total Spent" widget="monetary"/>
+                                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                        <label for="total_project_cost_difference"/>
+                                    </div>
+                                    <field class="oe_subtotal_footer_separator" name="total_project_cost_difference" nolabel="1" options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page groups="base_bim_2.group_manager_bim,base_bim_2.group_see_cost_bim"
+                              name="project_limit" string="Limits">
+                            <div class="text-muted pb-3">
+                                Analysis of resource purchase requests
+                            </div>
+                            <group>
+                                <button class="oe_highlight" name="action_load_recourse" string="Load" type="object"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="project_product_limited"/>
+                                    <button invisible="project_product_limited == False" name="get_project_material_total" string="Calculate Limits" type="object"/>
+                                </group>
+                                <group>
+                                    <field invisible="project_product_limited == False" name="product_percent_limit" required="project_product_limited == True" style="width: 20%;"/>
+                                    <field groups="base_bim_2.group_manager_bim,base_bim_2.group_bim_purchase_not_limit" name="limit_purchase"/>
+                                </group>
+                            </group>
+                            <field name="project_limit_ids" readonly="1">
+                                <list>
+                                    <field name="product_id" optional="show"/>
+                                    <field name="uom_id" optional="show"/>
+                                    <field name="budget_qty" optional="show" sum="sum"/>
+                                    <field name="limit_qty" optional="show" sum="sum"/>
+                                    <field name="requested_qty" optional="show" sum="sum"/>
+                                    <field optional="hide" name="material_ids" widget="many2many_tags"/>
+                                    <field optional="hide" name="service_ids" widget="many2many_tags"/>
+                                </list></field>
+                        </page>
+                        <page groups="base_bim_2.group_manager_bim" name="project_uom" string="UOM">
+                            <div class="text-muted pb-3">
+                                Analysis of uom of the project
+                            </div>
+                            <field name="project_uom_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="qty" sum="sum"/>
+                                </list></field>
+                        </page>
+
+                     <page name="contracted_coefficient" string="Contracted Coefficient">
+                         <group>
+
+                             <group>
+                                  <field name="contracted_sale"/>
+                                  <field name="contracted_cost"/>
+                                  <field name="contracted_coefficient"/>
+                                  <field name="expansion_contract"/>
+                                  <field name="pending_execution"/>
+                             </group>
+                             <group>
+                                    <field name="physical_advancement_m"/>
+                                    <field name="physical_advancement_v"/>
+                             </group>
+
+                         </group>
+                     </page>
+
+                     <page name="invoices" string="Facturación">
+                                <group>
+                                    <table border="1" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="2" style="padding: 8px;">FACTURACIÓN</th>
+                                                    <th colspan="3" style="padding: 8px;">
+                                                        <button name="action_update_invoice"
+                                                                class="btn btn-primary"
+                                                                string="Actualizar"
+                                                                icon="fa-refresh"
+                                                                type="object"/>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="padding: 8px;">FACTURAS NETO</th>
+                                                    <th style="padding: 8px;">FACTURAS BRUTO</th>
+                                                    <th style="padding: 8px;">PAGOS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 8px;">VENTAS</td>
+                                                    <td style="padding: 8px;"><field name="total_purchase_in_invoice" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="total_purchase_in_invoice_bruto" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="total_sale_payments" readonly="1"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px;">COMPRAS</td>
+                                                    <td style="padding: 8px;"><field name="total_purchase_invoice" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="total_purchase_invoice_bruto" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="total_purchase_payments" readonly="1"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px;">BENEFICIO</td>
+                                                    <td style="padding: 8px;"><field name="total_benif_neto" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="total_benif_bruto" readonly="1"/></td>
+                                                    <td style="padding: 8px;"><field name="total_benif_payment" readonly="1"/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                </group>
+                            </page>
+
+                            <page string="Datos Iniciales">
+                                <group>
+                                    <group>
+                                        <field name="initial_sale"/>
+                                        <field name="initial_coste"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </page>
+
+
+                    </notebook>
+                    <field class="pt-3" name="notes" nolabel="1" placeholder="Observations..." type="html"/>
+                </sheet>
+                <chatter/>
+            </form></field>
+    </record>
+    <record id="view_tree_bim_project" model="ir.ui.view">
+        <field name="name">view.tree.bim.project</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field optional="hide" name="active"/>
+                <field name="nombre"/>
+                <field name="company_id" optional="hide"/>
+                <field name="tag_ids" optional="hide"/>
+                <field name="department_id" optional="show"/>
+                <field name="project_user_id" optional="hide"/>
+                <field name="real_date_contract" optional="hide"/>
+                <field name="offer_delivered_project" optional="hide" string="Entregado"/>
+                <field name="customer_id" optional="show" widget="many2one_avatar"/>
+                <field name="customer_ids" optional="hide"/>
+                <field name="framework_contract_id" optional="hide"/>
+                <field name="contractor_id" optional="hide" string="Contratista"/>
+                <field name="priority" optional="hide"/>
+                <field name="date_contract" optional="hide"/>
+                <field name="c_classification" optional="hide"/>
+                <field name="parent_id" optional="hide"/>
+                <field name="favorite" optional="hide"/>
+                <field name="customer_payment_mode_id" optional="hide"/>
+                <field name="execution_manager" optional="hide"/>
+                <field name="contact_id" optional="hide"/>
+                <field name="street_id" optional="hide"/>
+                <field name="expansion_contract" optional="hide"/>
+                <field name="pending_execution" optional="hide"/>
+                <field name="physical_advancement_m" optional="hide"/>
+                <field name="physical_advancement_v" optional="hide"/>
+                <field name="user_id" optional="show" widget="many2one_avatar_user"/>
+                <field name="count_pending_tasks" optional="hide"/>
+                <field name="date_ini" optional="hide"/>
+                <field name="date_end" optional="hide"/>
+                <field name="project_state" optional="hide"/>
+                <field name="surface" optional="hide" sum="hide"/>
+
+                <field name="balance" optional="show" sum="Total"/>
+                <field name="currency_id" optional="show"/>
+
+                <field groups="base_bim_2.group_manager_bim" name="sale_total_project_cost" optional="show" sum="Total"/>
+                <field groups="base_bim_2.group_manager_bim" name="total_project_cost" optional="show" sum="Total"/>
+
+
+                <field groups="base_bim_2.group_manager_bim" name="project_profit" optional="show" sum="Total"/>
+                <field groups="base_bim_2.group_manager_bim" name="project_margin" optional="hide"/>
+
+
+                <field groups="base_bim_2.group_manager_bim" name="contracted_sale" optional="hide"/>
+                <field groups="base_bim_2.group_manager_bim" name="contracted_cost" optional="hide"/>
+                <field name="main_bim_budget_id" optional="hide"/>
+
+
+                <field groups="base_bim_2.group_manager_bim" name="contracted_coefficient" optional="hide"/>
+                <field name="initial_sale" optional="hide"/>
+                <field name="initial_coste" optional="hide"/>
+
+                <field name="budgeted_hours"  groups="base_bim_2.group_manager_bim" optional="hide"/>
+                <field name="real_hours"  groups="base_bim_2.group_manager_bim" optional="hide"/>
+
+                <field name="update_date_all" optional="hide"/>
+                <field name="warranty_end_date" optional="hide"/>
+                <field name="state_id" widget="badge"/>
+            </list></field>
+    </record>
+    <record id="view_kanban_bim_project" model="ir.ui.view">
+        <field name="name">Project</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <kanban archivable="false">
+                <field name="id"/>
+                <field name="image_128"/>
+                <field name="customer_id"/>
+                <field name="color"/>
+                <field name="tag_ids"/>
+                <field name="budget_count"/>
+                <field name="paidstatus_count"/>
+                <field name="in_invoice_count"/>
+                <field name="out_invoice_count"/>
+                <field name="favorite"/>
+                <field name="project_profit"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click" style="position:relative;">
+                            <t t-if="record.favorite.raw_value">
+                                <span style="position:absolute; top:8px; right:10px; font-size:14px; line-height:1;" title="Favorito">&#11088;</span>
+                            </t>
+                            <div style="display:flex; flex-direction:row; align-items:flex-start; width:100%;">
+                            <div style="flex:0 0 70px; width:70px; display:flex; flex-direction:column; align-items:center; padding:5px 4px; gap:4px;">
+                                <img class="o_image_48_contain" t-att-alt="record.name.value" t-attf-src="/web/image/bim.project/#{record.id.raw_value}/image_128" style="width:48px; height:48px; object-fit:contain;"/>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; width:100%;">
+                                    <div t-attf-style="background:#{record.budget_count.value > 0 ? '#dbeafe' : '#f1f5f9'}; border-radius:3px; text-align:center; padding:2px 1px;">
+                                        <div t-attf-style="font-size:11px; font-weight:700; color:#{record.budget_count.value > 0 ? '#1d4ed8' : '#94a3b8'}; line-height:1.2;"><t t-esc="record.budget_count.value"/></div>
+                                        <div style="font-size:8px; color:#555; line-height:1;">Pres.</div>
+                                    </div>
+                                    <div t-attf-style="background:#{record.paidstatus_count.value > 0 ? '#dcfce7' : '#f1f5f9'}; border-radius:3px; text-align:center; padding:2px 1px;">
+                                        <div t-attf-style="font-size:11px; font-weight:700; color:#{record.paidstatus_count.value > 0 ? '#15803d' : '#94a3b8'}; line-height:1.2;"><t t-esc="record.paidstatus_count.value"/></div>
+                                        <div style="font-size:8px; color:#555; line-height:1;">Cert.</div>
+                                    </div>
+                                    <div t-attf-style="background:#{record.in_invoice_count.value > 0 ? '#ffedd5' : '#f1f5f9'}; border-radius:3px; text-align:center; padding:2px 1px;">
+                                        <div t-attf-style="font-size:11px; font-weight:700; color:#{record.in_invoice_count.value > 0 ? '#c2410c' : '#94a3b8'}; line-height:1.2;"><t t-esc="record.in_invoice_count.value"/></div>
+                                        <div style="font-size:8px; color:#555; line-height:1;">F.C.</div>
+                                    </div>
+                                    <div t-attf-style="background:#{record.out_invoice_count.value > 0 ? '#fce7f3' : '#f1f5f9'}; border-radius:3px; text-align:center; padding:2px 1px;">
+                                        <div t-attf-style="font-size:11px; font-weight:700; color:#{record.out_invoice_count.value > 0 ? '#9d174d' : '#94a3b8'}; line-height:1.2;"><t t-esc="record.out_invoice_count.value"/></div>
+                                        <div style="font-size:8px; color:#555; line-height:1;">F.V.</div>
+                                    </div>
+                                </div>
+                                <div t-if="record.tag_ids.raw_value and record.tag_ids.raw_value.length > 0" style="width:100%; margin-top:2px;">
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" readonly="1"/>
+                                </div>
+                            </div>
+                            <div style="flex:1; min-width:0; overflow:hidden; padding:4px 8px 4px 4px;">
+                                <span style="display:block; font-size:16px; font-weight:700; color:#374151; letter-spacing:0.5px;">
+                                    <field name="name"/>
+                                </span>
+                                <strong>
+                                    <field name="nombre"/>
+                                </strong>
+                                <ul style="list-style:none; margin:0; padding:0;">
+                                    <li>
+                                        <strong>
+                                            Customer:
+                                        </strong>
+                                        <field name="customer_id"/>
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            Supervisor:
+                                        </strong>
+                                        <field name="user_id"/>
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            Importe:
+                                        </strong>
+                                        <field name="balance"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </li>
+                                    <li>
+                                        <strong>
+                                            Estado:
+                                        </strong>
+                                        <field name="state_id"/>
+                                    </li>
+                                </ul>
+                            </div>
+                            </div><!-- end flex row -->
+                            <t t-if="record.customer_id.raw_value">
+                                <div style="position:absolute; bottom:6px; right:6px;">
+                                    <img t-attf-src="/web/image/res.partner/{{ record.customer_id.raw_value }}/avatar_128"
+                                         t-att-title="record.customer_id.value"
+                                         t-att-alt="record.customer_id.value"
+                                     style="width:22px; height:22px; border-radius:3px; object-fit:cover; border:1px solid #d1d5db; background:#f3f4f6;"/>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </templates>
+            </kanban></field>
+    </record>
+    <record id="view_search_bim_project" model="ir.ui.view">
+        <field name="name">view.search.bim.project</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="nombre"/>
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="user_id"/>
+                <field name="customer_id"/>
+                <field name="tag_ids"/>
+                <field name="date_ini"/>
+                <group expand="0" string="Group By">
+                    <filter context="{'group_by': 'customer_id'}" name="group_customer" string="Customer"/>
+                    <filter context="{'group_by': 'department_id'}" name="group_department" string="Department"/>
+                    <filter context="{'group_by': 'user_id'}" name="group_user" string="Supervisor"/>
+                    <filter context="{'group_by': 'date_ini'}" domain="[]" help="Journal Entries by Date" name="by_date" string="Date"/>
+                </group>
+                <filter domain="[('user_id', '=', uid)]" help="My Projects" name="assigned_to_me" string="My Projects"/>
+                <separator/>
+            </search></field>
+    </record>
+    <record id="bim_project_view_pivot" model="ir.ui.view">
+        <field name="name">bim.project.view.pivot</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <pivot string="Project Analysis">
+                <field interval="month" name="date_ini" type="row"/>
+                <field name="state_id" type="col"/>
+                <field name="balance" type="measure"/>
+            </pivot></field>
+    </record>
+    <record id="action_bim_proect" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">bim.project</field>
+        <field name="view_mode">kanban,list,graph,pivot,form,activity</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="base_bim_2.view_search_bim_project"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Project!
+            </p></field>
+    </record>
+    <record id="bim_project_view_graph" model="ir.ui.view">
+        <field name="name">bim.project.view.graph</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <graph string="Projects">
+                <field name="state_id" type="col"/>
+                <field name="user_id" type="row"/>
+            </graph></field>
+    </record>
+    <menuitem action="action_bim_proect" id="menu_bim_projects" name="Projects" parent="submenu_bim_project" sequence="1"/>
+    <record id="view_bim_tag_tree" model="ir.ui.view">
+        <field name="name">view.bim.tag.tree</field>
+        <field name="model">bim.tag</field>
+        <field name="arch" type="xml">
+            <list editable="top">
+                <field name="name"/>
+                <field name="color"/>
+                <field name="active"/>
+            </list></field>
+    </record>
+    <record id="action_bim_tag_view" model="ir.actions.act_window">
+        <field name="name">Project Tags</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bim.tag</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Project Tag!
+            </p></field>
+    </record>
+
+    <record id="update_account_move_margin" model="ir.actions.server">
+            <field name="name">UPD</field>
+            <field name="model_id" ref="base_bim_2.model_bim_project"/>
+            <field name="binding_model_id" ref="base_bim_2.model_bim_project"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+            if records:
+                res = records.action_upd_all()
+            </field>
+    </record>
+
+
+    <menuitem action="action_bim_tag_view" id="menu_bim_tag_action" name="Project Tags" parent="base_bim_2.menu_tags_categ" sequence="1"/>
+
+
+
+</odoo>

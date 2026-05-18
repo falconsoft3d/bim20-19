@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_attribute" model="ir.ui.view">
+        <field name="name">view.form.bim.attribute</field>
+        <field name="model">bim.attribute</field>
+        <field name="arch" type="xml">
+            <form string="Attribute">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="show"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+
+                    <field name="active" invisible="True"/>
+                    <speparator string="Values"/>
+                        <field name="value_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="name"/>
+                            </list>
+                        </field>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_attribute" model="ir.ui.view">
+        <field name="name">view.tree.bim.attribute</field>
+        <field name="model">bim.attribute</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="parent_id"/>
+                <field name="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_attribute" model="ir.actions.act_window">
+        <field name="name">BIM Atrributes</field>
+        <field name="res_model">bim.attribute</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new BIM Attribute!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_bim_attribute"
+        name="BIM Attributes"
+        parent="base_bim_2.menu_bim_concept_templates"
+        action="action_bim_attribute"
+        sequence="13" />
+    </data>
+
+</odoo>

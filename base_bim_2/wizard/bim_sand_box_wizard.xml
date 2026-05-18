@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_sand_box_wizard_form" model="ir.ui.view">
+        <field name="name">bim.sand.box.wizard.form</field>
+        <field name="model">bim.sand.box</field>
+        <field name="arch" type="xml">
+            <form string="Bim Sand Box">
+                <group name="main">
+                    <group name="left">
+                        <field name="project_id"/>
+                        <field name="type"/>
+                        <field name="update_budget"/>
+                    </group>
+                    <group>
+                        <field name="number"/>
+                        <field name="quantity"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Create Budget"
+                            name="create_budget"  type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="bim_sand_box_action" model="ir.actions.act_window">
+        <field name="name">Bim Sand Box</field>
+        <field name="res_model">bim.sand.box</field>
+        <field name="view_mode">form</field>
+       <field name="target">new</field>
+    </record>
+
+</odoo>

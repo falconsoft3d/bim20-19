@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_diary_part" model="ir.ui.view">
+        <field name="name">view.form.diary.part</field>
+        <field name="model">diary.part</field>
+        <field name="arch" type="xml">
+            <form string="Diary Part">
+                <header>
+
+                    <button class="oe_highlight" invisible="not state in ('draft', 'review')"
+                            name="to_loaded"
+                            string="To Loaded" type="object"/>
+
+                    <button  invisible="state != 'draft'"
+                            name="to_dont_work" string="Dont Work" type="object"/>
+
+                    <button class="oe_highlight" invisible="state != 'loaded'"
+                            name="approve"
+                            string="Approve" type="object"/>
+
+                    <button class="oe_highlight" invisible="state != 'approved'"
+                            name="exe_done" string="To Done" type="object"/>
+
+                    <button invisible="state == 'done'"
+                            name="search_hours" string="Search Hours" type="object"/>
+
+                    <button invisible="state == 'draft'"
+                            name="exe_draft" string="To Draft" type="object"/>
+
+                    <button invisible="state == 'review'"
+                            name="exe_review" string="To Review" type="object"/>
+
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name" />
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                            <field name="project_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+                             <field name="budget_id"
+                                   domain="[('project_id', '=', project_id)]"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+
+                             <field name="bim_resource_template_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+                              <field name="hr_employee_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+                              <field name="sup_hr_employee_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+                              <field name="superintendent_hr_employee_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+                              <field name="employee_discipline_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+
+                              <field name="employee_area_id"
+                                   options="{'no_create': True, 'no_edit': True}"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+
+                            <field name="daily_part_liquidation_id"
+                                   invisible="daily_part_liquidation_id == False"
+                                   readonly="1"/>
+
+                            <field name="hh"/>
+                            <field name="hhr"/>
+
+                            <field name="amount_total"/>
+                            <field name="url"
+                                   widget="url" readonly="1"/>
+                             <button name="%(action_diary_part_wizard)d"
+                                     icon="fa-plus"
+                                     invisible="state != 'draft'"
+                                     string="Add"
+                                     type="action"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                      <page name="lines_ids" string="Employee Lines">
+                            <field name="employee_lines_ids"
+                                   readonly="state != 'draft'"
+                                   widget="one2many_list"
+                                   >
+                                <list editable="bottom"
+                                      decoration-danger="hh != hhr"
+                                      decoration-muted="hh == 0">
+                                    <field name="hr_employee_id" optional="show" widget="many2onebutton" options='{"no_create": true}'/>
+                                    <field name="project_id" optional="hide"/>
+                                    <field name="main_code" optional="hide"/>
+                                    <field name="code_bim" optional="hide"/>
+                                    <field name="budget_id" optional="hide"/>
+                                    <field name="bim_concept_id"
+                                           domain="[('budget_id', '=', budget_id), ('type', 'in', ['departure'])]"
+                                           optional="show" widget="many2onebutton" options='{"no_create": true}'/>
+                                    <field name="bim_pcp_id" optional="show" widget="many2onebutton" options='{"no_create": true}'/>
+                                    <field name="hh" optional="show" sum="sum"/>
+                                    <field name="hhr" optional="show" sum="sum"/>
+                                    <field name="bonus_hours" optional="hide" sum="hide"/>
+                                </list>
+                            </field>
+                        </page>
+
+
+
+
+                        <page name="lines_ids" string="Equipments">
+                            <field name="equip_ids" readonly="state != 'draft'" widget="one2many_list">
+                                <list editable="bottom">
+
+                                    <field name="fleet_vehicle_id"
+                                           optional="show" widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="product_id"
+                                           domain="[('resource_type', '=', 'Q')]"
+                                           optional="show" widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="ref" optional="show"/>
+
+                                    <field name="bim_pcp_id" optional="show" options='{"no_create": true}'/>
+
+                                     <field name="budget_id"
+                                            optional="hide"
+                                            widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="bim_concept_id"
+                                            optional="show"
+                                            domain="[('budget_id', '=', budget_id), ('type', 'in', ['departure'])]"
+                                            widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="qty" optional="show" sum="sum"/>
+                                </list>
+                            </field>
+                        </page>
+
+
+                      <page name="lines of advance" string="Lines of Advance">
+                            <field name="lines_ids"
+                                   readonly="state != 'draft'"
+                                   widget="one2many_list">
+
+                                <list editable="bottom">
+
+                                    <field name="budget_id"
+                                            optional="hide"
+                                            widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="concepts_id"
+                                            optional="hide"
+                                            domain="[('budget_id', '=', budget_id), ('type', 'in', ['departure'])]"
+                                            widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="bim_pcp_id"
+                                            optional="show"
+                                            widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="work_breakdown_id"
+                                            optional="hide"
+                                            domain="[('bim_pcp_id', '=', bim_pcp_id)]"
+                                            widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="bim_element_id"
+                                            optional="hide"
+                                            widget="many2onebutton" options='{"no_create": true}'/>
+
+                                    <field name="status"
+                                           optional="show"
+                                           sum="sum"/>
+
+                                    <field name="qty"
+                                           optional="show"
+                                           sum="sum"/>
+
+                                    <field name="ipr"
+                                           optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+
+
+                        <page name="Lost Hours" string="Lost Hours">
+                            <field name="lost_hour_ids"
+                                   widget="one2many_list">
+                                <list editable="bottom">
+                                    <field name="date" readonly="1" optional="hide"/>
+                                    <field name="description" optional="show"/>
+                                    <field name="cause_lost_hour_id" optional="show"/>
+                                    <field name="quantity" optional="show" sum="sum"/>
+                                    <field name="validate" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+
+
+                      <page string="Text">
+                           <field name="observation" placeholder="Observation..."/>
+                      </page>
+
+
+                      <page name="lines_sum_ids" string="Employee Sum">
+                            <field name="employee_lines_sum_ids" readonly="state != 'draft'" widget="one2many_list">
+                                <list editable="bottom">
+                                    <field name="hr_employee_id" optional="show" widget="many2onebutton" options='{"no_create": true}'/>
+                                    <field name="hh" optional="show" sum="sum"/>
+                                    <field name="hhr" optional="show" sum="sum"/>
+                                    <field name="bonus_hours" optional="show" sum="hide"/>
+                                </list>
+                            </field>
+                      </page>
+
+                      <page string="Other">
+                          <group>
+                              <group>
+                                    <field name="bim_pcp_ids" widget="many2many_tags" options='{"no_create": true}'/>
+                               </group>
+                              <group>
+                                  <field name="key"/>
+                                  <field name="work_order"/>
+                                  <field name="begin_date" readonly="state != 'draft'"/>
+                                  <field name="end_date" readonly="state != 'draft'"/>
+                                  <field name="user_id" options="{'no_create': True, 'no_edit': True}"
+                                           readonly="state != 'draft'"/>
+                                  <field name="company_id" options="{'no_create': True, 'no_edit': True}"
+                                           readonly="state != 'draft'"/>
+                               </group>
+                          </group>
+                      </page>
+
+
+
+                    </notebook>
+
+
+                 </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_diary_part" model="ir.ui.view">
+        <field name="name">view.tree.diary.part</field>
+        <field name="model">diary.part</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id" optional="show"/>
+                <field name="budget_id" optional="hide"/>
+                <field name="bim_resource_template_id" optional="show"/>
+
+                <field name="hr_employee_id" optional="show"/>
+                <field name="sup_hr_employee_id" optional="show"/>
+                <field name="superintendent_hr_employee_id" optional="show"/>
+
+                <field name="daily_part_liquidation_id" optional="hide"/>
+                <field name="user_id" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+                <field name="date" optional="show"/>
+                <field name="begin_date" optional="hide"/>
+                <field name="end_date" optional="hide"/>
+                <field name="hh" optional="show" sum="sum"/>
+                <field name="hhr" optional="show" sum="sum"/>
+                <field name="amount_total" sum="sum"/>
+                <field name="state"
+                           widget="badge"
+                           decoration-success="state == 'done'" decoration-warning="state == 'loaded'"
+                           decoration-info="state == 'dont_work'" decoration-danger="state == 'draft'"
+                           optional="show"/>
+            </list>
+        </field>
+    </record>
+
+
+
+    <record id="action_diary_part" model="ir.actions.act_window">
+        <field name="name">Diary Part</field>
+        <field name="res_model">diary.part</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Diary Part!
+            </p>
+        </field>
+    </record>
+
+
+
+    <record id="view_tree_diary_part_e_lines" model="ir.ui.view">
+        <field name="name">view.diary.part.e.lines</field>
+        <field name="model">diary.part.employee.lines</field>
+        <field name="arch" type="xml">
+            <list create="false"
+                  decoration-danger="hh != hhr"
+                  delete="false" edit="false">
+                <field name="id" string="id" optional="show"/>
+                <field name="part_id"  optional="show"/>
+                <field name="hr_employee_id"  optional="show"/>
+                <field name="date" optional="show"/>
+                <field name="main_code" optional="show"/>
+                <field name="code_bim" optional="show"/>
+                <field name="hh" sum="sum" optional="show"/>
+                <field name="hhr" sum="sum" optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="work_order" optional="show"/>
+                <field name="bim_pcp_id" optional="show"/>
+                <field name="bim_resource_template_id" optional="show"/>
+                <field name="employee_shift_id" optional="show"/>
+                <field name="employee_category_id" optional="show"/>
+                <field name="employee_specialty_id" optional="show"/>
+                <field name="employee_location_id" optional="show"/>
+                <field name="type_d" optional="show"/>
+                <field name="employee_bim_payroll_id" optional="show"/>
+                <field name="wek_number" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_diary_part_e_line" model="ir.actions.act_window">
+        <field name="name">Diary Part Lines</field>
+        <field name="res_model">diary.part.employee.lines</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new Diary Part Lines!
+            </p>
+        </field>
+    </record>
+
+
+
+
+    </data>
+</odoo>

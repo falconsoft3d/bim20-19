@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="bim_purchase_report_view_form" model="ir.ui.view">
+            <field name="name">bim.purchase.report.view.form</field>
+            <field name="model">bim.purchase.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button class="btn btn-primary"
+                                name="calc" string="Calcular" type="object"/>
+                    </header>
+
+                    <div class="alert alert-danger" role="alert" invisible="not r_purchase_ids">
+                        ERROR - Hay compras que tienen Líneas repitiendo el mismo producto.
+                    </div>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="purchase_ids" widget="many2many_tags"/>
+                                <field name="company_id" readonly="True"/>
+                            </group>
+                            <group>
+                                <field name="user_id" readonly="True"/>
+                                <field name="r_purchase_ids"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="lines" string="Lines">
+                                <field name="line_ids">
+                                    <list editable="bottom">
+                                        <field name="purchase_id" optional="show"/>
+                                        <field name="oc_date" optional="show"/>
+                                        <field name="state" optional="show"/>
+                                        <field name="partner_id" optional="show"/>
+                                        <field name="product_id" optional="show"/>
+                                        <field name="resource_type" optional="show"/>
+                                        <field name="concept_phase_id" optional="show"/>
+                                        <field name="currency_id" optional="show"/>
+                                        <field name="undm" optional="show"/>
+                                        <field name="qty" optional="show" sum="sum"/>
+                                        <field name="price_unit" optional="show" widget="monetary"/>
+                                        <field name="subtotal" optional="show" sum="sum" widget="monetary"/>
+                                        <field name="numer_stock_picking" optional="show"/>
+                                        <field name="begin_date" optional="show"/>
+                                        <field name="end_date" optional="show"/>
+                                        <field name="schedule_date" optional="show"/>
+                                        <field name="number_valuation" optional="show"/>
+                                        <field name="number_confim" optional="show"/>
+                                        <field name="qty_valoration" optional="show" sum="sum"/>
+                                        <field name="price_valoration" optional="show" widget="monetary"/>
+                                        <field name="val_subtotal" optional="show" sum="sum" widget="monetary"/>
+                                        <field name="qty_saldo" optional="show" sum="sum"/>
+                                        <field name="price_saldo" optional="show" widget="monetary"/>
+                                        <field name="total_saldo" optional="show" widget="monetary"/>
+                                        <field name="qty_invoiced"
+                                               sum="sum"
+                                               optional="show"/>
+                                        <field name="price_invoiced"
+                                               optional="show" widget="monetary"/>
+                                         <field name="subtotal_invoiced"
+                                                sum="sum"
+                                                optional="show" widget="monetary"/>
+                                         <field name="tc" optional="show"/>
+                                        <field name="closed_valuation" optional="show"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="bim_purchase_report_view_tree" model="ir.ui.view">
+            <field name="name">bim.purchase.report.view.tree</field>
+            <field name="model">bim.purchase.report</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list></field>
+        </record>
+
+
+        <record id="action_bim_purchase_report_orders" model="ir.actions.act_window">
+            <field name="name">Bim Purchase Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.purchase.report</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

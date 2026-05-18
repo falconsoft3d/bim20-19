@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/div[@name='button_box']/button[@name='action_view_picking']" position="after">
+                    <button class="oe_stat_button" icon="fa-file"
+                            invisible="state == 'draft'"
+                            groups="base_bim_2.group_bim_valuation"
+                            type="object" name="action_view_purchase_valuation">
+                      <field widget="statinfo" name="purchase_valuation_count" string="Purchase Valuation"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='products']/field[@name='order_line']/list[1]/button[@name='action_product_forecast_report']" position="after">
+                    <field optional="hide" name="concept_phase_id" options='{"no_create": 1}'/>
+                    <field optional="hide" name="qty_valoration" options='{"no_create": 1}'/>
+                    <field optional="hide" name="percent_val" options='{"no_create": 1}'/>
+                    <field optional="hide" name="total_saldo" options='{"no_create": 1}'/>
+                </xpath>
+
+                <field name="origin" position="after">
+                    <field name="project_id"
+                           domain="[('create_purchase_order', '=', True)]"
+                           options='{"no_create": 1}'/>
+                    <field name="budget_id" options='{"no_create": 1}'/>
+                    <field name="concept_id" options='{"no_create": 1}'/>
+                    <field name="closed_valuation" />
+                    <field name="margin" />
+                    <button name="action_margin_budget" type="object" string="Update Budget" />
+                </field>
+                <field name="picking_type_id" position="after">
+                    <field name="place_of_delivery_id" options='{"no_create": 1}'/>
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase_order_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_view_tree" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
+                    <field name="concept_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
+
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase_order_tree2" model="ir.ui.view">
+            <field name="name">purchase.order.tree2</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_kpis_tree" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
+                    <field name="concept_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
+                </field>
+
+
+
+            </field>
+        </record>
+
+
+        <record id="purchase_order_line_tree_bim_requisition" model="ir.ui.view">
+            <field name="name">purchase.order.line.tree.bim.requisition</field>
+            <field name="model">purchase.order.line</field>
+            <field name="inherit_id" ref="purchase_requisition.purchase_order_line_compare_tree" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="project_id" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="purchase_purchase_bim_history_tree" model="ir.ui.view">
+            <field name="name">purchase.purchase.bim.history.tree</field>
+            <field name="model">purchase.order.line</field>
+            <field name="inherit_id" ref="purchase.purchase_history_tree" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="project_id" widget="many2one"  optional="show"/>
+                </field>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

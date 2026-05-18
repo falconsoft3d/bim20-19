@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bim_budget_report_wizard_form" model="ir.ui.view">
+        <field name="name">bim.budget.report.wizard.form</field>
+        <field name="model">bim.budget.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget">
+                <group>
+                    <group>
+                        <field name="budget_id" invisible="True"/>
+                        <field name="project_id" invisible="True"/>
+                        <field name="display_type"
+                               required="1"
+                               widget="radio"/>
+                        <field name="see_total"/>
+                        <field name="summary_type"
+                               widget="radio"
+                               invisible="display_type in ['summary','compare','programming','analysis_ev','compare_detailed','r_departure_asset_discount','r_departure_list']"/>
+                        <field name="compare_type"
+                               widget="radio"
+                               invisible="display_type != 'compare'"/>
+                    </group>
+                    <group>
+                        <field name="type_price" widget="radio" />
+
+                        <field name="use_range"
+                               invisible="display_type not in ['r_departure_asset_discount']"/>
+
+                        <field name="range_from"
+                               invisible="use_range == False"/>
+
+                        <field name="range_to"
+                               invisible="use_range == False"/>
+
+                        <field name="bim_concepts_ids"
+                               widget="many2many_tags"
+                               invisible="1"/>
+
+                        <field name="total_type" widget="radio" invisible="display_type in ['analysis_ev','r_departure_asset_discount','r_departure_list']" readonly="filter_ok"/>
+                        <field name="show_cd"  invisible="display_type in ['analysis_ev','r_departure_asset_discount','r_departure_list']" readonly="filter_ok"/>
+
+
+                        <field name="notes_ok" invisible="display_type in ['analysis_ev','r_departure_asset_discount','r_departure_list']"/>
+                        <field name="ev" invisible="display_type in ['summary','detailed','full','compare','programming','r_departure_asset_discount','r_departure_list']"/>
+                        <field name="projection" invisible="display_type in ['summary','detailed','full','compare','programming','r_departure_asset_discount','r_departure_list']"/>
+                        <field name="show_amount_and_price" invisible="display_type in ['summary','compare','programming','analysis_ev','r_departure_asset_discount','r_departure_list']"/>
+                        <field name="filter_ok" invisible="display_type == 'summary' or summary_type == 'chapter' or resource_breakdown"/>
+                        <field name="filter_type" widget="radio" invisible="not filter_ok"/>
+                        <field name="space_ids" domain="[('budget_id', '=', budget_id)]" options="{'no_create_edit':True}" widget="many2many_tags"
+                               invisible="filter_type == 'object' or not filter_ok"
+                               required="filter_type == 'space' and filter_ok"/>
+                        <field name="object_ids" domain="[('project_id', '=', project_id)]" options="{'no_create_edit':True}" widget="many2many_tags"
+                               invisible="filter_type == 'space' or not filter_ok"
+                               required="filter_type == 'object' and filter_ok"/>
+                        <field name="text" invisible="display_type != 'full'"/>
+                        <field name="measures" invisible="display_type != 'full'"/>
+                        <field name="images" invisible="display_type != 'full'"/>
+                        <field name="resource_breakdown"
+                               invisible="display_type not in ('detailed','full') or summary_type == 'resource'"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="bim_parts" invisible="compare_type == 'departure'"/>
+                        <field name="bim_attendance" invisible="compare_type == 'departure'"/>
+                        <field name="bim_tools" invisible="compare_type == 'departure'"/>
+                    </group>
+                    <group>
+                        <field name="bim_invoices" invisible="compare_type == 'departure'"/>
+                        <field name="bim_picking_out" invisible="compare_type == 'departure'"/>
+                        <field name="bim_open_balance" invisible="compare_type == 'departure'"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Print" name="check_report" type="object" class="btn-primary"/>
+                    <button string="Print Excel" name="check_report_xls" type="object"
+                            class="btn-primary"
+                            invisible="display_type in ['programming', 'analysis_ev'] or compare_type != 'departure' or resource_breakdown"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="bim_budget_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Budget Report</field>
+        <field name="res_model">bim.budget.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_report_multiple_real_execution" model="ir.actions.report">
+        <field name="name">Budget Report</field>
+        <field name="model">bim.budget</field>
+        <field name="report_type">qweb-pdf</field>
+         <field name="report_name">base_bim_2.multiple_real_execute_report</field>
+        <field name="report_file">base_bim_2.multiple_real_execute_report</field>
+        <field name="print_report_name">'Finished products - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_bim_budget"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

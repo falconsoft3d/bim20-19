@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_real_estate_prototype" model="ir.ui.view">
+        <field name="name">view.form.real.estate.prototype</field>
+        <field name="model">real.estate.prototype</field>
+        <field name="arch" type="xml">
+            <form string="Real Estate Prototype" delete="0" >
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                            <field name="project_id"/>
+                            <field name="budget_id" domain="[('project_id','=',project_id)]" />
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_real_estate_prototype" model="ir.ui.view">
+        <field name="name">view.tree.real.estate.prototype</field>
+        <field name="model">real.estate.prototype</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="project_id"/>
+                <field name="budget_id"
+
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_real_estate_prototype" model="ir.actions.act_window">
+        <field name="name">Real Estate prototype</field>
+        <field name="res_model">real.estate.prototype</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new real estate prototype!
+            </p>
+        </field>
+    </record>
+
+
+    </data>
+
+
+</odoo>

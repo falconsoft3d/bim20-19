@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="bim_tool_rent_view_form" model="ir.ui.view">
+            <field name="name">bim.tool.rent.view.form</field>
+            <field name="model">bim.tool.rent</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button class="btn btn-primary" invisible="state not in ['draft']" name="action_sign" string="Action Rent" type="object"/>
+                        <button class="btn btn-primary" invisible="state not in ['rented']" name="action_finished" string="Action Finished" type="object"/>
+                        <button confirm="Are you sure you want to cancel this rent?" invisible="state not in ['draft','rented']" name="action_cancel" string="Action Cancel" type="object"/>
+                        <button invisible="state not in ['cancel']" name="convert_to_draft" string="Convert to Draft" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" readonly="state != 'draft'"/>
+                                <field name="date_from" readonly="state != 'draft'"/>
+                                <field name="date_to" readonly="state != 'draft'"/>
+                                <field invisible="delivery_id == False" name="delivery_id"/>
+                                <field invisible="bim_purchase_requisition_id == False" name="bim_purchase_requisition_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="project_id" readonly="state != 'draft'"/>
+                                <field groups="base_bim_2.group_budget_concept_documents" name="budget_id" readonly="state != 'draft'"/>
+                                <field invisible="True" name="budget_id"/>
+                                <field groups="base_bim_2.group_budget_concept_documents" name="concept_id" readonly="state != 'draft'"/>
+                                <field invisible="True" name="concept_id"/>
+                                <field groups="base.group_multi_company" name="company_id" readonly="1"/>
+                                <field invisible="True" name="company_id"/>
+                                <field name="user_id" options="{'no_open': True,'no_create': True, 'no_create_edit':True}" readonly="state != 'draft'"/>
+                                <field invisible="True" name="currency_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="lines" string="Rented tools">
+                                <field name="rent_line_ids" readonly="state != 'draft'">
+                                    <list editable="bottom">
+                                        <field name="product_id" options="{'no_create': True}"/>
+                                        <field name="name"/>
+                                        <field name="product_uom_qty" sum="sum"/>
+                                        <field name="product_uom" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="price_unit" widget="monetary"/>
+                                        <field name="price_total" sum="sum" widget="monetary"/>
+                                        <field optional="hide"  name="currency_id"/>
+                                        <field optional="hide" name="company_id"/>
+                                    </list></field>
+                                <group col="6" name="note_group">
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                            <label for="amount_total"/>
+                                        </div>
+                                        <field class="oe_subtotal_footer_separator" name="amount_total" nolabel="1" options="{'currency_field': 'currency_id'}" widget="monetary"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </group>
+                            </page>
+                            <page string="Rent Terms">
+                                <field name="terms" placeholder="Add contract terms..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+        <record id="bim_tool_rent_view_tree" model="ir.ui.view">
+            <field name="name">bim.tool.rent.view.tree</field>
+            <field name="model">bim.tool.rent</field>
+            <field name="arch" type="xml">
+                <list decoration-muted="state == 'cancel'" decoration-primary="state=='draft'" decoration-success="state=='signed'" delete="0" string="_tree">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="project_id" optional="show"/>
+                    <field groups="base_bim_2.group_budget_concept_documents" name="budget_id" optional="show"/>
+                    <field groups="base_bim_2.group_budget_concept_documents" name="concept_id" optional="show"/>
+                    <field name="create_date"/>
+                    <field name="user_id"/>
+                    <field name="amount_total" sum="sum" widget="monetary"/>
+                    <field invisible="True" name="currency_id"/>
+                    <field name="state"/>
+                    <field groups="base.group_multi_company" name="company_id"/>
+                    <field name="bim_purchase_requisition_id"/>
+                </list></field>
+        </record>
+        <record id="bim_tool_rent_view_search" model="ir.ui.view">
+            <field name="name">bim.tool.rent.view.search</field>
+            <field name="model">bim.tool.rent</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="partner_id"/>
+                    <field name="name"/>
+                    <field name="user_id"/>
+                </search></field>
+        </record>
+        <record id="action_bim_tool_rent_orders" model="ir.actions.act_window">
+            <field name="name">Rent tool orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.tool.rent</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="bim_tool_rent_view_search"/>
+        </record>
+    </data>
+</odoo>

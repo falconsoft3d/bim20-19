@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_work_resources_contract" model="ir.ui.view">
+        <field name="name">view.form.work.resources.contract</field>
+        <field name="model">work.resources.contract</field>
+        <field name="arch" type="xml">
+            <form string="Work Resources Contract" delete="0" >
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                         <group>
+                             <field name="partner_id"/>
+                             <field name="project_id"/>
+                             <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="currency_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+
+                    <field name="line_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="name" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="price_unit"/>
+                        </list>
+                    </field>
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_work_resources_contract" model="ir.ui.view">
+        <field name="name">view.tree.work.resources.contract</field>
+        <field name="model">work.resources.contract</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="project_id"/>
+                <field name="currency_id"/>
+                <field name="company_id"/>
+                <field name="user_id"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_work_resources_contract" model="ir.actions.act_window">
+        <field name="name">Work Resources Contract</field>
+        <field name="res_model">work.resources.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new work resources contract!
+            </p>
+        </field>
+    </record>
+
+
+    </data>
+
+
+</odoo>

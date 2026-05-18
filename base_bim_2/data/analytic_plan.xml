@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- BIM  -->
+        <record forcecreate="True" id="bim_analytic_plan" model="account.analytic.plan">
+            <field name="name">Plan BIM</field>
+        </record>
+    </data>
+</odoo>

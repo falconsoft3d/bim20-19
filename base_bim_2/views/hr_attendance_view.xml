@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_inherit_hr_attendance_form" model="ir.ui.view">
+            <field name="name">view.inherit.hr.attendance.form</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='worked_hours']" position="before">
+                    <field name="project_id" optional="show"/>
+                    <field name="budget_id"  optional="hide"/>
+                    <field name="concept_id"  optional="hide"/>
+                    <field name="attendance_summary_id"  optional="hide"/>
+                    <field name="description" optional="show"/>
+                    <field name="bim_client_hour_id"  optional="show"/>
+                    <field name="bim_extra_hour_id"  optional="show"/>
+                    <field name="currency_id" optional="hide"/>
+                    <field name="from_wizard" optional="hide"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='worked_hours']" position="after">
+                    <!-- PRICE -->
+                    <field name="hour_price" widget="monetary"
+                           optional="hide"
+                           string="Price/hour"
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="attendance_price" sum="Sum" widget="monetary"
+                           optional="hide"
+                           options="{'currency_field': 'currency_id'}"/>
+
+                    <!-- COST -->
+                    <field name="hour_cost" widget="monetary"
+                           optional="show"
+                           string="Cost/hour"
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="attendance_cost" sum="Sum" widget="monetary"
+                           optional="show"
+                           options="{'currency_field': 'currency_id'}"/>
+
+                     <field name="hour_profit" sum="Sum" widget="monetary"
+                           optional="hide"
+                           options="{'currency_field': 'currency_id'}"/>
+
+                </xpath>
+
+
+                <field name="worked_hours" position="attributes">
+                    <attribute name="sum">Sum</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_inherit_hr_attendance_form_new" model="ir.ui.view">
+            <field name="name">view.inherit.hr.attendance.form.new</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='check_out']" position="after">
+                    <field name="project_id"/>
+                    <field name="budget_id"/>
+                    <field name="concept_id"/>
+                    <field name="from_wizard" invisible="True"/>
+                    <field name="bim_extra_hour_id"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

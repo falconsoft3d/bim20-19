@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_hr_level_study" model="ir.ui.view">
+         <field name="name">view.form.hr.level.study</field>
+         <field name="model">hr.level.study</field>
+         <field name="arch" type="xml">
+            <form>
+              <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                    </group>
+               </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_hr_level_study" model="ir.ui.view">
+         <field name="name">view.tree.hr.level.study</field>
+         <field name="model">hr.level.study</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_hr_level_study" model="ir.actions.act_window">
+        <field name="name">Hr level study</field>
+        <field name="res_model">hr.level.study</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

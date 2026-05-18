@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="customer_question_template_view_tree" model="ir.ui.view">
+            <field name="name">customer.question.template.view.tree</field>
+            <field name="model">customer.question.template</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="project_id"  optional="show"/>
+                    <field name="budget_id"  optional="show"/>
+                    <field name="bim_concepts"  optional="show"/>
+                    <field name="url" widget="url" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="active" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="customer_question_template_view_form" model="ir.ui.view">
+            <field name="name">customer.question.template.view.form</field>
+            <field name="model">customer.question.template</field>
+            <field name="arch" type="xml">
+                <form string="Customer Question Template">
+                    <sheet>
+                     <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="key"/>
+                                <field name="url" widget="url"/>
+                                <field name="company_id"/>
+                                <field name="text_template"/>
+                                <field name="active"/>
+                            </group>
+                         <group>
+                         <field name="project_id"
+                                       options='{"no_create": 1, "no_open": 1}'
+
+                                />
+                                <field name="budget_id"
+                                       options='{"no_create": 1, "no_open": 1}'
+                                       domain="[('project_id','=',project_id)]"
+
+                                />
+                                <field name="bim_concepts"
+                                       options='{"no_create": 1, "no_open": 1}'
+                                       domain="[('budget_id','=',budget_id)]"
+
+                                />
+                       </group>
+                     </group>
+
+
+                     <notebook>
+                        <page string="Lines" name="lines">
+                            <field name="lines_ids"  nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="sequence" optional="hide"
+                                            widget="handle"
+                                        />
+                                        <field name="name" options='{"no_create": 1, "no_open": 1}' optional="show"/>
+                                    </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="customer_question_template_action" model="ir.actions.act_window">
+            <field name="name">Customer Question Template</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.question.template</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+
+        <menuitem id="menu_bim_customer_question_template"
+                name="Customer Question Template"
+                action="customer_question_template_action"
+                parent="menu_customer_evaluation"
+                sequence="9" />
+
+    </data>
+</odoo>

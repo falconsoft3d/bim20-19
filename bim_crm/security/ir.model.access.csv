@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bim_typology,bim.typology,model_bim_typology,,1,1,1,1
+access_bim_project_unit,bim.project.unit,model_bim_project_unit,,1,1,1,1
+access_bim_budget_extra,bim.budget.extra,model_bim_budget_extra,,1,1,1,1
+access_bim_budget_sample,bim.budget.sample,model_bim_budget_sample,,1,1,1,1
+access_bim_budget_sample_line,bim.budget.sample.line,model_bim_budget_sample_line,,1,1,1,1
+access_bim_project_unit_typology_price,bim.project.unit.typology.price,model_bim_project_unit_typology_price,,1,1,1,1

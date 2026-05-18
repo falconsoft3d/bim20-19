@@ -1,0 +1,102 @@
+BIM20 Proprietary License v1.0 (BPL-1.0)
+==========================================
+
+Copyright (C) 2017-2026 Marlon Falcón Hernández — BIM 2.0
+Website: https://www.bim20.com
+Contact: contacto@bim20.com
+
+DEFINITIONS
+-----------
+"Software"         : The source code, configuration files, XML views, reports,
+                     static assets, and all associated files that make up the
+                     Odoo module "Base BIM 2.0 MFH" (base_bim_2) and any
+                     derivative works thereof.
+
+"Author / Team"    : Marlon Falcón Hernández and the development team of BIM 2.0
+                     (https://www.bim20.com), who hold the exclusive right to
+                     modify and distribute the Software.
+
+"Contracted Client": The company or individual that has entered into a valid,
+                     written service or implementation agreement with the Author
+                     for the deployment of this Software.
+
+GRANT OF RIGHTS
+---------------
+Subject to the terms and conditions of this License, the Author grants the
+Contracted Client a non-exclusive, non-transferable, limited right to:
+
+  1. Install and execute the Software on the Contracted Client's own servers or
+     cloud infrastructure solely for the Contracted Client's internal business
+     operations.
+
+  2. View the source code of the Software for the purpose of understanding its
+     operation, integration, and customization within the scope of the service
+     agreement.
+
+RESTRICTIONS
+------------
+The following actions are expressly FORBIDDEN unless the Author grants explicit
+prior written authorization:
+
+  a. MODIFICATION: Only the Author / Team may modify, adapt, translate, or
+     create derivative works of the Software. The Contracted Client may NOT
+     modify the Software without a separate written agreement.
+
+  b. REDISTRIBUTION: The Contracted Client may NOT publish, distribute,
+     sublicense, sell, rent, lease, or otherwise transfer the Software or any
+     part of it to any third party.
+
+  c. REVERSE ENGINEERING: The Contracted Client may NOT decompile, disassemble,
+     or attempt to derive the source code of any compiled components of the
+     Software.
+
+  d. REMOVAL OF NOTICES: The Contracted Client may NOT remove or alter any
+     copyright, trademark, or proprietary notices contained in the Software.
+
+  e. USE BEYOND CONTRACT SCOPE: The rights granted herein apply solely to the
+     Contracted Client named in the corresponding service agreement. Use by any
+     other entity, including subsidiaries, affiliates, or parent companies, is
+     NOT permitted unless explicitly stated in the agreement.
+
+OWNERSHIP
+---------
+The Software remains the exclusive intellectual property of the Author at all
+times. This License does not constitute a transfer of ownership, title, or any
+intellectual property rights. All rights not expressly granted herein are
+reserved by the Author.
+
+TERM AND TERMINATION
+--------------------
+This License is effective as of the date the Contracted Client receives the
+Software and remains in force for the duration of the valid service agreement.
+
+The Author may terminate this License immediately and without notice if the
+Contracted Client breaches any term of this License. Upon termination, the
+Contracted Client must cease all use of the Software and destroy or return all
+copies in its possession.
+
+DISCLAIMER OF WARRANTIES
+-------------------------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL
+THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+GOVERNING LAW
+-------------
+This License shall be governed by and construed in accordance with the laws of
+the jurisdiction in which the Author is domiciled, without regard to its conflict
+of law provisions. Any disputes arising under this License shall be subject to
+the exclusive jurisdiction of the courts of that jurisdiction.
+
+CONTACT
+-------
+For licensing inquiries, partnership agreements, or to request modification
+rights, please contact:
+
+  Marlon Falcón Hernández
+  BIM 2.0
+  https://www.bim20.com
+  contacto@bim20.com

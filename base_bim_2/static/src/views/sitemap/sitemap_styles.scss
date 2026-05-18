@@ -1,0 +1,59 @@
+.osm_contextmenu {
+    height: 100vh;
+    width: 100%;
+    box-shadow: 3px 5px 5px 0px rgba(100, 100, 100, 0.1);
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    position: fixed;
+
+    .list-group {
+        background-color: white;
+
+        .list-group-item {
+            padding: 5px 10px;
+            min-width: 100px;
+
+            &.border-bold-top {
+                border-top-width: 2px;
+                border-top: 2px solid #ccc;
+            }
+
+            i {
+                margin-right: 0.25rem;
+            }
+        }
+    }
+}
+
+.bim-sitemap-measures {
+    position: fixed;
+    bottom: 0;
+    width: -webkit-fill-available;
+
+    .card {
+        border: none;
+
+        .card-header {
+            background-color: $o-brand-primary;
+            color: #fff;
+            border-radius: 0;
+            padding: 0;
+            margin: 0;
+
+            >button {
+                padding: 9px 15px;
+                font-weight: bold;
+
+                &.o_bim_measures_visible:hover {
+                    color: #ccc;
+                    background-color: darken($o-brand-primary, 15%);
+                }
+
+                &:last-child {
+                    flex: 1;
+                }
+            }
+        }
+    }
+}

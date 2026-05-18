@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="invoicefrompicking_view_move_form" model="ir.ui.view">
+            <field name="name">invoicefrompicking.view.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//group[@name='accounting_info_group']" position="inside">
+                    <field name="invoicefrompicking_id" readonly="1"/>
+                    <field name="picking_origin" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="invoicefrompicking_view_move_tree" model="ir.ui.view">
+            <field name="name">invoicefrompicking.view.move.tree</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_origin']" position="after">
+                    <field name="picking_origin" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_bim_ajust_budget_form" model="ir.ui.view">
+            <field name="name">view.bim.ajust.budget.form</field>
+            <field name="model">bim.ajust.budget.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Modify Budget">
+                    <group>
+                        <group>
+                            <field name="budget_id" options="{'no_open': True}" readonly="1"/>
+                            <field invisible="True" name="currency_id"/>
+                            <field name="type" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field invisible="type not in 'amount'" name="new_amount"/>
+                            <field invisible="type not in 'percent'" name="percent"/>
+                            <field invisible="type not in 'fixed'" name="fixed"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="type_ajust" readonly="type == 'amount'" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="materials" readonly="type == 'amount'"/>
+                            <field name="work_hand" readonly="type == 'amount'"/>
+                            <field name="equipment" readonly="type == 'amount'"/>
+                            <field invisible="True" name="service"/>
+                            <field invisible="True" name="functions"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="duplicate"/>
+                    </group>
+                    <footer>
+                        <button class="btn-primary" name="load_ajust" string="Apply" type="object"/>
+                        <button class="btn-default" special="cancel" string="Cancel"/>
+                    </footer>
+                </form></field>
+        </record>
+        <record id="action_bim_ajust_budget" model="ir.actions.act_window">
+            <field name="name">Modify Budget</field>
+            <field name="res_model">bim.ajust.budget.wzd</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bim_ajust_budget_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="main_real_estate"
+                  name="Development"
+                  web_icon="base_bim_2,static/description/property.png"
+                  groups="base_bim_2.group_development_products_user"
+                  sequence="90">
+
+            <menuitem id="menu_real_estate_sale" name="Sale"  sequence="10">
+                        <menuitem id="menu_real_estate_sale_order"
+                                        name="Sales"
+                                        sequence="40"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_state_sale_order" />
+
+                        <menuitem id="menu_real_estate_quota"
+                                        name="Quotas"
+                                        sequence="50"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_estate_quota" />
+
+                        <menuitem id="menu_real_estate_price_list"
+                                        name="Price List"
+                                        sequence="60"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_estate_price_list" />
+            </menuitem>
+
+
+            <menuitem id="menu_real_estate_data" name="Data"  sequence="20">
+                        <menuitem id="menu_real_estate_development"
+                                        name="Developments"
+                                        sequence="40"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_estate_development" />
+
+                        <menuitem id="menu_real_estate_block"
+                                        name="Blocks"
+                                        sequence="45"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_estate_block" />
+
+                        <menuitem id="menu_real_estate_lot"
+                                        name="Lots"
+                                        sequence="50"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_estate_lot" />
+
+                        <menuitem id="menu_real_estate_prototype"
+                                        name="Prototypes"
+                                        sequence="60"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_estate_prototype" />
+
+                        <menuitem id="menu_real_estate_property"
+                                        name="Properties"
+                                        sequence="100"
+                                        groups="base_bim_2.group_development_products_user"
+                                        action="action_real_estate_property" />
+
+                        <menuitem id="menu_real_estate_property_variant"
+                                        name="Variants"
+                                        groups="base_bim_2.group_development_products_user"
+                                        sequence="200"
+                                        action="action_real_estate_property_variant" />
+            </menuitem>
+
+
+
+            <menuitem id="menu_real_estate_mconfig"
+                      groups="base_bim_2.group_development_products_user"
+                      name="Config"  sequence="30">
+                            <menuitem id="menu_real_estate_state"
+                                        name="State"
+                                        groups="base_bim_2.group_development_products_user"
+                                        sequence="40"
+                                        action="action_real_estate_state" />
+            </menuitem>
+
+
+        </menuitem>
+
+
+
+    </data>
+</odoo>

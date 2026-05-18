@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="bim_concept_template_update_wzd" model="ir.ui.view">
+            <field name="name">bim.concept.template.update.wzd</field>
+            <field name="model">bim.concept.template.update.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Update Concept Template Massively">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type_update" widget="radio"/>
+                            </group>
+                            <group>
+                                <field invisible="type_update not in ['template_group']" name="template_group_ids" options="{'no_create_edit':True}" required="type_update == 'template_group'" widget="many2many_tags"/>
+                                <field invisible="type_update not in ['group']" name="group_ids" options="{'no_create_edit':True}" required="type_update == 'group'" widget="many2many_tags"/>
+                                <field invisible="type_update not in ['manual']" name="product_id" options="{'no_create_edit':True}" required="type_update == 'manual'"/>
+                                <field invisible="type_update not in ['manual', 'group', 'template_group']" name="type_price" readonly="type_update in ['group', 'template_group']" required="type_update in ['manual', 'group', 'template_group']"/>
+                                <field invisible="type_update not in ['manual', 'group', 'template_group']" name="new_price" required="type_update == 'manual'"/>
+                            </group>
+                        </group>
+                        <footer>
+                            <button class="btn-primary" name="update_price" string="Update" type="object"/>
+                            <button class="btn-default" special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form></field>
+        </record>
+        <record id="action_update_concept_template_wzd" model="ir.actions.act_window">
+            <field name="name">Update Concept Template Massively</field>
+            <field name="res_model">bim.concept.template.update.wzd</field>
+            <field name="binding_model_id" ref="model_bim_concept_template"/>
+            <field name="binding_view_types">list</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="bim_concept_template_update_wzd"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

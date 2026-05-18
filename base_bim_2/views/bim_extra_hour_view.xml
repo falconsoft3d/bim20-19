@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_extra_hour" model="ir.ui.view">
+        <field name="name">view.form.bim.extra.hour</field>
+        <field name="model">bim.extra.hour</field>
+        <field name="arch" type="xml">
+            <form string="Bim Extra Hour">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="value" />
+                            <field name="factor" />
+                            <field name="desc"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_extra_hour" model="ir.ui.view">
+        <field name="name">view.tree.bim.extra.hour</field>
+        <field name="model">bim.extra.hour</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="desc"/>
+                <field name="value"/>
+            </list>
+        </field>
+    </record>
+
+         <record id="action_bim_extra_hour" model="ir.actions.act_window">
+            <field name="name">Extra Hour</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bim.extra.hour</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_tree_bim_extra_hour"/>
+        </record>
+
+    </data>
+
+</odoo>

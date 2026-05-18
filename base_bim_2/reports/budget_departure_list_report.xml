@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="base_bim_2.budget_departure_list">
+         <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="base_bim_2.bim_header_external_layout_departure_list">
+                    <div class="page">
+                        <style type="text/css">
+                            th, td {
+                            vertical-align: middle !important;
+                            }
+                        </style>
+                        <!--departures-->
+                        <t t-set="concept_count" t-value="0"/>
+                        <span t-set="sum_total" t-value="0"/>
+                        <div style="height: 50px;"/>
+                         <table class="table table-sm" style="width:1xx%;">
+                            <thead class="pt-2">
+                                <tr>
+                                    <th class="text-left" style="border:1px solid black;width:10%;background-color: #B8B9B8;">#</th>
+                                    <th class="text-left" style="border:1px solid black;width:10%;background-color: #B8B9B8;">Part.</th>
+                                    <th class="text-left" style="border:1px solid black;width:50%;background-color: #B8B9B8;">Descripción</th>
+                                    <th class="text-left" style="border:1px solid black;width:10%;background-color: #B8B9B8;">Und</th>
+                                    <th class="text-left" style="border:1px solid black;width:10%;background-color: #B8B9B8;">Cantidad</th>
+                                    <th class="text-left" style="border:1px solid black;width:10%;background-color: #B8B9B8;">PU</th>
+                                    <th class="text-left" style="border:1px solid black;width:10%;background-color: #B8B9B8;">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="chapters" t-value="o.budget_id.concept_ids.filtered(lambda x: x.type == 'departure').mapped('parent_id')"/>
+                                <t t-set="accumulated" t-value="0"/>
+
+
+                                <t t-foreach="chapters" t-as="chapter">
+
+                                    <tr>
+                                       <tr class="resource_row" style="font-style: italic; font-size: 11px;max-height: 14px !important;">
+                                             <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                             <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><span t-esc="chapter.code"/></td>
+                                             <td class="text-left" style="width:50%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><strong t-esc="chapter.name"/></td>
+                                             <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                             <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                             <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                             <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         </tr>
+                                    </tr>
+
+                                    <t t-set="_sum_of_the_chapter" t-value="0"/>
+
+                                    <t t-foreach="o.budget_id.concept_ids.filtered(lambda x: x.type == 'departure' and x.parent_id == chapter)" t-as="concept">
+                                        <t t-set="concept_count" t-value="concept_count + 1"/>
+                                             <tr class="resource_row" style="font-style: italic; font-size: 11px;max-height: 14px !important;">
+                                                 <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><span t-esc="concept_count"/></td>
+                                                 <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><span t-esc="concept.code"/></td>
+                                                 <td class="text-left" style="width:50%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><span t-esc="concept.name"/></td>
+                                                 <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><t t-if="concept.uom_id"><span t-esc="concept.uom_id.name"/></t></td>
+                                                 <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><span t-esc="concept.quantity"/></td>
+                                                 <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><span t-esc="concept.apu_total" t-options="{'widget': 'monetary', 'display_currency': concept.budget_id.currency_id}"/></td>
+                                                 <t t-set="_total" t-value="round(concept.quantity,2) * round(concept.apu_total,2)"/>
+                                                 <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><span t-esc="_total" t-options="{'widget': 'monetary', 'display_currency': concept.budget_id.currency_id}"/></td>
+                                             </tr>
+                                            <t t-set="_sum_of_the_chapter" t-value="_sum_of_the_chapter + _total"/>
+
+                                    </t>
+
+                                    <t t-set="accumulated" t-value="_sum_of_the_chapter + accumulated"/>
+                                    <t t-set="sum_total" t-value="sum_total + _sum_of_the_chapter"/>
+
+                                    <tr class="resource_row" style="font-style: italic; font-size: 11px;max-height: 14px !important;border-top:1px solid black;">
+                                         <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-left" style="width:50%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;" colspan="2"><strong>TOTAL CAPÍTULO</strong></td>
+                                         <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><strong t-esc="_sum_of_the_chapter" t-options="{'widget': 'monetary', 'display_currency': chapter.budget_id.currency_id}"/></td>
+                                     </tr>
+                                    <tr class="resource_row" style="font-style: italic; font-size: 11px;max-height: 14px !important;">
+                                         <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-left" style="width:50%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                         <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;" colspan="2"><strong>TOTAL ACUMULADO</strong></td>
+                                         <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><strong t-esc="accumulated" t-options="{'widget': 'monetary', 'display_currency': o.budget_id.currency_id}"/></td>
+                                     </tr>
+
+                                </t>
+
+
+
+                                <tr class="resource_row" style="font-style: italic; font-size: 11px;max-height: 14px !important;">
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:50%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;" colspan="2"><strong>TOTAL NETO</strong></td>
+                                     <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><strong t-esc="accumulated" t-options="{'widget': 'monetary', 'display_currency': o.budget_id.currency_id}"/></td>
+                                 </tr>
+
+
+                                  <tr class="resource_row" style="font-style: italic; font-size: 11px;max-height: 14px !important;">
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:50%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;" colspan="2"><strong>IVA</strong></td>
+                                     <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><strong t-esc="o.budget_id.iva" t-options="{'widget': 'monetary', 'display_currency': o.budget_id.currency_id}"/></td>
+                                 </tr>
+
+                                <tr class="resource_row" style="font-style: italic; font-size: 11px;border-bottom:1px solid black;max-height: 14px !important;">
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:50%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-left" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"/>
+                                     <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;" colspan="2"><strong>TOTAL</strong></td>
+                                     <td class="text-right" style="width:10%; border-left:1px solid black;border-right:1px solid black;min-height: 10px !important;max-height: 10px !important;"><strong t-esc="o.budget_id.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.budget_id.currency_id}"/></td>
+                                 </tr>
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <template id="attendance_work_detailed_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="base_bim_2.bim_header_attendance_external_layout">
+                        <div class="page">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col table-responsive">
+                                        <table class="table table-sm table-bordered">
+                                            <thead>
+<!--
+                                                <tr>
+                                                    <th class="text-center">Trabajos Realizados (OT)</th>
+                                                    <th class="text-left">Normal</th>
+                                                    <th class="text-left">Extra</th>
+                                                    <th class="text-left">Festiva</th>
+                                                    <th class="text-left">Guardia</th>
+                                                </tr>
+-->
+                                                <tr>
+                                                    <th class="text-center">Empleado</th>
+                                                    <th class="text-left">Proyecto</th>
+                                                    <th class="text-left">Hora entrada</th>
+                                                    <th class="text-left">Minuto entrada</th>
+                                                    <th class="text-left">Jornada</th>
+                                                    <th class="text-left">Horas extras</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                    <tr>
+                                                        <td class="text-left"><span t-field="line.employee_id.display_name"/></td>
+                                                        <td class="text-left"><span t-field="line.project_id.display_name"/></td>
+                                                        <td class="text-center"><span t-field="line.hour_start_job"/></td>
+                                                        <td class="text-center"><span t-field="line.minute_start_job"/></td>
+                                                        <td class="text-center"><span t-field="line.working_hours"/></td>
+                                                        <td class="text-center"><span t-field="line.bim_extra_hour_id.name"/></td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

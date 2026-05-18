@@ -1,0 +1,1834 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Layout base del Portal BIM -->
+    <template id="portal_bim_layout" name="Portal BIM Layout">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+                <link rel="stylesheet" href="/base_bim_2_portal/static/src/css/portal_bim.css"/>
+            </t>
+            <t t-set="body_classname" t-value="'portal-bim-body'"/>
+            
+            <div class="portal-bim-wrapper">
+                <t t-raw="0"/>
+            </div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        </t>
+    </template>
+
+    <!-- Página de Login -->
+    <template id="portal_bim_login" name="Portal BIM Login">
+        <t t-call="base_bim_2_portal.portal_bim_layout">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <div class="login-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h1>Portal BIM</h1>
+                        <p>Bienvenido, ingrese sus credenciales</p>
+                    </div>
+                    
+                    <t t-if="error_message">
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <t t-esc="error_message"/>
+                        </div>
+                    </t>
+                    
+                    <form method="POST" action="/portal/bim/login" class="login-form">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="form-group">
+                            <label for="login">
+                                <i class="fas fa-user"></i> Usuario
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="login" 
+                                   name="login" 
+                                   placeholder="Ingrese su usuario"
+                                   required="required"
+                                   autofocus="autofocus"/>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">
+                                <i class="fas fa-lock"></i> Contraseña
+                            </label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Ingrese su contraseña"
+                                   required="required"/>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Ingresar
+                        </button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>© 2025 Portal BIM. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Layout con menú lateral para páginas internas -->
+    <template id="portal_bim_internal_layout" name="Portal BIM Internal Layout">
+        <t t-call="base_bim_2_portal.portal_bim_layout">
+            <div class="portal-bim-container">
+                <!-- Sidebar -->
+                <aside class="portal-sidebar">
+                    <div class="sidebar-header">
+                        <div class="sidebar-logo">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h2>Portal BIM</h2>
+                    </div>
+                    
+                    <nav class="sidebar-nav">
+                        <a t-attf-href="/portal/bim/dashboard" 
+                           t-attf-class="nav-item #{page == 'dashboard' and 'active' or ''}">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Inicio</span>
+                        </a>
+                        
+                        <a t-attf-href="/portal/bim/projects" 
+                           t-attf-class="nav-item #{page == 'projects' and 'active' or ''}">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Proyectos</span>
+                        </a>
+                        
+                        <a t-attf-href="/portal/bim/tickets" 
+                           t-attf-class="nav-item #{page == 'tickets' and 'active' or ''}">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Tickets</span>
+                        </a>
+                        
+                        <a t-attf-href="/portal/bim/documents" 
+                           t-attf-class="nav-item #{page == 'documents' and 'active' or ''}">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Documentos</span>
+                        </a>
+                        
+                        <a t-attf-href="/portal/bim/budgets" 
+                           t-attf-class="nav-item #{page == 'budgets' and 'active' or ''}">
+                            <i class="fas fa-calculator"></i>
+                            <span>Presupuestos</span>
+                        </a>
+                        
+                        <a t-attf-href="/portal/bim/invoices" 
+                           t-attf-class="nav-item #{page == 'invoices' and 'active' or ''}">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Facturas</span>
+                        </a>
+                        
+                        <a t-attf-href="/portal/bim/profile" 
+                           t-attf-class="nav-item #{page == 'profile' and 'active' or ''}">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Mi Perfil</span>
+                        </a>
+                        
+                        <a href="/portal/bim/logout" class="nav-item nav-logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Cerrar Sesión</span>
+                        </a>
+                    </nav>
+                    
+                    <div class="sidebar-footer">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <t t-esc="partner.name[0].upper()"/>
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name" t-esc="partner.name"/>
+                                <div class="user-email" t-esc="partner.email or ''"/>
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; font-size: 11px; color: #888; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px;">
+                            <p style="margin: 5px 0;">Desarrollado <a href="https://marlonfalcon.com" target="_blank">Marlon</a></p>
+                            <p style="margin: 5px 0;">con tecnología de <strong>Odoo</strong></p>
+                        </div>
+                    </div>
+                </aside>
+                
+                <!-- Main Content -->
+                <main class="portal-content">
+                    <t t-raw="0"/>
+                </main>
+            </div>
+        </t>
+    </template>
+
+    <!-- Dashboard -->
+    <template id="portal_bim_dashboard" name="Portal BIM Dashboard">
+        <t t-call="base_bim_2_portal.portal_bim_internal_layout">
+            <div class="content-header mb-4">
+                <h1 class="display-4 fw-bold">Bienvenido, <t t-esc="partner.name"/></h1>
+                <p class="lead text-muted">Resumen de su actividad en tiempo real</p>
+            </div>
+            
+            <!-- KPIs Grid con Bootstrap -->
+            <div class="row g-4 mb-5">
+                <!-- KPI 1: Tickets -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div>
+                                    <h6 class="text-uppercase text-muted fw-semibold mb-2">Tickets</h6>
+                                    <div class="d-flex align-items-baseline">
+                                        <h1 class="display-3 fw-bold mb-0 text-primary">
+                                            <t t-esc="open_tickets"/>
+                                        </h1>
+                                        <h3 class="text-muted ms-2 mb-0">
+                                            / <t t-esc="total_tickets"/>
+                                        </h3>
+                                    </div>
+                                    <p class="text-muted small mb-0 mt-2">Tickets Abiertos</p>
+                                </div>
+                                <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                    <i class="fas fa-ticket-alt fa-2x text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-primary" 
+                                     role="progressbar" 
+                                     t-attf-style="width: #{(open_tickets * 100 / total_tickets) if total_tickets > 0 else 0}%"
+                                     t-attf-aria-valuenow="#{open_tickets}"
+                                     aria-valuemin="0" 
+                                     t-attf-aria-valuemax="#{total_tickets}"></div>
+                            </div>
+                            <div class="mt-2 text-end">
+                                <small class="text-muted">
+                                    <t t-esc="round((open_tickets * 100 / total_tickets) if total_tickets > 0 else 0, 1)"/>%
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- KPI 2: Documentos -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div>
+                                    <h6 class="text-uppercase text-muted fw-semibold mb-2">Documentos</h6>
+                                    <div class="d-flex align-items-baseline">
+                                        <h1 class="display-3 fw-bold mb-0 text-warning">
+                                            <t t-esc="pending_documents"/>
+                                        </h1>
+                                        <h3 class="text-muted ms-2 mb-0">
+                                            / <t t-esc="total_documents"/>
+                                        </h3>
+                                    </div>
+                                    <p class="text-muted small mb-0 mt-2">Documentos Pendientes</p>
+                                </div>
+                                <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                    <i class="fas fa-file-alt fa-2x text-warning"></i>
+                                </div>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-warning" 
+                                     role="progressbar" 
+                                     t-attf-style="width: #{(pending_documents * 100 / total_documents) if total_documents > 0 else 0}%"
+                                     t-attf-aria-valuenow="#{pending_documents}"
+                                     aria-valuemin="0" 
+                                     t-attf-aria-valuemax="#{total_documents}"></div>
+                            </div>
+                            <div class="mt-2 text-end">
+                                <small class="text-muted">
+                                    <t t-esc="round((pending_documents * 100 / total_documents) if total_documents > 0 else 0, 1)"/>%
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- KPI 3: Facturas -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="text-uppercase text-muted fw-semibold mb-2">Facturas</h6>
+                                    <div class="d-flex align-items-baseline">
+                                        <h1 class="display-3 fw-bold mb-0 text-danger">
+                                            <t t-esc="total_unpaid_invoices"/>
+                                        </h1>
+                                        <h3 class="text-muted ms-2 mb-0">
+                                            / <t t-esc="total_invoices"/>
+                                        </h3>
+                                    </div>
+                                    <p class="text-muted small mb-3 mt-2">Facturas sin Pagar</p>
+                                    <div class="alert alert-danger py-2 px-3 mb-0">
+                                        <small class="d-block mb-1 fw-semibold">Importe pendiente:</small>
+                                        <h5 class="mb-0 fw-bold">
+                                            €<t t-esc="'{:,.2f}'.format(total_unpaid_amount)"/>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                                    <i class="fas fa-file-invoice-dollar fa-2x text-danger"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- KPI 4: Presupuestos -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="text-uppercase text-muted fw-semibold mb-2">Presupuestos</h6>
+                                    <div class="d-flex align-items-baseline">
+                                        <h1 class="display-3 fw-bold mb-0 text-success">
+                                            <t t-esc="total_approved_budgets"/>
+                                        </h1>
+                                        <h3 class="text-muted ms-2 mb-0">
+                                            / <t t-esc="total_budgets"/>
+                                        </h3>
+                                    </div>
+                                    <p class="text-muted small mb-3 mt-2">Presupuestos Aprobados</p>
+                                    <div class="alert alert-success py-2 px-3 mb-0">
+                                        <small class="d-block mb-1 fw-semibold">Importe aprobado:</small>
+                                        <h5 class="mb-0 fw-bold">
+                                            €<t t-esc="'{:,.2f}'.format(total_approved_amount)"/>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                    <i class="fas fa-calculator fa-2x text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Accesos Rápidos con Bootstrap Cards -->
+            <div class="row g-4">
+                <div class="col-12">
+                    <h3 class="mb-4">
+                        <i class="fas fa-rocket me-2 text-primary"></i>
+                        Accesos Rápidos
+                    </h3>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <a href="/portal/bim/projects" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100 hover-shadow">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-building fa-2x text-primary"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-2">Mis Proyectos</h5>
+                                <p class="card-text text-muted small">Gestiona tus obras</p>
+                                <span class="badge bg-primary rounded-pill">Ver proyectos →</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <a href="/portal/bim/tickets" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100 hover-shadow">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-ticket-alt fa-2x text-info"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-2">Tickets</h5>
+                                <p class="card-text text-muted small">Reporta incidencias</p>
+                                <span class="badge bg-info rounded-pill">Ver tickets →</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <a href="/portal/bim/documents" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100 hover-shadow">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-file-alt fa-2x text-warning"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-2">Documentos</h5>
+                                <p class="card-text text-muted small">Revisa documentación</p>
+                                <span class="badge bg-warning rounded-pill">Ver documentos →</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <a href="/portal/bim/budgets" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100 hover-shadow">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-calculator fa-2x text-success"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-2">Presupuestos</h5>
+                                <p class="card-text text-muted small">Aprueba presupuestos</p>
+                                <span class="badge bg-success rounded-pill">Ver presupuestos →</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Perfil / Actualización de datos -->
+    <template id="portal_bim_profile" name="Portal BIM Profile">
+        <t t-call="base_bim_2_portal.portal_bim_internal_layout">
+            <div class="content-header">
+                <h1>Mi Perfil</h1>
+                <p class="text-muted">Actualice su información personal</p>
+            </div>
+            
+            <t t-if="success_message">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    <t t-esc="success_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <t t-if="error_message">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <t t-esc="error_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="mb-4">Información Personal</h3>
+                            
+                            <form method="POST" action="/portal/bim/profile" class="profile-form">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="name" class="form-label">
+                                            <i class="fas fa-user"></i> Nombre Completo *
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="name" 
+                                               name="name" 
+                                               t-att-value="partner.name"
+                                               required="required"/>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">
+                                            <i class="fas fa-envelope"></i> Correo Electrónico
+                                        </label>
+                                        <input type="email" 
+                                               class="form-control" 
+                                               id="email" 
+                                               name="email" 
+                                               t-att-value="partner.email or ''"/>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label">
+                                            <i class="fas fa-phone"></i> Teléfono
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="phone" 
+                                               name="phone" 
+                                               t-att-value="partner.phone or ''"/>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="mobile" class="form-label">
+                                            <i class="fas fa-mobile-alt"></i> Móvil
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="mobile" 
+                                               name="mobile" 
+                                               t-att-value="partner.mobile or ''"/>
+                                    </div>
+                                    
+                                    <div class="col-md-12 mb-3">
+                                        <label for="street" class="form-label">
+                                            <i class="fas fa-map-marker-alt"></i> Dirección
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="street" 
+                                               name="street" 
+                                               t-att-value="partner.street or ''"/>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="city" class="form-label">
+                                            <i class="fas fa-city"></i> Ciudad
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="city" 
+                                               name="city" 
+                                               t-att-value="partner.city or ''"/>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="zip" class="form-label">
+                                            <i class="fas fa-mail-bulk"></i> Código Postal
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="zip" 
+                                               name="zip" 
+                                               t-att-value="partner.zip or ''"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Guardar Cambios
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h3 class="mb-4">Cambiar Contraseña</h3>
+                            
+                            <form method="POST" action="/portal/bim/profile" class="profile-form">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="current_password" class="form-label">
+                                            <i class="fas fa-lock"></i> Contraseña Actual *
+                                        </label>
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="current_password" 
+                                               name="current_password" 
+                                               placeholder="Ingrese su contraseña actual"/>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="new_password" class="form-label">
+                                            <i class="fas fa-key"></i> Nueva Contraseña *
+                                        </label>
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="new_password" 
+                                               name="new_password" 
+                                               placeholder="Ingrese nueva contraseña"/>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="confirm_password" class="form-label">
+                                            <i class="fas fa-key"></i> Confirmar Contraseña *
+                                        </label>
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="confirm_password" 
+                                               name="confirm_password" 
+                                               placeholder="Confirme nueva contraseña"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-key"></i> Cambiar Contraseña
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="profile-avatar">
+                                <t t-esc="partner.name[0].upper()"/>
+                            </div>
+                            <h4 class="mt-3" t-esc="partner.name"/>
+                            <p class="text-muted" t-esc="partner.email or 'Sin correo'"/>
+                            <div class="profile-info">
+                                <div class="profile-info-item">
+                                    <label>VAT/NIF</label>
+                                    <p t-esc="partner.vat or 'No especificado'"/>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>Usuario</label>
+                                    <p t-esc="partner.portal_bim_login"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Lista de Proyectos -->
+    <template id="portal_bim_projects" name="Portal BIM Projects">
+        <t t-call="base_bim_2_portal.portal_bim_internal_layout">
+            <div class="content-header">
+                <h1>Mis Proyectos</h1>
+                <p class="text-muted">Consulte el estado de sus obras</p>
+                
+                <t t-if="view_mode == 'detail'">
+                    <a href="/portal/bim/projects" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                </t>
+            </div>
+            
+            <t t-if="success_message">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    <t t-esc="success_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <t t-if="error_message">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <t t-esc="error_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <!-- Vista de lista -->
+            <t t-if="view_mode == 'list'">
+                <t t-if="not projects">
+                    <div class="card">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-folder-open" style="font-size: 60px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                            <h3>No hay proyectos disponibles</h3>
+                            <p class="text-muted">Actualmente no tiene proyectos asignados.</p>
+                        </div>
+                    </div>
+                </t>
+                
+                <t t-if="projects">
+                    <div class="row">
+                        <t t-foreach="projects" t-as="project">
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <a t-attf-href="/portal/bim/projects?project_id=#{project.id}" style="text-decoration: none; color: inherit;">
+                                    <div class="card project-card h-100" style="cursor: pointer; transition: transform 0.2s;">
+                                        <div class="card-body">
+                                            <div class="project-header">
+                                                
+                                                <div class="project-info">
+                                                    <h3 t-esc="project.nombre"/>
+                                                    <p class="project-code">
+                                                        <i class="fas fa-hashtag"></i>
+                                                        <span t-esc="project.name or 'Sin código'"/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="project-details">
+                                                <div class="detail-row">
+                                                    <label>
+                                                        <i class="fas fa-user-tie"></i> Supervisor
+                                                    </label>
+                                                    <p t-esc="project.user_id.name if project.user_id else 'No asignado'"/>
+                                                </div>
+                                                
+                                                <t t-if="project.user_id">
+                                                    <div class="detail-row">
+                                                        <label>
+                                                            <i class="fas fa-envelope"></i> Email
+                                                        </label>
+                                                        <p t-esc="project.user_id.email or 'N/A'"/>
+                                                    </div>
+                                                    
+                                                    <div class="detail-row">
+                                                        <label>
+                                                            <i class="fas fa-phone"></i> Teléfono
+                                                        </label>
+                                                        <p t-esc="project.user_id.phone or 'N/A'"/>
+                                                    </div>
+                                                </t>
+                                                
+                                                <div class="detail-row">
+                                                    <label>
+                                                        <i class="fas fa-flag"></i> Estado
+                                                    </label>
+                                                    <p>
+                                                        <t t-if="project.state_id">
+                                                           
+                                                                <t t-esc="project.state_id.name"/>
+
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span class="badge badge-0">Sin estado</span>
+                                                        </t>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+
+            <!-- Vista de Detalle del Proyecto -->
+            <t t-if="view_mode == 'detail' and project">
+                <div class="container-fluid">
+                    <!-- Información del Proyecto -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="portal-card">
+                                <h3 class="mb-4">
+                                    <i class="fas fa-building me-2"></i>Información del Proyecto
+                                </h3>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Nombre:</strong>
+                                        <p class="mb-0"><t t-esc="project.name"/></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Código:</strong>
+                                        <p class="mb-0"><t t-esc="project.nombre"/></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Supervisor:</strong>
+                                        <p class="mb-0">
+                                            <t t-if="project.user_id">
+                                                <t t-esc="project.user_id.name"/>
+                                            </t>
+                                            <t t-else="">Sin supervisor</t>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Estado:</strong>
+                                        <p class="mb-0">
+                                            <t t-if="project.state_id">
+                                                <span t-attf-class="badge badge-#{project.state_id.sequence or '0'}">
+                                                    <t t-esc="project.state_id.name"/>
+                                                </span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-0">Sin estado</span>
+                                            </t>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Comentarios -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="portal-card">
+                                <h3 class="mb-4">
+                                    <i class="fas fa-comments me-2"></i>Comentarios del Proyecto
+                                </h3>
+
+                                <!-- Formulario para nuevo comentario -->
+                                <div class="mb-4">
+                                    <form method="post" action="/portal/bim/projects">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="project_id" t-att-value="project.id"/>
+                                        <div class="mb-3">
+                                            <label for="comment" class="form-label">
+                                                <strong>Agregar comentario:</strong>
+                                            </label>
+                                            <textarea class="form-control" 
+                                                      id="comment" 
+                                                      name="comment" 
+                                                      rows="4" 
+                                                      placeholder="Escribe tu comentario aquí..."
+                                                      required="required"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-paper-plane me-2"></i>Enviar Comentario
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <hr/>
+
+                                <!-- Lista de Mensajes del Chatter -->
+                                <div class="messages-list mt-4">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-history me-2"></i>Historial de Comentarios
+                                    </h5>
+                                    <t t-if="messages">
+                                        <t t-foreach="messages" t-as="message">
+                                            <div class="message-item mb-3 p-3 border rounded">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div class="message-author">
+                                                        <strong>
+                                                            <i class="fas fa-user-circle me-2"></i>
+                                                            <t t-if="message.author_id">
+                                                                <t t-esc="message.author_id.name"/>
+                                                            </t>
+                                                            <t t-else="">Usuario</t>
+                                                        </strong>
+                                                    </div>
+                                                    <div class="message-date text-muted small">
+                                                        <i class="fas fa-clock me-1"></i>
+                                                        <t t-esc="message.date.strftime('%d/%m/%Y %H:%M')"/>
+                                                    </div>
+                                                </div>
+                                                <div class="message-body">
+                                                    <t t-raw="message.body"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            No hay comentarios aún. ¡Sé el primero en comentar!
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Lista de Tickets -->
+    <template id="portal_bim_tickets" name="Portal BIM Tickets">
+        <t t-call="base_bim_2_portal.portal_bim_internal_layout">
+            <div class="content-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1>Mis Tickets</h1>
+                        <p class="text-muted">Reporte incidencias y consulte su estado</p>
+                    </div>
+                    <t t-if="view_mode == 'list'">
+                        <a href="/portal/bim/tickets?action=new" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i> Nuevo Ticket
+                        </a>
+                    </t>
+                    <t t-if="view_mode == 'new' or view_mode == 'detail'">
+                        <a href="/portal/bim/tickets" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver a la lista
+                        </a>
+                    </t>
+                </div>
+            </div>
+            
+            <t t-if="success_message">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    <t t-esc="success_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <t t-if="error_message">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <t t-esc="error_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <!-- Vista de lista -->
+            <t t-if="view_mode == 'list'">
+                <div class="card">
+                    <div class="card-body">
+                        <t t-if="not tickets">
+                            <div class="text-center py-5">
+                                <i class="fas fa-inbox" style="font-size: 60px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                                <h4>No hay tickets registrados</h4>
+                                <p class="text-muted">Cree su primer ticket usando el botón "Nuevo Ticket".</p>
+                            </div>
+                        </t>
+                        
+                        <t t-else="">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Asunto</th>
+                                            <th>Proyecto</th>
+                                            <th>Estado</th>
+                                            <th>Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="tickets" t-as="ticket">
+                                            <tr class="ticket-row" style="cursor: pointer;" t-att-onclick="'window.location.href=\'/portal/bim/tickets?ticket_id=' + str(ticket.id) + '\''">
+                                                <td>
+                                                    <span class="ticket-code">
+                                                        <i class="fas fa-hashtag"></i>
+                                                        <t t-esc="ticket.name or ticket.id"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <strong t-esc="ticket.title"/>
+                                                    <t t-if="ticket.obs">
+                                                        <br/>
+                                                        <small class="text-muted ticket-desc" t-esc="ticket.obs[:80] + ('...' if len(ticket.obs) > 80 else '')"/>
+                                                    </t>
+                                                </td>
+                                                <td t-esc="ticket.project_id.nombre if ticket.project_id else 'N/A'"/>
+                                                <td>
+                                                    <t t-if="ticket.state">
+                                                            <t t-esc="ticket.state"/>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <small t-esc="ticket.create_date.strftime('%d/%m/%Y %H:%M') if ticket.create_date else 'N/A'"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+            
+            <!-- Vista de formulario nuevo -->
+            <t t-if="view_mode == 'new'">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="mb-4">
+                            <i class="fas fa-plus-circle"></i> Crear Nuevo Ticket
+                        </h3>
+                        
+                        <form method="POST" action="/portal/bim/tickets" class="ticket-form" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="project_id" class="form-label">
+                                        <i class="fas fa-project-diagram"></i> Proyecto *
+                                    </label>
+                                    <select class="form-control" id="project_id" name="project_id" required="required">
+                                        <option value="">Seleccione un proyecto</option>
+                                        <t t-foreach="projects" t-as="project">
+                                            <option t-att-value="project.id">
+                                                <t t-esc="project.nombre"/> (<t t-esc="project.name"/>)
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="category_id" class="form-label">
+                                        <i class="fas fa-tags"></i> Categoría *
+                                    </label>
+                                    <select class="form-control" id="category_id" name="category_id" required="required">
+                                        <option value="">Seleccione una categoría</option>
+                                        <t t-foreach="categories" t-as="category">
+                                            <option t-att-value="category.id" t-esc="category.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-12 mb-3">
+                                    <label for="title" class="form-label">
+                                        <i class="fas fa-tag"></i> Asunto *
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="title" 
+                                           name="title" 
+                                           placeholder="Ingrese el asunto del ticket"
+                                           required="required"/>
+                                </div>
+                                
+                                <div class="col-12 mb-3">
+                                    <label for="description" class="form-label">
+                                        <i class="fas fa-align-left"></i> Descripción
+                                    </label>
+                                    <textarea class="form-control" 
+                                              id="description" 
+                                              name="description" 
+                                              rows="6"
+                                              placeholder="Describa el problema o consulta..."></textarea>
+                                </div>
+                                
+                                <div class="col-12 mb-3">
+                                    <label for="comprobante_01" class="form-label">
+                                        <i class="fas fa-paperclip"></i> Adjunto
+                                    </label>
+                                    <input type="file" 
+                                           class="form-control" 
+                                           id="comprobante_01" 
+                                           name="comprobante_01" 
+                                           accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx"/>
+                                    <small class="form-text text-muted">Formatos permitidos: JPG, PNG, PDF, Word, Excel (máx. 10MB)</small>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Crear Ticket
+                                </button>
+                                <a href="/portal/bim/tickets" class="btn btn-secondary ms-2">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </t>
+            
+            <!-- Vista de detalle -->
+            <t t-if="view_mode == 'detail' and ticket">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="ticket-detail-header">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div>
+                                    <h3 class="mb-2">
+                                        <span class="ticket-code me-2">
+                                            <i class="fas fa-hashtag"></i>
+                                            <t t-esc="ticket.name or ticket.id"/>
+                                        </span>
+                                        <t t-esc="ticket.name"/>
+                                    </h3>
+                                    <div class="ticket-meta">
+                                            <span>
+                                                <t t-esc="ticket.state"/>
+                                            </span>
+                                        <span class="text-muted">
+                                            <i class="fas fa-calendar"></i>
+                                            Creado: <t t-esc="ticket.create_date.strftime('%d/%m/%Y %H:%M') if ticket.create_date else 'N/A'"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="ticket-section">
+                                    <h5>
+                                        <i class="fas fa-align-left"></i> Descripción
+                                    </h5>
+                                    <div class="ticket-description">
+                                        <t t-if="ticket.obs">
+                                            <p t-esc="ticket.obs"/>
+                                        </t>
+                                        <t t-else="">
+                                            <p class="text-muted">Sin descripción</p>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="ticket-info-panel">
+                                    <h5>
+                                        <i class="fas fa-info-circle"></i> Información
+                                    </h5>
+                                    
+                                    <div class="info-item">
+                                        <label>
+                                            <i class="fas fa-project-diagram"></i> Proyecto
+                                        </label>
+                                        <p t-esc="ticket.project_id.nombre if ticket.project_id else 'N/A'"/>
+                                        <small class="text-muted" t-esc="ticket.project_id.name if ticket.project_id else ''"/>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <label>
+                                            <i class="fas fa-user"></i> Solicitante
+                                        </label>
+                                        <p t-esc="ticket.partner_id.name if ticket.partner_id else 'N/A'"/>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <label>
+                                            <i class="fas fa-clock"></i> Última actualización
+                                        </label>
+                                        <p>
+                                            <small t-esc="ticket.write_date.strftime('%d/%m/%Y %H:%M') if ticket.write_date else 'N/A'"/>
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="info-item" t-if="ticket.comprobante_01">
+                                        <label>
+                                            <i class="fas fa-paperclip"></i> Adjunto
+                                        </label>
+                                        <p>
+                                            <a t-attf-href="/web/content/ticket.bim/#{ticket.id}/comprobante_01/#{ticket.comprobante_01_name}?download=true" 
+                                               class="btn btn-sm btn-outline-primary" target="_blank">
+                                                <i class="fas fa-download"></i> <t t-esc="ticket.comprobante_01_name"/>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    
+    <!-- Documentos -->
+    <template id="portal_bim_documents" name="Portal BIM Documents">
+        <t t-call="base_bim_2_portal.portal_bim_internal_layout">
+            <div class="content-header">
+                <h1>Documentos</h1>
+                <p class="text-muted">Documentación de sus proyectos</p>
+                
+                <t t-if="view_mode == 'list'">
+                    <a href="/portal/bim/documents?action=new" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Nuevo Documento
+                    </a>
+                </t>
+                
+                <t t-if="view_mode == 'new'">
+                    <a href="/portal/bim/documents" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                </t>
+            </div>
+            
+            <t t-if="success_message">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    <t t-esc="success_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <t t-if="error_message">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <t t-esc="error_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <!-- Vista de lista -->
+            <t t-if="view_mode == 'list'">
+                <div class="card">
+                    <div class="card-body">
+                        <t t-if="not documents">
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                                <h4>No hay documentos disponibles</h4>
+                                <p class="text-muted">No se encontraron documentos para sus proyectos.</p>
+                            </div>
+                        </t>
+                        
+                        <t t-if="documents">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Descripción</th>
+                                            <th>Proyecto</th>
+                                            <th>Estado</th>
+                                            <th>Archivo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="documents" t-as="doc">
+                                            <tr>
+                                                <td>
+                                                    <span class="badge bg-secondary">
+                                                        <i class="fas fa-hashtag"></i>
+                                                        <t t-esc="doc.code_doc or 'N/A'"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <strong t-esc="doc.desc or 'Sin descripción'"/>
+                                                </td>
+                                                <td>
+                                                    <t t-if="doc.project_id">
+                                                        <t t-esc="doc.project_id.nombre"/>
+                                                        <br/>
+                                                        <small class="text-muted" t-esc="doc.project_id.name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="text-muted">N/A</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="doc.costumer_state == 'draft'">
+                                                        <span class="badge bg-secondary">
+                                                            <i class="fas fa-file"></i> Borrador
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="doc.costumer_state == 'approved'">
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check-circle"></i> Aprobado
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="doc.costumer_state == 'rejected'">
+                                                        <span class="badge bg-danger">
+                                                            <i class="fas fa-times-circle"></i> Rechazado
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="doc.costumer_state == 'cancelled'">
+                                                        <span class="badge bg-dark">
+                                                            <i class="fas fa-ban"></i> Cancelado
+                                                        </span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="doc.file_01 and doc.file_name">
+                                                        <i class="fas fa-file text-primary"></i>
+                                                        <t t-esc="doc.file_name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="text-muted">Sin archivo</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="doc.file_01 and doc.file_name">
+                                                        <a t-attf-href="/web/content/bim.documentation/#{doc.id}/file_01/#{doc.file_name}?download=true" 
+                                                           class="btn btn-sm btn-primary" 
+                                                           target="_blank">
+                                                            <i class="fas fa-download"></i> Descargar
+                                                        </a>
+                                                    </t>
+                                                    
+                                                    <t t-if="doc.costumer_state == 'draft'">
+                                                        <a t-attf-href="/portal/bim/documents/approve/#{doc.id}" 
+                                                           class="btn btn-sm btn-success ms-1"
+                                                           onclick="return confirm('¿Está seguro de aprobar este documento?');">
+                                                            <i class="fas fa-check"></i> Aprobar
+                                                        </a>
+                                                        <a t-attf-href="/portal/bim/documents/reject/#{doc.id}" 
+                                                           class="btn btn-sm btn-danger ms-1"
+                                                           onclick="return confirm('¿Está seguro de rechazar este documento?');">
+                                                            <i class="fas fa-times"></i> Rechazar
+                                                        </a>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+            
+            <!-- Vista de formulario nuevo -->
+            <t t-if="view_mode == 'new'">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="mb-4">
+                            <i class="fas fa-plus-circle"></i> Crear Nuevo Documento
+                        </h3>
+                        
+                        <form method="POST" action="/portal/bim/documents" class="ticket-form" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="project_id" class="form-label">
+                                        <i class="fas fa-project-diagram"></i> Proyecto *
+                                    </label>
+                                    <select class="form-control" id="project_id" name="project_id" required="required">
+                                        <option value="">Seleccione un proyecto</option>
+                                        <t t-foreach="projects" t-as="project">
+                                            <option t-att-value="project.id">
+                                                <t t-esc="project.nombre"/> (<t t-esc="project.name"/>)
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="code_doc" class="form-label">
+                                        <i class="fas fa-barcode"></i> Código *
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="code_doc" 
+                                           name="code_doc" 
+                                           placeholder="Ingrese el código del documento"
+                                           required="required"/>
+                                </div>
+                                
+                                <div class="col-12 mb-3">
+                                    <label for="desc" class="form-label">
+                                        <i class="fas fa-align-left"></i> Descripción *
+                                    </label>
+                                    <textarea class="form-control" 
+                                              id="desc" 
+                                              name="desc" 
+                                              rows="4"
+                                              placeholder="Describa el documento..."
+                                              required="required"></textarea>
+                                </div>
+                                
+                                <div class="col-12 mb-3">
+                                    <label for="file_01" class="form-label">
+                                        <i class="fas fa-paperclip"></i> Archivo *
+                                    </label>
+                                    <input type="file" 
+                                           class="form-control" 
+                                           id="file_01" 
+                                           name="file_01" 
+                                           accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx,.dwg,.dxf"
+                                           required="required"/>
+                                    <small class="form-text text-muted">Formatos permitidos: JPG, PNG, PDF, Word, Excel, AutoCAD (máx. 25MB)</small>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Crear Documento
+                                </button>
+                                <a href="/portal/bim/documents" class="btn btn-secondary ms-2">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    
+    <!-- Presupuestos -->
+    <template id="portal_bim_budgets" name="Portal BIM Budgets">
+        <t t-call="base_bim_2_portal.portal_bim_internal_layout">
+            <div class="content-header">
+                <h1>Presupuestos</h1>
+                <p class="text-muted">Consulte y gestione sus presupuestos</p>
+                
+                <t t-if="view_mode == 'detail'">
+                    <a href="/portal/bim/budgets" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                </t>
+            </div>
+            
+            <!-- Vista de lista -->
+            <t t-if="view_mode == 'list'">
+                <t t-if="not budgets">
+                    <div class="card">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-calculator" style="font-size: 60px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                            <h3>No hay presupuestos disponibles</h3>
+                            <p class="text-muted">Actualmente no tiene presupuestos registrados.</p>
+                        </div>
+                    </div>
+                </t>
+                
+                <t t-if="budgets">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Estado</th>
+                                            <th>Estado Aprobación</th>
+                                            <th class="text-end">Importe</th>
+                                            <th class="text-center">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="budgets" t-as="budget">
+                                            <tr class="ticket-row" style="cursor: pointer;" t-att-onclick="'window.location.href=&quot;/portal/bim/budgets?budget_id=' + str(budget.id) + '&quot;'">
+                                                <td>
+                                                    <strong><t t-esc="budget.code or 'N/A'"/></strong>
+                                                </td>
+                                                <td>
+                                                    <t t-esc="budget.name or 'Sin nombre'"/>
+                                                </td>
+                                                <td>
+                                                    <t t-if="budget.state_id">
+                                                        <span t-attf-class="badge badge-#{budget.state_id.sequence or '0'}">
+                                                            <t t-esc="budget.state_id.name"/>
+                                                        </span>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="badge badge-0">Sin estado</span>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="budget.costumer_state == 'draft'">
+                                                        <span class="badge bg-secondary">Borrador</span>
+                                                    </t>
+                                                    <t t-elif="budget.costumer_state == 'approved'">
+                                                        <span class="badge bg-success">Aprobado</span>
+                                                    </t>
+                                                    <t t-elif="budget.costumer_state == 'rejected'">
+                                                        <span class="badge bg-danger">Rechazado</span>
+                                                    </t>
+                                                    <t t-elif="budget.costumer_state == 'cancelled'">
+                                                        <span class="badge bg-dark">Cancelado</span>
+                                                    </t>
+                                                </td>
+                                                <td class="text-end">
+                                                    <strong><t t-esc="'{:,.2f}'.format(budget.amount_total or 0)"/></strong>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a t-attf-href="/portal/bim/budgets?budget_id=#{budget.id}" 
+                                                       class="btn btn-sm btn-primary"
+                                                       onclick="event.stopPropagation();">
+                                                        <i class="fas fa-eye"></i> Ver
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+            
+            <!-- Vista de detalle -->
+            <t t-if="view_mode == 'detail' and budget">
+                <div class="row">
+                    <!-- Información del Presupuesto -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="mb-4">
+                                    <i class="fas fa-info-circle me-2"></i>Información del Presupuesto
+                                </h3>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="text-muted small">Código</label>
+                                        <p class="mb-0"><strong><t t-esc="budget.code or 'N/A'"/></strong></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="text-muted small">Nombre</label>
+                                        <p class="mb-0"><strong><t t-esc="budget.name or 'Sin nombre'"/></strong></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="text-muted small">Estado</label>
+                                        <p class="mb-0">
+                                            <t t-if="budget.state_id">
+                                                <span t-attf-class="badge badge-#{budget.state_id.sequence or '0'}">
+                                                    <t t-esc="budget.state_id.name"/>
+                                                </span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-0">Sin estado</span>
+                                            </t>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="text-muted small">Estado Aprobación</label>
+                                        <p class="mb-0">
+                                            <t t-if="budget.costumer_state == 'draft'">
+                                                <span class="badge bg-secondary">Borrador</span>
+                                            </t>
+                                            <t t-elif="budget.costumer_state == 'approved'">
+                                                <span class="badge bg-success">Aprobado</span>
+                                            </t>
+                                            <t t-elif="budget.costumer_state == 'rejected'">
+                                                <span class="badge bg-danger">Rechazado</span>
+                                            </t>
+                                            <t t-elif="budget.costumer_state == 'cancelled'">
+                                                <span class="badge bg-dark">Cancelado</span>
+                                            </t>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="text-muted small">Importe Total</label>
+                                        <p class="mb-0">
+                                            <strong style="font-size: 1.2em; color: var(--primary-color);">
+                                                <t t-esc="'{:,.2f}'.format(budget.amount_total or 0)"/>
+                                            </strong>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label class="text-muted small">Notas</label>
+                                        <p class="mb-0">
+                                            <t t-if="budget.note">
+                                                <t t-esc="budget.note"/>
+                                            </t>
+                                            <t t-else="">
+                                                <em class="text-muted">Sin notas</em>
+                                            </t>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Botones de aprobación/rechazo -->
+                                <t t-if="budget.costumer_state == 'draft'">
+                                    <hr/>
+                                    <div class="d-flex gap-2">
+                                        <form method="POST" action="/portal/bim/budgets/action" class="d-inline">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="budget_id" t-att-value="budget.id"/>
+                                            <input type="hidden" name="action" value="approve"/>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-check-circle me-2"></i>Aprobar Presupuesto
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="/portal/bim/budgets/action" class="d-inline">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="budget_id" t-att-value="budget.id"/>
+                                            <input type="hidden" name="action" value="reject"/>
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fas fa-times-circle me-2"></i>Rechazar Presupuesto
+                                            </button>
+                                        </form>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Adjuntos -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="mb-4">
+                                    <i class="fas fa-paperclip me-2"></i>Adjuntos
+                                </h3>
+                                <t t-if="attachments">
+                                    <div class="list-group">
+                                        <t t-foreach="attachments" t-as="attachment">
+                                            <a t-attf-href="/portal/bim/budgets/attachment/#{attachment.id}" 
+                                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                               target="_blank">
+                                                <div>
+                                                    <i class="fas fa-file me-2"></i>
+                                                    <span t-esc="attachment.name"/>
+                                                </div>
+                                                <i class="fas fa-download text-primary"></i>
+                                            </a>
+                                        </t>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <div class="alert alert-info mb-0">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        No hay adjuntos disponibles
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    
+    <!-- Facturas -->
+    <template id="portal_bim_invoices" name="Portal BIM Invoices">
+        <t t-call="base_bim_2_portal.portal_bim_internal_layout">
+            <div class="content-header">
+                <h1>Facturas</h1>
+                <p class="text-muted">Facturas de venta a su nombre</p>
+                
+                <t t-if="view_mode == 'detail'">
+                    <a href="/portal/bim/invoices" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la lista
+                    </a>
+                </t>
+            </div>
+            
+            <t t-if="success_message">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    <t t-esc="success_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <t t-if="error_message">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <t t-esc="error_message"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            
+            <!-- Vista de lista -->
+            <t t-if="view_mode == 'list'">
+                <div class="card">
+                    <div class="card-body">
+                        <t t-if="not invoices">
+                            <div class="empty-state">
+                                <i class="fas fa-file-invoice fa-3x text-muted mb-3"></i>
+                                <h4>No hay facturas disponibles</h4>
+                                <p class="text-muted">No se encontraron facturas a su nombre.</p>
+                            </div>
+                        </t>
+                        
+                        <t t-if="invoices">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Número</th>
+                                            <th>Fecha</th>
+                                            <th>Vencimiento</th>
+                                            <th>Estado</th>
+                                            <th>Estado Pago</th>
+                                            <th>Total</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="invoices" t-as="invoice">
+                                            <tr class="ticket-row" style="cursor: pointer;" t-att-onclick="'window.location.href=&quot;/portal/bim/invoices?invoice_id=' + str(invoice.id) + '&quot;'">
+                                            <td>
+                                                <strong>
+                                                    <i class="fas fa-file-invoice"></i>
+                                                    <t t-esc="invoice.name or 'Borrador'"/>
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                <t t-esc="invoice.invoice_date.strftime('%d/%m/%Y') if invoice.invoice_date else 'N/A'"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="invoice.invoice_date_due.strftime('%d/%m/%Y') if invoice.invoice_date_due else 'N/A'"/>
+                                            </td>
+                                            <td>
+                                                <t t-if="invoice.state == 'draft'">
+                                                    <span class="badge bg-secondary">
+                                                        <i class="fas fa-file"></i> Borrador
+                                                    </span>
+                                                </t>
+                                                <t t-elif="invoice.state == 'posted'">
+                                                    <span class="badge bg-info">
+                                                        <i class="fas fa-paper-plane"></i> Publicada
+                                                    </span>
+                                                </t>
+                                                <t t-elif="invoice.state == 'cancel'">
+                                                    <span class="badge bg-danger">
+                                                        <i class="fas fa-ban"></i> Cancelada
+                                                    </span>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <t t-if="invoice.state == 'posted'">
+                                                    <t t-if="invoice.payment_state == 'paid'">
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check-circle"></i> Pagada
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="invoice.payment_state == 'partial'">
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="fas fa-hourglass-half"></i> Pago Parcial
+                                                        </span>
+                                                    </t>
+                                                    <t t-elif="invoice.payment_state == 'not_paid'">
+                                                        <span class="badge bg-danger">
+                                                            <i class="fas fa-times-circle"></i> No Pagada
+                                                        </span>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="fas fa-clock"></i> Pendiente
+                                                        </span>
+                                                    </t>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="text-muted">-</span>
+                                                </t>
+                                            </td>
+                                            <td>
+                                                <strong>
+                                                    <t t-esc="'{:,.2f}'.format(invoice.amount_total)"/>
+                                                    <t t-esc="invoice.currency_id.symbol if invoice.currency_id else ''"/>
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                <t t-if="invoice.state == 'posted'">
+                                                    <a t-attf-href="/portal/bim/invoices/pdf/#{invoice.id}" 
+                                                       class="btn btn-sm btn-primary" 
+                                                       target="_blank"
+                                                       onclick="event.stopPropagation();">
+                                                        <i class="fas fa-file-pdf"></i> PDF
+                                                    </a>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="text-muted">N/A</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </div>
+            </div>
+            </t>
+        
+        <!-- Vista de detalle -->
+        <t t-if="view_mode == 'detail' and invoice">
+            <div class="row">
+                <!-- Información de la factura -->
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="mb-4">
+                                <i class="fas fa-file-invoice"></i>
+                                Factura <t t-esc="invoice.name or 'Borrador'"/>
+                            </h3>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted">Cliente</label>
+                                    <p><strong t-esc="invoice.partner_id.name"/></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted">Fecha</label>
+                                    <p><strong t-esc="invoice.invoice_date.strftime('%d/%m/%Y') if invoice.invoice_date else 'N/A'"/></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted">Fecha Vencimiento</label>
+                                    <p><strong t-esc="invoice.invoice_date_due.strftime('%d/%m/%Y') if invoice.invoice_date_due else 'N/A'"/></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted">Estado</label>
+                                    <p>
+                                        <t t-if="invoice.state == 'draft'">
+                                            <span class="badge bg-secondary">Borrador</span>
+                                        </t>
+                                        <t t-elif="invoice.state == 'posted'">
+                                            <t t-if="invoice.payment_state == 'paid'">
+                                                <span class="badge bg-success">Pagada</span>
+                                            </t>
+                                            <t t-elif="invoice.payment_state == 'partial'">
+                                                <span class="badge bg-warning">Pago Parcial</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-info">Publicada</span>
+                                            </t>
+                                        </t>
+                                        <t t-elif="invoice.state == 'cancel'">
+                                            <span class="badge bg-danger">Cancelada</span>
+                                        </t>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <hr/>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Subtotal</h5>
+                                    <p><strong><t t-esc="'{:,.2f}'.format(invoice.amount_untaxed)"/> <t t-esc="invoice.currency_id.symbol"/></strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Impuestos</h5>
+                                    <p><strong><t t-esc="'{:,.2f}'.format(invoice.amount_tax)"/> <t t-esc="invoice.currency_id.symbol"/></strong></p>
+                                </div>
+                                <div class="col-md-12">
+                                    <h4 class="text-primary">Total</h4>
+                                    <h3><strong><t t-esc="'{:,.2f}'.format(invoice.amount_total)"/> <t t-esc="invoice.currency_id.symbol"/></strong></h3>
+                                </div>
+                            </div>
+                            
+                            <t t-if="invoice.state == 'posted'">
+                                <hr/>
+                                <a t-attf-href="/portal/bim/invoices/pdf/#{invoice.id}" 
+                                   class="btn btn-primary" 
+                                   target="_blank">
+                                    <i class="fas fa-file-pdf"></i> Descargar PDF
+                                </a>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Comprobante de pago -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-3">
+                                <i class="fas fa-receipt"></i> Comprobante de Pago
+                            </h5>
+                            
+                            <!-- Lista de comprobantes existentes -->
+                            <t t-if="attachments">
+                                <div class="mb-3">
+                                    <label class="text-muted">Comprobantes subidos:</label>
+                                    <t t-foreach="attachments" t-as="attachment">
+                                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                                            <div>
+                                                <i class="fas fa-paperclip text-primary"></i>
+                                                <small t-esc="attachment.name"/>
+                                            </div>
+                                            <a t-attf-href="/web/content/#{attachment.id}?download=true" 
+                                               class="btn btn-sm btn-outline-primary" 
+                                               target="_blank">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                            
+                            <!-- Formulario para subir comprobante -->
+                            <form method="POST" 
+                                  t-attf-action="/portal/bim/invoices/upload-payment/#{invoice.id}" 
+                                  enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                
+                                <div class="mb-3">
+                                    <label for="payment_proof" class="form-label">
+                                        <i class="fas fa-cloud-upload-alt"></i> Subir comprobante
+                                    </label>
+                                    <input type="file" 
+                                           class="form-control" 
+                                           id="payment_proof" 
+                                           name="payment_proof" 
+                                           accept=".jpg,.jpeg,.png,.pdf"
+                                           required="required"/>
+                                    <small class="form-text text-muted">Formatos: JPG, PNG, PDF</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="payment_note" class="form-label">Nota (opcional)</label>
+                                    <textarea class="form-control" 
+                                              id="payment_note" 
+                                              name="payment_note" 
+                                              rows="3"
+                                              placeholder="Observaciones sobre el pago..."></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-upload"></i> Subir Comprobante
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        </t>
+    </template>
+</odoo>

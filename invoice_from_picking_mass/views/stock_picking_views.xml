@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record id="view_invoice_from_picking_mass" model="ir.ui.view">
+            <field name="name">view.invoice.from.picking.mass</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="state_invoice"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_invoice_from_picking_mass_tree" model="ir.ui.view">
+            <field name="name">view.invoice.from.picking.mass.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="state_invoice"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

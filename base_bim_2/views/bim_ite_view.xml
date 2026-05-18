@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_bim_ite" model="ir.ui.view">
+            <field name="name">view.form.bim.ite</field>
+            <field name="model">bim.ite</field>
+            <field name="arch" type="xml">
+                <form delete="0" string="ITE">
+                    <sheet>
+                        <field class="oe_avatar" name="image" options='{"preview_image": "image"}' widget="image"/>
+                        <div class="o_address_format">
+                            <h1>
+                                <field class="oe_inline" colspan="1" name="name" required="1"/>
+                                <field class="oe_inline" colspan="3" name="desc" placeholder="Description" required="1" style="margin-left: 30px"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <div class="oe_grey" colspan="4">
+                                    <p>
+                                        <strong>
+                                            - X :
+                                        </strong>
+                                        Base1 / Ratio
+                                    </p>
+                                    <p>
+                                        <strong>
+                                            - Y :
+                                        </strong>
+                                        Base2 / Width
+                                    </p>
+                                    <p>
+                                        <strong>
+                                            - Z :
+                                        </strong>
+                                        Height
+                                    </p>
+                                    <p>
+                                        <strong>
+                                            Other Available Operators
+                                        </strong>
+                                    </p>
+                                    <p>
+                                        <strong>
+                                            - X² :
+                                        </strong>
+                                        X**2 ó pow(x,2)
+                                    </p>
+                                    <!-- <p><strong>- π :</strong> pi ó 3.14</p>-->
+                                </div>
+                            </group>
+                            <group>
+                                <field name="val_n" required="1"/>
+                                <field name="val_x" required="1"/>
+                                <field name="val_y" required="1"/>
+                                <field name="val_z" required="1"/>
+                                <field force_save="1" name="amount"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Concepts List">
+                                <field name="line_ids"><list create="1" delete="1" editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="type" required="1"/>
+                                        <field invisible="type == False or type == 'concept'" name="product_id" options="{'no_create': True}" required="type == 'product'"/>
+                                        <field name="code" required="1"/>
+                                        <field name="name" required="1"/>
+                                        <field name="product_uom" options="{'no_create': True}"/>
+                                        <field name="formula" placeholder="Ej:(x+y)/z" required="1"/>
+                                        <field name="qty_calc" sum="Sum"/>
+                                        <field name="price" readonly="type == 'concept'" required="1"/>
+                                        <field name="amount" sum="Sum"/>
+                                        <field name="parent_id" optional="hide"/>
+                                    </list></field>
+                            </page>
+                        </notebook>
+                        <field name="obs" placeholder="Notes.."/>
+                    </sheet>
+                    <chatter/>
+                </form></field>
+        </record>
+
+        <record id="view_tree_bim_ite" model="ir.ui.view">
+            <field name="name">view.tree.bim.ite</field>
+            <field name="model">bim.ite</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="desc"/>
+                    <field name="amount"/>
+                    <field name="company_id"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="action_bim_ite" model="ir.actions.act_window">
+            <field name="name">ITE</field>
+            <field name="res_model">bim.ite</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a new Entry!
+                </p></field>
+        </record>
+    </data>
+</odoo>

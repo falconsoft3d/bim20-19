@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <record id="view_form_bim_model" model="ir.ui.view">
+        <field name="name">view.form.bim.model</field>
+        <field name="model">bim.model</field>
+        <field name="arch" type="xml">
+            <form string="model" delete="0" >
+                <header>
+                       <button name="upload_model"
+                               invisible="state != 'draft'"
+                               class="oe_highlight"
+                               string="Upload Model" type="object"/>
+                       <button name="derive_model"
+                               class="oe_highlight"
+                               invisible="state != 'uploaded'"
+                               string="Derivate Model" type="object"/>
+                       <button name="status_derive_model"
+                               class="oe_highlight"
+                               invisible="state not in 'derived,status,failed,uploaded'"
+                               string="Check Status" type="object"/>
+
+                       <button name="delete_model"
+                               class="oe_highlight"
+                               confirm="Are you sure you want to delete this model?"
+                               string="Delete Model" type="object"/>
+
+                       <button name="load_data"
+                               class="oe_highlight"
+                               invisible="state != 'done'"
+                               string="Load Data" type="object"/>
+
+                       <button name="set_draft"
+                               string="Set Draft" type="object"/>
+
+                       <field name="state" widget="statusbar"/>
+                 </header>
+                <sheet>
+                    <div class="oe_title">
+                       <h1>
+                           <field name="name"/>
+                       </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="bim_bucket_id"
+                                   options='{"no_create": 1, "no_open": 1}'
+                                   readonly="state != 'draft'"
+                            />
+                            <field invisible="True" name="attachment_name"/>
+                            <field filename="attachment_name"
+                                   readonly="state != 'draft'"
+                                   name="attachment"/>
+                            <field name="urn"  invisible="urn == False"/>
+                            <field name="urn2"  invisible="urn2 == False"/>
+
+                        </group>
+                        <group>
+                            <field name="url"
+                                   invisible="state != 'done'"
+                                   widget="url"
+                                   readonly="1"/>
+                            <field name="description" readonly="state != 'draft'" />
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <list editable="bottom" create="1" delete="1">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="area"/>
+                                    <field name="volume"/>
+                                    <field name="perimeter"/>
+                                    <field name="thickness"/>
+                                    <field name="bim_concept_template_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Data">
+                            <field name="data" readonly="1"/>
+                        </page>
+                    </notebook>
+
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_bim_model" model="ir.ui.view">
+        <field name="name">view.tree.bim.model</field>
+        <field name="model">bim.model</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="bim_bucket_id"/>
+                <field name="company_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_model" model="ir.actions.act_window">
+        <field name="name">Bim model</field>
+        <field name="res_model">bim.model</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create a new bim model!
+            </p>
+        </field>
+    </record>
+
+    </data>
+
+</odoo>

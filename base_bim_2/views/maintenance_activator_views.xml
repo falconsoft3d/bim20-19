@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <odoo>
+      <record id="view_form_maintenance_activator" model="ir.ui.view">
+         <field name="name">view.form.maintenance.activator</field>
+         <field name="model">maintenance.activator</field>
+         <field name="arch" type="xml">
+            <form>
+              <sheet>
+                    <group>
+                        <group>
+                            <field name="type" required="1"/>
+                            <field name="maintenance_task_id"/>
+                        </group>
+                        <group>
+                            <field name="do_each"/>
+                            <field name="frequency"/>
+                            <field name="type_of_programming"/>
+                        </group>
+                    </group>
+               </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tree_maintenance_activator" model="ir.ui.view">
+         <field name="name">view.tree.maintenance.activator</field>
+         <field name="model">maintenance.activator</field>
+         <field name="arch" type="xml">
+             <list>
+                 <field name="maintenance_task_id"/>
+                 <field name="type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_maintenance_activator" model="ir.actions.act_window">
+        <field name="name">Activator</field>
+        <field name="res_model">maintenance.activator</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

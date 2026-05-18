@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="crm_form_bim_budget_view" model="ir.ui.view">
+            <field name="name">crm.form.bim.budget.view</field>
+            <field name="model">bim.budget</field>
+            <field name="inherit_id" ref="base_bim_2.view_form_bim_budget"/>
+            <field name="arch" type="xml">
+                <field name="sale_order_id" position="after">
+                    <field name="opportunity_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="crm_tree_bim_budget_view" model="ir.ui.view">
+            <field name="name">crm.tree.bim.budget.view</field>
+            <field name="model">bim.budget</field>
+            <field name="inherit_id" ref="base_bim_2.view_tree_bim_budget"/>
+            <field name="arch" type="xml">
+                <field name="sale_order_id" position="after">
+                    <field name="opportunity_id" optional="show"/>
+                </field>
+            </field>
+        </record>
+</odoo>
