@@ -42,13 +42,8 @@
         </record>
 
         <!-- Unidades de Medida  -->
-        <record id="uom_categ_function" model="uom.category">
-            <field name="name">FUNCTION</field>
-        </record>
-
         <record id="product_uom_percent" model="uom.uom">
             <field name="name">(%) Percentage</field>
-            <field name="category_id" ref="uom_categ_function"/>
             <field name="factor" eval="1.0"/>
             <field name="rounding" eval="0.001"/>
         </record>

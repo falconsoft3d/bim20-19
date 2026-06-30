@@ -332,7 +332,7 @@ class BimImportTemp(models.Model):
 
                         if uom_id:
                             product_id.uom_id = uom_id.id
-                            product_id.uom_po_id = uom_id.id
+                            product_id.uom_id = uom_id.id
 
                     vals = {
                         'type': 'subcontract',
@@ -392,7 +392,7 @@ class BimImportTemp(models.Model):
 
                         if uom_id:
                             product_id.uom_id = uom_id.id
-                            product_id.uom_po_id = uom_id.id
+                            product_id.uom_id = uom_id.id
 
 
 
@@ -435,7 +435,7 @@ class BimImportTemp(models.Model):
 
                         if uom_id:
                             product_id.uom_id = uom_id.id
-                            product_id.uom_po_id = uom_id.id
+                            product_id.uom_id = uom_id.id
 
 
 
@@ -1808,7 +1808,7 @@ class BimImportTemp(models.Model):
                         'default_code': str(row[0].value).strip(),
                         'categ_id': category.id or False,
                         'uom_id': uom_id.id or units_id,
-                        'uom_po_id': uom_id.id or units_id,
+                        'uom_id': uom_id.id or units_id,
                     })
                 concept.product_id = product
             # Si esta línea no tiene naturaleza, y tampoco es la siguiente luego
@@ -1972,7 +1972,7 @@ class BimImportTemp(models.Model):
                             'standard_price': price if self.product_cost_or_price == 'cost' else 0,
                             'categ_id': category.id or False,
                             'uom_id': uom_id.id or units_id,
-                            'uom_po_id': uom_id.id or units_id,
+                            'uom_id': uom_id.id or units_id,
                         })
                     concept.product_id = product
 

@@ -43,13 +43,13 @@ class LiquidateStockWzd(models.TransientModel):
                 'location_dest_id': self.location_dest_id.id,
                 'location_id': self.project_id.stock_location_id.id,
                 'company_id': self.company_id.id,
-                'move_ids_without_package': picking_lines
+                'move_ids': picking_lines
             }
             picking = self.env['stock.picking'].create(vals)
             picking.action_confirm()
             picking.action_assign()
             picking._action_done()
-            for line in picking.move_ids_without_package:
+            for line in picking.move_ids:
                 line.quantity_done = line.product_uom_qty
             picking.button_validate()
             self.project_id.message_post(body=_("All products from this Project were liquidated to another location: {} in transfer: {} by user: {}").format(self.location_dest_id.name,picking.name,self.env.user.name))
@@ -107,13 +107,13 @@ class LiquidateStockWzd(models.TransientModel):
                     'location_id': location_id.id,
                     'company_id': self.company_id.id,
                     'moved_from': self.picking_id.id,
-                    'move_ids_without_package': picking_lines
+                    'move_ids': picking_lines
                 }
                 picking = self.env['stock.picking'].create(vals)
                 picking.action_confirm()
                 picking.action_assign()
                 picking._action_done()
-                for line in picking.move_ids_without_package:
+                for line in picking.move_ids:
                     line.quantity_done = line.product_uom_qty
                 picking.button_validate()
 

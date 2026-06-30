@@ -17,18 +17,18 @@ class StockPicking(models.Model):
             rec.update_picking_total_cost()
 
 
-    @api.depends('move_ids_without_package.product_cost','move_ids_without_package.quantity')
+    @api.depends('move_ids.product_cost','move_ids.quantity')
     def compute_picking_total_cost(self):
         _logger.info('= compute_picking_total_cost = ')
         for picking in self:
             total = 0
-            for line in picking.move_ids_without_package:
+            for line in picking.move_ids:
                 total += line.product_cost * ( line.quantity - line.assets_qty )
             picking.total_cost = total
 
     def update_picking_total_cost(self):
         for picking in self:
-            for line in picking.move_ids_without_package:
+            for line in picking.move_ids:
                 if self.state == 'done':
                     line.assets_qty = 0
 

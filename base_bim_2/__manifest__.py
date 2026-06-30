@@ -11,7 +11,7 @@
 
 {
     'name': 'BASE BIM 2.0 MFH',
-    'version': '18.0.19.04.2026',
+    'version': '19.0.19.04.2026',
     'author': "Marlon Falcon Hernandez",
     'maintainer': 'Marlon Falcon Hernandez',
     'website': 'http://www.bim20.com',

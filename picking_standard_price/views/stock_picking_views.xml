@@ -40,7 +40,7 @@
                <xpath expr="//header" position="inside">
                    <button type="object" name="update_picking_total_cost" string="Update Cost" groups="picking_standard_price.group_picking_cost"/>
                </xpath>
-               <xpath expr="//field[@name='move_ids_without_package']/list/field[@name='lot_ids']" position="after">
+               <xpath expr="//field[@name='move_ids']/list/field[@name='lot_ids']" position="after">
                    <field name="assets_qty" groups="picking_standard_price.group_picking_cost" force_save="1" optional="hide"/>
                    <field name="product_cost"
                           groups="picking_standard_price.group_picking_cost" widget="monetary"

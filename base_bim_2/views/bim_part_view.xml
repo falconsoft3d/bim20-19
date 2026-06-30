@@ -55,7 +55,6 @@
                                 <field name="lines_ids" nolabel="1">
                                     <list editable="bottom">
                                         <field invisible="True" name="filter_type"/>
-                                        <field invisible="True" name="product_uom_category_id"/>
                                         <field force_save="1" name="partner_id" options='{"no_create": 1}' readonly="filter_type == 'doc'" required="filter_type == 'line'"/>
                                         <field domain="[('resource_type', 'in', ['H','Q']),('type', 'in', ['service'])]" name="name" options='{"no_create": 1}' required="1"/>
                                         <field force_save="1" name="resource_type" readonly="1"/>

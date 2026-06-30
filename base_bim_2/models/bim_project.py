@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Bim20. See LICENSE file for full copyright and licensing details.
 import base64
-from odoo import api, fields, models, _
+from odoo import api, fields, models, tools, _
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError, RedirectWarning, ValidationError, AccessError
-from odoo.modules.module import get_module_resource
 from random import randint
 import logging
 _logger = logging.getLogger(__name__)
@@ -286,7 +285,7 @@ class bim_project(models.Model):
 
     @api.model
     def _default_image(self):
-        image_path = get_module_resource('base_bim_2', 'static/src/img', 'default_image.png')
+        image_path = tools.file_path('base_bim_2/static/src/img/default_image.png')
         return base64.b64encode(open(image_path, 'rb').read())
 
     image_1920 = fields.Image("Image", max_width=1920, max_height=1920, default=_default_image)

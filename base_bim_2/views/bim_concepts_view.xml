@@ -457,7 +457,6 @@
                             <field name="sale_price" invisible="type not in ['chapter', 'departure']" />
                             <field invisible="type not in ['chapter', 'departure']" name="amount_type"/>
                             <field invisible="type not in ['equip']" name="depreciation"/>
-                            <field invisible="True" name="product_uom_category_id"/>
                             <field invisible="type in ['chapter']" name="uom_id" options="{'no_create': True, 'no_edit': True}"/>
                             <field invisible="type == False" name="balance"/>
 

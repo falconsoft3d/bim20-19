@@ -489,7 +489,6 @@ class BimConcepts(models.Model):
     budget_id = fields.Many2one('bim.budget', "Budget", required=True)
     parent_id = fields.Many2one('bim.concepts', "Parent")
     uom_id = fields.Many2one('uom.uom', string='UoM', domain="[]")
-    product_uom_category_id = fields.Many2one(related='product_id.uom_id.category_id')
     product_id = fields.Many2one('product.product', "Product", ondelete='restrict')
     rubro_id = fields.Many2one('bim.rubro', string='Rubro', related='product_id.rubro_id', store=True)
     srubro_id = fields.Many2one('bim.rubro', string='Subrubro', related='product_id.srubro_id', store=True)

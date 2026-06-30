@@ -6,7 +6,7 @@ from datetime import datetime
 from odoo.exceptions import UserError,ValidationError
 import base64
 from io import BytesIO
-from odoo.tools.misc import xlwt
+import xlwt
 
 class BimPurchaseServices(models.Model):
     _inherit = ['mail.thread']

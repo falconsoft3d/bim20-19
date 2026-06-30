@@ -2,8 +2,8 @@
 # Part of Bim20. See LICENSE file for full copyright and licensing details.
 from odoo import api, fields, models, _
 
-class HrEmployeeBimBase(models.AbstractModel):
-    _inherit = 'hr.employee.base'
+class HrEmployeeBimBase(models.Model):
+    _inherit = 'hr.employee'
 
     wage_bim = fields.Float('BIM Salary', digits="BIM price")
     default_bim_project = fields.Many2one('bim.project', string='Default Project')

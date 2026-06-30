@@ -153,7 +153,6 @@
                                         TODO: at some point we want to fix this in the framework so that an invisible field is not required.
                                     -->
                                         <field invisible="True" name="sequence"/>
-                                        <field invisible="True" name="product_uom_category_id"/>
                                         <group>
                                             <group invisible="display_type != False">
                                                 <field invisible="True" name="product_updatable"/>
@@ -221,7 +220,6 @@
                                         <field name="sequence" widget="handle"/>
                                         <!-- We do not display the type because we don't want the user to be bothered with that information if he has no section or note. -->
                                         <field invisible="True" name="display_type"/>
-                                        <field invisible="True" name="product_uom_category_id"/>
                                         <field invisible="True" name="product_updatable"/>
                                         <field context="{                                             'partner_id': parent.partner_id,                                             'quantity': product_uom_qty,                                             'pricelist': parent.pricelist_id,                                             'uom':product_uom,                                             'company_id': parent.company_id,                                             'default_lst_price': price_unit,                                             'default_description_sale': name                                         }" domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]" force_save="1" name="product_id" options="{'no_open': True, 'no_create': True}" readonly="product_updatable == False" required="display_type == False" widget="product_configurator"/>
                                         <field context="{                                           'partner_id': parent.partner_id,                                           'quantity': product_uom_qty,                                           'pricelist': parent.pricelist_id,                                           'uom':product_uom,                                           'company_id': parent.company_id,                                           'default_list_price': price_unit,                                           'default_description_sale': name                                       }" domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]" invisible="True" name="product_template_id" options="{'no_open': True}" readonly="product_updatable == False" required="display_type == False" string="Product" widget="product_configurator"/>

@@ -13,12 +13,10 @@
 
         <record id="group_user_bim_expense" model="res.groups">
             <field name="name">BIM Expense User see owner documents</field>
-            <field name="category_id" ref="bim_expense_category"/>
         </record>
 
         <record id="group_user_bim_expense_all" model="res.groups">
             <field name="name">BIM Expense see all documents</field>
-            <field name="category_id" ref="bim_expense_category"/>
         </record>
 
         <record id="rule_group_user_bim_expense" model="ir.rule">
@@ -37,12 +35,10 @@
 
         <record id="group_bi_bim" model="res.groups">
             <field name="name">BI User</field>
-            <field name="category_id" ref="bim_ro_category"/>
         </record>
 
         <record id="group_bi_bim_admin" model="res.groups">
             <field name="name">BI Admin</field>
-            <field name="category_id" ref="bim_ro_category"/>
         </record>
 
 
@@ -72,15 +68,13 @@
 
         <record id="group_deliver_products_user" model="res.groups">
             <field name="name">Deliver product user</field>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="comment">Usuario</field>
         </record>
 
         <record id="group_purchase_requisition_admin" model="res.groups">
             <field name="name">Purchase requisition admin</field>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="comment">Admin</field>
         </record>
 
@@ -91,13 +85,11 @@
 
         <record id="group_user_bim" model="res.groups">
             <field name="name">BIM User see owner documents</field>
-            <field name="category_id" ref="bim_security_rules_category"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
         <record id="group_user_bim_all" model="res.groups">
             <field name="name">BIM User see all documents</field>
-            <field name="category_id" ref="bim_security_rules_category"/>
             <field name="implied_ids" eval="[(4, ref('group_user_bim'))]"/>
         </record>
 
@@ -105,173 +97,142 @@
 
         <record id="group_bim_purchase_not_limit" model="res.groups">
             <field name="name">BIM Purchase Without Limits</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
             <field name="comment">Purchase Resources without limit according to budgets</field>
         </record>
 
         <record id="group_bim_integrations" model="res.groups">
             <field name="name">BIM Integrations</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_invoice_from_picking" model="res.groups">
             <field name="name">BIM Invoice From Picking</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_maintenance" model="res.groups">
             <field name="name">BIM Maintenance</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_valuation" model="res.groups">
             <field name="name">BIM Valuation</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_sand_box" model="res.groups">
             <field name="name">BIM Sand Box</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_diary_part" model="res.groups">
             <field name="name">Diary Part</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
         <record id="group_block" model="res.groups">
             <field name="name">BIM Blockade</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
         <record id="group_bim_sql_report_user" model="res.groups">
             <field name="name">BIM SQL Report</field>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="comment">BIM SQL Report</field>
         </record>
 
        <record id="group_bim_menu_solpe_mat" model="res.groups">
             <field name="name">Menu Material Request</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_menu_solpe_service" model="res.groups">
             <field name="name">Menu Service Request</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_sat" model="res.groups">
             <field name="name">BIM SAT</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_certification" model="res.groups">
             <field name="name">BIM Certification</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
         <record id="group_bim_paidstate" model="res.groups">
             <field name="name">BIM Paidstate</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
         <record id="group_bim_delete" model="res.groups">
             <field name="name">BIM Delete</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_report_line" model="res.groups">
             <field name="name">Reportes x Líneas</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
 
         <record id="group_bim_trips" model="res.groups">
             <field name="name">BIM TRIPS USER</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_admin_trips" model="res.groups">
             <field name="name">BIM TRIPS ADMIN</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_bim_mkt" model="res.groups">
             <field name="name">BIM Marketing</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
 
         <record id="group_certification_index" model="res.groups">
             <field name="name">Certification Index</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_budget_concept_documents" model="res.groups">
             <field name="name">See budget and concept in documents</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_employee_bim" model="res.groups">
             <field name="name">Construction Employees</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_attendance_bim" model="res.groups">
             <field name="name">Bim Attendance</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_certify_chapters" model="res.groups">
             <field name="name">Certify chapters</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_see_cost_bim" model="res.groups">
             <field name="name">Bim Costs</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_user_bim_employee_doc" model="res.groups">
              <field name="name">BIM Employee Documentation</field>
-             <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
         <record id="group_ia_bim" model="res.groups">
             <field name="name">IA</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
 
 
         <record id="group_special_configuration" model="res.groups">
             <field name="name">Special configurations and rectifications</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
         </record>
 
          <record id="group_bim_usd_user" model="res.groups">
             <field name="name">BIM USD Currency User</field>
-            <field name="category_id" ref="bim_security_extra_rules_category"/>
           </record>
 
         <record id="group_manager_bim" model="res.groups">
             <field name="name">BIM Manager</field>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
-            <field name="category_id" ref="bim_security_rules_category"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="implied_ids" eval="[(4, ref('base_bim_2.group_user_bim')),(4, ref('base_bim_2.group_bim_sat')),
                                             (4, ref('base_bim_2.group_user_bim_all')),(4, ref('base_bim_2.group_bim_usd_user'))]"/>
         </record>
 
         <record id="virtual_product_security_group" model="res.groups">
             <field name="name">Virtual Product Manager</field>
-            <field name="category_id" ref="virtual_product_security_category"/>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
         <record id="virtual_product_security_rule" model="ir.rule">

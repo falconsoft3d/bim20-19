@@ -18,7 +18,7 @@
                     <field name="product_id" optional="show"/>
                     <field name="project_id" optional="hide"/>
                     <field name="concept_phase_id" optional="show"/>
-                    <field name="product_uom" optional="show"/>
+                    <field name="product_uom_id" optional="show"/>
                     <field name="product_qty" optional="show" sum="sum"/>
                     <field name="price_unit" optional="show"/>
                     <field name="price_subtotal" optional="show" sum="sum"/>

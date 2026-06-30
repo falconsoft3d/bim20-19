@@ -161,7 +161,7 @@
                         <td class="text-right">-</td>
                     </tr>
                         <t t-foreach="concept_pickings[0]" t-as="picking" class="active">
-                            <t t-foreach="picking['picking_id'].move_ids_without_package" t-as="picking_line" class="active">
+                            <t t-foreach="picking['picking_id'].move_ids" t-as="picking_line" class="active">
                                 <tr class="child_row">
                                     <td>
                                         <i t-attf-class="fa fa-maxcdn text-warning mr-2 ml-{{pos + 1}}"/>

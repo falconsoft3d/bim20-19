@@ -34,22 +34,20 @@
         </div>
     </t>
 
-    <t t-name="base_bim_2.SitemapView.Buttons" t-inherit="web.ListView.Buttons" t-inherit-mode="primary">
-        <div t-if="props.showButtons" position="after">
-            <button t-if="budgetId" class="btn btn-primary" title="Back to budget" t-on-click="backHome">
-                <i class="fa fa-home fa-fw"/>
+    <t t-name="base_bim_2.SitemapView.Buttons">
+        <button t-if="budgetId" class="btn btn-primary" title="Back to budget" t-on-click="backHome">
+            <i class="fa fa-home fa-fw"/>
+        </button>
+        <div t-if="budgetType" class="dropdown d-inline">
+            <button class="btn btn-primary dropdown-toggle"
+                type="button" id="bim_budget_type_dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Change type
             </button>
-            <div t-if="budgetType" class="dropdown d-inline">
-                <button class="btn btn-primary dropdown-toggle"
-                    type="button" id="bim_budget_type_dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Change type
-                </button>
-                <div class="dropdown-menu" aria-labelledby="bim_budget_type_dropdown">
-                    <button t-attf-class="dropdown-item{{budgetType === 'budget' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('budget')">Budget</button>
-                    <button t-attf-class="dropdown-item{{budgetType === 'certification' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('certification')">Certification</button>
-                    <button t-attf-class="dropdown-item{{budgetType === 'execution' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('execution')">Execution</button>
-                    <button t-attf-class="dropdown-item{{budgetType === 'gantt' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('gantt')">Programming</button>
-                </div>
+            <div class="dropdown-menu" aria-labelledby="bim_budget_type_dropdown">
+                <button t-attf-class="dropdown-item{{budgetType === 'budget' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('budget')">Budget</button>
+                <button t-attf-class="dropdown-item{{budgetType === 'certification' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('certification')">Certification</button>
+                <button t-attf-class="dropdown-item{{budgetType === 'execution' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('execution')">Execution</button>
+                <button t-attf-class="dropdown-item{{budgetType === 'gantt' ? ' active' : ''}}" type="button" t-on-click="() => this.changeBudgetType('gantt')">Programming</button>
             </div>
         </div>
     </t>

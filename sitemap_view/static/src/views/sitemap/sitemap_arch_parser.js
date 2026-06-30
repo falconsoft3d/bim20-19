@@ -172,6 +172,12 @@ export class SitemapArchParser {
                             type: "create",
                             context: childNode.getAttribute("context"),
                             string: childNode.getAttribute("string"),
+                            invisible: childNode.getAttribute("invisible"),
+                        });
+                    } else if (childNode.tagName === "delete") {
+                        creates.push({
+                            type: "delete",
+                            invisible: childNode.getAttribute("invisible"),
                         });
                     }
                 }
@@ -226,6 +232,7 @@ export class SitemapArchParser {
 
         return {
             creates,
+            controls: creates,
             headerButtons,
             fieldNodes,
             widgetNodes,

@@ -45,7 +45,6 @@
                                         <field name="lst_price"/>
                                         <field name="standard_price"/>
                                         <field name="uom_id"/>
-                                        <field name="uom_po_id"/>
                                     </list></field>
                             </page>
                         </notebook>

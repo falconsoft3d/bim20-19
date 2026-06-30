@@ -2390,7 +2390,6 @@ class BimBudget(models.Model):
         })
         return True
 
-    @api.returns('self', lambda value: value.ids)
     def copy(self, default=None):
         cobj = self.env['bim.concepts']
         sobj = self.env['bim.budget.space']

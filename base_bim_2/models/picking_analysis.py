@@ -132,7 +132,7 @@ class PickingAnalysis(models.Model):
         self.lines_ids.unlink()
 
         for picking in stock_picking_ids:
-            for move in picking.move_ids_without_package:
+            for move in picking.move_ids:
                 vals = {
                         'name': picking.id,
                         'purchase_id': move.purchase_id.id,

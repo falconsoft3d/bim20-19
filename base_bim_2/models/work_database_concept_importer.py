@@ -246,7 +246,7 @@ class WorkDatabaseConceptImporter(models.Model):
                                 'standard_price': _price,
                                 'default_code': _departure,
                                 'uom_id': uom_id.id if uom_id else False,
-                                'uom_po_id': uom_id.id if uom_id else False,
+                                'uom_id': uom_id.id if uom_id else False,
                                 'resource_type': resource_type,
                             })
 
@@ -480,7 +480,7 @@ class WorkDatabaseConceptImporter(models.Model):
                                     'list_price': val['PRECIO'],
                                     'standard_price': val['PRECIO'],
                                     'uom_id': uom_id.id if uom_id else False,
-                                    'uom_po_id': uom_id.id if uom_id else False,
+                                    'uom_id': uom_id.id if uom_id else False,
                                     'resource_type': type,
                                 }
 
@@ -821,7 +821,7 @@ class WorkDatabaseConceptImporter(models.Model):
                 'default_code': code,
                 'categ_id': category.id,
                 'uom_id': uom_id.id if uom_id else False,
-                'uom_po_id': uom_id.id if uom_id else False,
+                'uom_id': uom_id.id if uom_id else False,
             })
         if concept_type != 'aux':
             concept.product_id = product

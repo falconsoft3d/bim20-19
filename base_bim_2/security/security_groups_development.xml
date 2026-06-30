@@ -9,8 +9,7 @@
 
     <record id="group_development_products_user" model="res.groups">
             <field name="name">Development User</field>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
-            <field name="category_id" ref="development_security_rules_category"/>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="comment">User</field>
     </record>
 

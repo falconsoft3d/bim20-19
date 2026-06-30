@@ -78,7 +78,7 @@ class TmsExpenseRecord(models.Model):
               'price_unit': self.amount,
               'company_id': self.company_id.id,
               'name': product_expense.partner_ref,
-              'product_uom_id': product_expense.uom_po_id.id,
+              'product_uom_id': product_expense.uom_id.id,
               'tax_ids': product_expense.supplier_taxes_id.filtered(lambda r: r.company_id == self.company_id),
               'analytic_distribution': {'%s' % (self.bim_project_id.analytic_id.id): 100}
         }))

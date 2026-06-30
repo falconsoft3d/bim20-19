@@ -60,7 +60,7 @@ class BudgetExit(models.Model):
                 'bim_concept_id': line.departure_id.id,
                 'include_for_bim': True,
 
-                'move_ids_without_package': [(0, 0, {
+                'move_ids': [(0, 0, {
                     'name': line.concept_id.name,
                     'product_id': line.concept_id.product_id.id,
                     'product_uom_qty': line.qty,

@@ -31,6 +31,6 @@
         <field name="target">new</field>
         <field name="binding_view_types">form</field>
         <field name="context">{'default_sale_id': active_id}</field>
-        <field eval="[(4, ref('base_bim_2.group_user_bim'))]" name="groups_id"/>
+        <field eval="[(4, ref('base_bim_2.group_user_bim'))]" name="group_ids"/>
     </record>
 </odoo>

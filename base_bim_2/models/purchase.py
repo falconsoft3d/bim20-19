@@ -104,7 +104,7 @@ class PurchaseOrder(models.Model):
             pick.bim_budget_id = self.budget_id.id
             pick.bim_concept_id = self.concept_id.id
 
-            for line in pick.move_ids_without_package:
+            for line in pick.move_ids:
                 if line.purchase_line_id:
                     line.concept_phase_id = line.purchase_line_id.concept_phase_id.id
 

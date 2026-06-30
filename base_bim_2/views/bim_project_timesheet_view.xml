@@ -53,7 +53,7 @@
                     <field name="employee_id"/>
                     <field name="project_id"/>
                     <!--                    <field name="capitulo_id"/>-->
-                    <group expand="0" string="Group">
+                    <group>
                         <filter context="{'group_by':'employee_id'}" name="group_by_employee_id" string="Employee"/>
                         <filter context="{'group_by':'project_id'}" name="group_by_project_id" string="Project"/>
                         <filter context="{'group_by':'partner_id'}" name="partner_id" string="Partner"/>

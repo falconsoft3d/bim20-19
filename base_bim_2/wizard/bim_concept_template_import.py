@@ -278,7 +278,7 @@ class BimConceptTemplateImport(models.TransientModel):
         if uom:
             uom_id = uom_obj.search(['|',('alt_names', 'ilike', uom),('name','=',uom)],limit=1)
             if uom_id:
-                vals.update({'uom_id': uom_id.id, 'uom_po_id': uom_id.id})
+                vals.update({'uom_id': uom_id.id, 'uom_id': uom_id.id})
         return vals
 
     @staticmethod

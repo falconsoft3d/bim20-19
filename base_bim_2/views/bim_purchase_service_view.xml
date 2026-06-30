@@ -181,7 +181,7 @@
                 <search string="Search Services">
                     <field name="project_id"/>
                     <field name="service_id"/>
-                    <group expand="0" string="Group By">
+                    <group>
                         <filter context="{'group_by': 'project_id'}" name="group_project" string="Project"/>
                         <filter context="{'group_by': 'service_id'}" name="group_requisition" string="Service Request"/>
                     </group>

@@ -107,7 +107,7 @@ class StockPicking(models.Model):
             if self.account_move_id.state == 'draft':
                 self.account_move_id.unlink()
 
-        if not self.move_ids_without_package:
+        if not self.move_ids:
             raise UserError(_('No lines to invoice'))
 
         if not self.bim_project_id:
@@ -129,7 +129,7 @@ class StockPicking(models.Model):
 
         invoice_line_ids = []
 
-        for line in self.move_ids_without_package:
+        for line in self.move_ids:
             if line.purchase_line_id:
                 purchase_line_id = line.purchase_line_id
             else:
@@ -252,7 +252,7 @@ class StockPicking(models.Model):
 
     def action_force_assign(self):
         for picking in self:
-            for move in picking.move_ids_without_package:
+            for move in picking.move_ids:
                 if move.product_uom_qty != move.product_uom_qty:
                     move.product_uom_qty = move.product_uom_qty
         return True

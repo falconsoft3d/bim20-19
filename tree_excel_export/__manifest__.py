@@ -21,7 +21,7 @@
 
 {
     'name': 'Tree Excel Export MFH',
-    'version': '18.0.1.0.1',
+    'version': '19.0.1.0.1',
     'author': 'Ynext SpA',
     'maintainer': 'Ynext SpA',
     'website': 'http://www.ynext.cl',

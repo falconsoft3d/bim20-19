@@ -426,7 +426,7 @@ class BimstockReportWizard(models.TransientModel):
 
         if stock_picking_ids:
             for order in stock_picking_ids:
-                for line in order.move_ids_without_package:
+                for line in order.move_ids:
                     # buscamos a ver si ya esta el producto en products
                     if line.product_id.id not in self.bim_stock_report_wizard_category.mapped('name.id'):
                         self.bim_stock_report_wizard_category = [(0,0,
@@ -454,7 +454,7 @@ class BimstockReportWizard(models.TransientModel):
 
         if stock_picking_ids:
             for order in stock_picking_ids:
-                for line in order.move_ids_without_package:
+                for line in order.move_ids:
                     # buscamos a ver si ya esta el producto en products
                     if line.product_id.id not in self.bim_stock_report_wizard_category.mapped('name.id'):
                         self.bim_stock_report_wizard_category = [(0,0,
@@ -722,7 +722,7 @@ class BimstockReportWizard(models.TransientModel):
 
         if stock_picking_ids:
             for order in stock_picking_ids:
-                for line in order.move_ids_without_package:
+                for line in order.move_ids:
                     # buscamos a ver si ya esta el producto en products
                     if line.product_id.id not in self.bim_stock_report_wizard_category.mapped('name.id'):
                         self.bim_stock_report_wizard_category = [(0,0,
@@ -750,7 +750,7 @@ class BimstockReportWizard(models.TransientModel):
 
         if stock_picking_ids:
             for order in stock_picking_ids:
-                for line in order.move_ids_without_package:
+                for line in order.move_ids:
                     # buscamos a ver si ya esta el producto en products
                     if line.product_id.id not in self.bim_stock_report_wizard_category.mapped('name.id'):
                         self.bim_stock_report_wizard_category = [(0,0,
@@ -937,7 +937,7 @@ class BimstockReportWizard(models.TransientModel):
 
             if stock_picking_ids and self.display_type == 'individual_delivery_report':
                 for order in stock_picking_ids:
-                    for line in order.move_ids_without_package:
+                    for line in order.move_ids:
                         if line.product_id.resource_type == 'M' and not self.material:
                             continue
                         if line.product_id.resource_type == 'Q' and not self.equipment:
@@ -974,7 +974,7 @@ class BimstockReportWizard(models.TransientModel):
 
             if stock_picking_ids and self.display_type == 'accumulated_delivery_report':
                 for order in stock_picking_ids:
-                    for line in order.move_ids_without_package:
+                    for line in order.move_ids:
                         if line.product_id.resource_type == 'M' and not self.material:
                             continue
                         if line.product_id.resource_type == 'Q' and not self.equipment:

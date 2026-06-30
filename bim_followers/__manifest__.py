@@ -1,6 +1,6 @@
 {
     'name': 'Bim Followers MFH',
-    'version': '18.0.1.0.0',
+    'version': '19.0.1.0.0',
     'summary': 'Oculta obras por los seguidores',
     'sequence': 10,
     'description': """

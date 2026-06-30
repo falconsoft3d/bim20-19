@@ -1,6 +1,6 @@
 {
     "name": "Base Bim Gantt MFH",
-    'version': '18.0.1.0.0',
+    'version': '19.0.1.0.0',
     "summary": "Invoices & Payments",
     "sequence": 10,
     "description": """

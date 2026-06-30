@@ -22,7 +22,7 @@
 
 {
     'name': 'Picking Standard Price MFH II',
-    'version': '18.0.1.0.0',
+    'version': '19.0.1.0.0',
     'author': 'Ynext SpA',
     'maintainer': 'Ynext SpA',
     'website': 'http://www.ynext.cl',

@@ -757,7 +757,7 @@
                 <field name="project_profit"/>
                 <templates>
                     <t t-name="card">
-                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click" style="position:relative;">
+                        <div t-attf-class="#{!selection_mode ? 'o_kanban_color_' + record.color.raw_value : ''} oe_kanban_global_click" style="position:relative;">
                             <t t-if="record.favorite.raw_value">
                                 <span style="position:absolute; top:8px; right:10px; font-size:14px; line-height:1;" title="Favorito">&#11088;</span>
                             </t>
@@ -847,7 +847,7 @@
                 <field name="customer_id"/>
                 <field name="tag_ids"/>
                 <field name="date_ini"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter context="{'group_by': 'customer_id'}" name="group_customer" string="Customer"/>
                     <filter context="{'group_by': 'department_id'}" name="group_department" string="Department"/>
                     <filter context="{'group_by': 'user_id'}" name="group_user" string="Supervisor"/>

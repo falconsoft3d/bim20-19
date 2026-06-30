@@ -6,7 +6,7 @@ import requests
 from odoo import api
 from odoo import fields, models, _
 from io import BytesIO
-from odoo.tools.misc import xlwt
+import xlwt
 _logger = logging.getLogger(__name__)
 
 TEMPLATE_LINE_TYPES = {

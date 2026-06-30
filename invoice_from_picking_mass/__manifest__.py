@@ -21,7 +21,7 @@
 
 {
     'name': 'Invoice From Picking Mass MFH',
-    'version': '18.0',
+    'version': '19.0.1.0.0',
     'author': 'Ynext SpA',
     'maintainer': 'Ynext SpA',
     'website': 'http://www.ynext.cl',

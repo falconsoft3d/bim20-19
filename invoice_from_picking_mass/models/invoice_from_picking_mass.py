@@ -77,7 +77,7 @@ class InvoiceFromPickingMass(models.Model):
             for r in result:
                 if r['partner_id'] == partner.id:
                     picking_id_name = ""
-                    for l in line.picking_id.move_ids_without_package:
+                    for l in line.picking_id.move_ids:
                         _name = "Albarán:" + line.picking_id.name + ", Fecha: " + str(line.picking_id.scheduled_date)
                         if line.picking_id.external_reference:
                             _name += ", Ref. Ext: " + line.picking_id.external_reference
@@ -144,7 +144,7 @@ class InvoiceFromPickingMass(models.Model):
                 }
                 invoice_lines.append((0, 0, line_vals))
 
-                for l in xline.move_ids_without_package:
+                for l in xline.move_ids:
                     line_vals = {
                         'picking_id': line.picking_id.id,
                         'line_picking_id': l.id,
@@ -204,7 +204,7 @@ class InvoiceFromPickingMass(models.Model):
                 line.account_move_line_ids = [(4, l.id)]
 
 
-                for line_picking in line.picking_id.move_ids_without_package:
+                for line_picking in line.picking_id.move_ids:
                     _logger.info(line_picking.product_id.name)
 
                     val = {

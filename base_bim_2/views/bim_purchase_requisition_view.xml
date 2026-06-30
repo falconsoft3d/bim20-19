@@ -231,7 +231,7 @@
                 <search string="Search Products">
                     <field name="project_id"/>
                     <field name="requisition_id"/>
-                    <group expand="0" string="Group By">
+                    <group>
                         <filter context="{'group_by': 'project_id'}" name="group_project" string="Project"/>
                         <filter context="{'group_by': 'requisition_id'}" name="group_requisition" string="Material Request"/>
                     </group>

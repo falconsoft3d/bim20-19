@@ -138,7 +138,7 @@
             <search>
                 <field name="product_id"/>
                 <field name="retry"/>
-                <group expand="0" string="Group by...">
+                <group>
                     <filter context="{'group_by':'product_id'}" domain="[]" name="group_by_product" string="Product"/>
                 </group>
             </search></field>

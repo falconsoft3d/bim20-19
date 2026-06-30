@@ -318,7 +318,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="target">inline</field>
+        <field name="target">current</field>
         <field name="context">{'module' : 'base_bim_2'}</field>
     </record>
     <menuitem action="action_bim_configuration" groups="base.group_system" id="menu_bim_general_settings" name="Settings" parent="menu_bim_config" sequence="10"/>

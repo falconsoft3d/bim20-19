@@ -5,9 +5,9 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
-            <header position="inside">
-                <button invisible="default_code == False" name="%(action_update_product_from_master)d" string="Update From Master" type="action"/>
-            </header>
+            <div name="button_box" position="inside">
+                <button invisible="default_code == False" name="%(action_update_product_from_master)d" string="Update From Master" type="action" class="oe_stat_button" icon="fa-refresh"/>
+            </div>
             <xpath expr="//div[@name='options']" position="after">
                 <div name="tool_ok">
                     <field name="tool_ok"/>

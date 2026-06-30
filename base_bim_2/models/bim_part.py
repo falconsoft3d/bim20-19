@@ -194,11 +194,10 @@ class BimPartLine(models.Model):
     name = fields.Many2one('product.product', string='Product', domain=[('purchase_ok', '=', True)], change_default=True)
     description = fields.Char('Description')
     product_uom_qty = fields.Float(string='Quantity', digits='BIM qty', required=True)
-    product_uom = fields.Many2one('uom.uom', string='UdM', domain="[('category_id', '=', product_uom_category_id)]")
+    product_uom = fields.Many2one('uom.uom', string='UdM')
     price_unit = fields.Float(string='Price', required=True, digits='BIM price')
     price_subtotal = fields.Float(compute='_compute_amount', string='Subtotal', digits="BIM price")
     part_id = fields.Many2one('bim.part', 'Project Report')
-    product_uom_category_id = fields.Many2one(related='name.uom_id.category_id')
     resource_type = fields.Selection(
         [('M', 'Material'),
          ('H', 'Labor'),
