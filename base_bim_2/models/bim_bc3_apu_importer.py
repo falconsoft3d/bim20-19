@@ -45,6 +45,7 @@ class BimBc3ApuImporter(models.Model):
     pending_lines = fields.Integer(string='Pending', compute='_compute_progress', store=True)
     progress = fields.Float(string='Progress %', compute='_compute_progress', store=True, digits=(5, 2))
     template_count = fields.Integer(string='APU Templates', compute='_compute_template_count')
+    product_count = fields.Integer(string='Products', compute='_compute_product_count')
     log = fields.Text(string='Log', readonly=True)
 
     @api.model_create_multi
@@ -61,12 +62,29 @@ class BimBc3ApuImporter(models.Model):
             rec.template_count = template_obj.search_count(
                 [('bc3_importer_id', '=', rec.id)])
 
+    def _compute_product_count(self):
+        product_tmpl_obj = self.env['product.template']
+        for rec in self:
+            rec.product_count = product_tmpl_obj.search_count(
+                [('bc3_importer_id', '=', rec.id)])
+
     def action_view_templates(self):
         self.ensure_one()
         action = self.env.ref('base_bim_2.action_bim_concept_template').sudo().read()[0]
         action['domain'] = [('bc3_importer_id', '=', self.id)]
         action['context'] = {'default_bc3_importer_id': self.id}
         return action
+
+    def action_view_products(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Products'),
+            'res_model': 'product.template',
+            'view_mode': 'list,form',
+            'domain': [('bc3_importer_id', '=', self.id)],
+            'context': {'default_bc3_importer_id': self.id},
+        }
 
     @api.depends('line_ids', 'line_ids.state', 'line_ids.ctype', 'line_ids.code')
     def _compute_progress(self):
@@ -364,6 +382,7 @@ class BimBc3ApuImporter(models.Model):
                                     'name': child_staging.name,
                                     'resource_type': resource_type,
                                     'type': 'service',
+                                    'bc3_importer_id': self.id,
                                 }
                                 if uom_rec:
                                     create_vals['uom_id'] = uom_rec.id

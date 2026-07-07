@@ -42,6 +42,7 @@ class ApuProductTemplate(models.Model):
     virtual_product_id = fields.Many2one('virtual.product', string='Virtual Product')
     rubro_id = fields.Many2one('bim.rubro', string='Rubro')
     srubro_id = fields.Many2one('bim.rubro', string='Subrubro', domain="[('parent_id','=',rubro_id)]")
+    bc3_importer_id = fields.Many2one('bim.bc3.apu.importer', string='BC3 Import', ondelete='set null', index=True)
 
 
 
