@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ══════════════════════════════════════════════════════════════════
+         res.partner — Pestaña Portal BIM
+    ══════════════════════════════════════════════════════════════════ -->
+
+    <record id="res_partner_portal_bim_view_form" model="ir.ui.view">
+        <field name="name">res.partner.portal.bim.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <notebook position="inside">
+                <page string="Portal BIM" name="portal_bim">
+                    <group>
+                        <group string="Credenciales de acceso">
+                            <field name="portal_login"
+                                   placeholder="ej: jose.garcia"/>
+                            <field name="portal_active"/>
+                            <field name="portal_password_set"
+                                   string="Contraseña configurada"/>
+                            <field name="portal_responsible_id"
+                                   options="{'no_create': True}"/>
+                        </group>
+
+                        <group string="Acciones">
+                            <div class="o_field_widget">
+                                <button name="action_open_portal_password_wizard"
+                                        type="object"
+                                        string="Establecer / Cambiar contraseña"
+                                        class="btn btn-primary"
+                                        icon="fa-key"
+                                        invisible="not portal_login"/>
+                                <p class="text-muted small mt-2"
+                                   invisible="portal_login != False">
+                                    Define un Login Portal para poder establecer la contraseña.
+                                </p>
+                            </div>
+                        </group>
+                    </group>
+
+                    <group string="Roles del portal">
+                        <group>
+                            <field name="portal_is_customer"/>
+                            <field name="portal_is_employee"/>
+                            <field name="portal_is_admin"/>
+                        </group>
+                        <group>
+                            <field name="portal_is_tecno_cartas"/>
+                            <field name="portal_is_proveedor"/>
+                        </group>
+                    </group>
+
+                    <!-- Información de seguridad -->
+                    <div class="alert alert-warning mt-3" role="alert"
+                         invisible="portal_active">
+                        <i class="fa fa-exclamation-triangle mr-2"/>
+                        El acceso al portal está <strong>desactivado</strong> para este contacto.
+                    </div>
+                    <div class="alert alert-success mt-3" role="alert"
+                         invisible="not portal_active">
+                        <i class="fa fa-check-circle mr-2"/>
+                        El acceso al portal está <strong>activo</strong>.
+                        <span invisible="portal_password_set">
+                            <strong> Sin contraseña configurada.</strong> El usuario no podrá entrar.
+                        </span>
+                    </div>
+                </page>
+            </notebook>
+
+        </field>
+    </record>
+
+</odoo>

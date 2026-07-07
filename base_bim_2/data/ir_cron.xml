@@ -1,6 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo noupdate="1">
 
+    <!-- BC3 APU step-by-step importer — processes one batch per active importer -->
+    <record id="bim_bc3_apu_importer_cron" model="ir.cron">
+        <field name="name">BIM BC3 APU Importer - Process Batch</field>
+        <field name="active">False</field>
+        <field name="priority">5</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="model_id" ref="model_bim_bc3_apu_importer"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_process_batch()</field>
+        <field name="numbercall">-1</field>
+    </record>
 
     <record id="bim_account_move" model="ir.cron">
         <field name="name">BIM Include in Date</field>

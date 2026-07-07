@@ -1896,9 +1896,15 @@ class BimConcepts(models.Model):
 
     @api.depends('product_id', 'uom_id', 'quantity')
     def _compute_weight(self):
-        peso_category = self.env.ref('uom.product_uom_categ_kgm', raise_if_not_found=False)
+        peso_base = self.env.ref('uom.product_uom_gram', raise_if_not_found=False)
         for record in self:
-            if record.product_id and record.uom_id and record.uom_id.category_id == peso_category:
+            is_weight_uom = (
+                peso_base
+                and record.uom_id
+                and record.uom_id.parent_path
+                and record.uom_id.parent_path.startswith(str(peso_base.id) + '/')
+            )
+            if record.product_id and is_weight_uom:
                 record.weight = record.product_id.weight * record.uom_id.factor * record.quantity
             else:
                 record.weight = 0.0

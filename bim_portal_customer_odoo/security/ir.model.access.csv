@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bim_portal_token,bim.portal.token,model_bim_portal_token,base.group_user,1,1,1,0
+access_bim_portal_token_system,bim.portal.token system,model_bim_portal_token,base.group_system,1,1,1,1
+access_bim_portal_password_wizard,bim.portal.password.wizard,model_bim_portal_password_wizard,base.group_user,1,1,1,1

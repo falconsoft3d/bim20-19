@@ -751,4 +751,14 @@
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
+
+    <!-- bim.bc3.apu.importer -->
+    <record id="seq_bim_bc3_apu_importer" model="ir.sequence">
+        <field name="name">BC3 APU Importer</field>
+        <field name="code">bim.bc3.apu.importer</field>
+        <field name="prefix">BC3IMP/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
 </odoo>

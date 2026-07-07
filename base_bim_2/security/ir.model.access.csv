@@ -385,3 +385,5 @@ access_bim_equipment_cost,bim.equipment.cost,model_bim_equipment_cost,,1,1,1,1
 bim_equipment_cost_line,bim.equipment.cost.line,model_bim_equipment_cost_line,,1,1,1,1
 bim_ticket_category,bim.ticket.category,model_bim_ticket_category,,1,1,1,1
 access_bim_deliverable,bim.deliverable,model_bim_deliverable,,1,1,1,1
+access_bim_bc3_apu_importer,bim.bc3.apu.importer,model_bim_bc3_apu_importer,,1,1,1,1
+access_bim_bc3_apu_importer_line,bim.bc3.apu.importer.line,model_bim_bc3_apu_importer_line,,1,1,1,1

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         Form view
+    ============================================================ -->
+    <record id="view_bim_bc3_apu_importer_form" model="ir.ui.view">
+        <field name="name">bim.bc3.apu.importer.form</field>
+        <field name="model">bim.bc3.apu.importer</field>
+        <field name="arch" type="xml">
+            <form string="BC3 APU Importer">
+                <header>
+                    <button name="action_parse"
+                            string="1. Parse File"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_process_batch"
+                            string="2. Process Batch"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ('parsed','processing')"/>
+                    <button name="action_retry_errors"
+                            string="Retry Errors"
+                            type="object"
+                            class="btn-warning"
+                            invisible="state not in ('processing','done')"/>
+                    <button name="action_reset"
+                            string="Reset"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state == 'draft'"
+                            confirm="This will delete all staging lines and reset to Draft. Continue?"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,parsed,processing,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_templates"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-list-ul"
+                                invisible="template_count == 0">
+                            <field name="template_count" widget="statinfo"
+                                   string="APU Templates"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" readonly="True"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="File">
+                            <field name="bc3_file"
+                                   filename="filename"
+                                   widget="binary"
+                                   readonly="state != 'draft'"/>
+                            <field name="filename" invisible="True"/>
+                            <field name="company_id" readonly="state != 'draft'"/>
+                            <field name="code_filter" readonly="state != 'draft'"
+                                   placeholder="e.g. D  →  only codes starting with D"/>
+                        </group>
+                        <group string="Options">
+                            <field name="action_type" readonly="state != 'draft'"/>
+                            <field name="product_id"
+                                   invisible="action_type != 'import_resource'"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="batch_size"/>
+                        </group>
+                    </group>
+
+                    <group string="Progress" invisible="state == 'draft'">
+                        <group>
+                            <field name="total_lines"/>
+                            <field name="processed_lines"/>
+                            <field name="pending_lines"/>
+                        </group>
+                        <group>
+                            <field name="progress" widget="progressbar"
+                                   options="{'editable': false, 'max_value': 100}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Staging Lines" invisible="state == 'draft'">
+                            <field name="line_ids" readonly="True">
+                                <list decoration-success="state == 'done'"
+                                      decoration-danger="state == 'error'"
+                                      decoration-muted="state == 'skip'">
+                                    <field name="sequence" optional="hide"/>
+                                    <field name="code"/>
+                                    <field name="type_label" string="Kind"/>
+                                    <field name="name"/>
+                                    <field name="uom"/>
+                                    <field name="price"/>
+                                    <field name="parent_code" optional="show"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'done'"
+                                           decoration-danger="state == 'error'"
+                                           decoration-warning="state == 'pending'"/>
+                                    <field name="error_msg" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Log" invisible="not log">
+                            <field name="log" readonly="True"
+                                   widget="text"
+                                   style="font-family: monospace; font-size: 12px;"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         List view
+    ============================================================ -->
+    <record id="view_bim_bc3_apu_importer_list" model="ir.ui.view">
+        <field name="name">bim.bc3.apu.importer.list</field>
+        <field name="model">bim.bc3.apu.importer</field>
+        <field name="arch" type="xml">
+            <list string="BC3 APU Importers" decoration-success="state == 'done'"
+                  decoration-warning="state == 'processing'">
+                <field name="name"/>
+                <field name="filename"/>
+                <field name="company_id"/>
+                <field name="code_filter" optional="show"/>
+                <field name="batch_size"/>
+                <field name="total_lines"/>
+                <field name="processed_lines"/>
+                <field name="pending_lines"/>
+                <field name="progress" widget="progressbar"
+                       options="{'editable': false, 'max_value': 100}"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-warning="state == 'processing'"
+                       decoration-info="state == 'parsed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         Action and menu
+    ============================================================ -->
+    <record id="action_bim_bc3_apu_importer" model="ir.actions.act_window">
+        <field name="name">BC3 APU Importer (by steps)</field>
+        <field name="res_model">bim.bc3.apu.importer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem action="action_bim_bc3_apu_importer"
+              id="menu_bim_bc3_apu_importer"
+              name="Importar APU por pasos (BC3)"
+              parent="menu_bim_import_apu"
+              sequence="75"/>
+
+</odoo>

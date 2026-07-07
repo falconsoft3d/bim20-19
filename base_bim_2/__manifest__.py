@@ -366,6 +366,7 @@ BIM 2.0
         'views/work_database_concept_importer.xml',
         'wizard/concept_from_database.xml',
         'wizard/bim_paidstate_mass_wzd.xml',
+        'views/bim_bc3_apu_importer_view.xml',
         'views/res_user_view.xml',
         'views/account_payment_views.xml',
 

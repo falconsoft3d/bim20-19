@@ -133,6 +133,8 @@ class BimConceptTemplate(models.Model):
     sub_phase_id = fields.Many2one('concept.phase', string='Sub Phase')
     concept_specialty_id = fields.Many2one('concept.specialty', string='Specialty')
 
+    bc3_importer_id = fields.Many2one('bim.bc3.apu.importer', string='BC3 Import', ondelete='set null', index=True)
+
     bim_concepts_ids = fields.One2many('bim.concepts', 'concept_template_id', string='Concepts')
     bim_concepts_count = fields.Integer(compute='_compute_bim_concepts_count', string='Concepts Count')
 

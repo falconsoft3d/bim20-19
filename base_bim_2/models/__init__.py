@@ -190,3 +190,4 @@ from . import employee_documentation
 from . import employee_dcategory
 from . import budget_exit
 from . import closing_expenses
+from . import bim_bc3_apu_importer

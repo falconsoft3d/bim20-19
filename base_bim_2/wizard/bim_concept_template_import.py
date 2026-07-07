@@ -34,6 +34,7 @@ class BimConceptTemplateImport(models.TransientModel):
     csv_url = fields.Char(string='CSV URL')
     import_type= fields.Selection([('apu_file','APUs File'),
                                    ('apu_url','APUs Url'),
+                                   ('bc3_file','BC3 File'),
                                    ('budget','Budget'),
                                    ('product','Product')
                                    ],string='Import Type',default='apu_file', required=True)
@@ -96,9 +97,250 @@ class BimConceptTemplateImport(models.TransientModel):
             _logger.info("budget")
             self.import_from_csv()
 
+        elif self.import_type == 'bc3_file':
+            _logger.info("bc3_file")
+            self.import_from_bc3()
+
         elif self.import_type == 'product':
             _logger.info("product")
             self.import_product()
+
+
+    def import_from_bc3(self):
+        if not self.csv_file:
+            raise UserError(_("No file uploaded or the file is empty."))
+
+        data = base64.b64decode(self.csv_file).decode('latin-1')
+
+        template_obj = self.env['bim.concept.template']
+        group_obj = self.env['bim.concept.template.group']
+        product_obj = self.env['product.product']
+        uom_obj = self.env['uom.uom']
+
+        # BC3 type -> template line type
+        bc3_to_line_type = {1: 'H', 2: 'Q', 3: 'M'}
+
+        # Pass 1: collect all records
+        concepts = {}       # code -> {name, uom, price, ctype}
+        decompositions = {} # parent_code (clean) -> [(child_code, qty), ...]
+        descriptions = {}   # code -> text
+
+        pending = ''
+        rows = data.split('\n')
+        for idx, row in enumerate(rows):
+            row = row.strip()
+            if row and pending:
+                row = pending + row
+                pending = ''
+
+            next_row = rows[idx + 1].strip() if idx + 1 < len(rows) else ''
+            if row and next_row and next_row[0] != '~':
+                pending = row
+                continue
+            pending = ''
+
+            if not row or row[0] != '~' or len(row) < 2:
+                continue
+
+            rec_type = row[1]
+
+            if rec_type == 'C':
+                datas = row[3:].split('|')
+                if len(datas) < 6:
+                    continue
+                code = datas[0]
+                uom = datas[1]
+                name = datas[2]
+                price_str = datas[3]
+                ctype_str = datas[5]
+                try:
+                    ctype = int(ctype_str)
+                except (ValueError, TypeError):
+                    ctype = 0
+                try:
+                    price = float(price_str.replace(',', '.')) if price_str.strip() else 0.0
+                except (ValueError, AttributeError):
+                    price = 0.0
+                concepts[code] = {'name': name, 'uom': uom, 'price': price, 'ctype': ctype}
+
+            elif rec_type == 'D':
+                try:
+                    content = row[3:-1] if row.endswith('|') else row[3:]
+                    datas = content.split('|')
+                    parent_code = datas[0].replace('#', '')
+                    if len(datas) < 2 or not datas[1]:
+                        continue
+                    parts = datas[1].split('\\')
+                    while parts and not parts[-1].strip():
+                        parts.pop()
+                    children = []
+                    for i in range(0, len(parts) - 2, 3):
+                        child_code = parts[i].strip()
+                        qty_str = parts[i + 2].strip().replace(',', '.')
+                        try:
+                            qty = float(qty_str) if qty_str else 0.0
+                        except ValueError:
+                            qty = 0.0
+                        if child_code:
+                            children.append((child_code, qty))
+                    if children:
+                        decompositions[parent_code] = children
+                except Exception:
+                    pass
+
+            elif rec_type == 'T':
+                datas = row[3:].split('|', 1)
+                code = datas[0].replace('#', '').strip()
+                text = datas[1].strip() if len(datas) > 1 else ''
+                if code and text:
+                    descriptions[code] = text
+
+        # Classify codes
+        chapter_codes = set()
+        apu_codes = set()
+        for code, cdata in concepts.items():
+            if cdata['ctype'] == 0:
+                if '##' in code:
+                    pass  # root, skip
+                elif '#' in code:
+                    chapter_codes.add(code.replace('#', ''))
+                else:
+                    apu_codes.add(code)
+
+        # Build APU -> chapter mapping
+        apu_to_chapter = {}
+        for parent_code, children in decompositions.items():
+            if parent_code in chapter_codes:
+                for child_code, _qty in children:
+                    if child_code in apu_codes:
+                        apu_to_chapter[child_code] = parent_code
+
+        # Create/update groups from chapters
+        groups = {}  # clean_code -> group record
+        for chapter_code in chapter_codes:
+            chapter_data = concepts.get(chapter_code + '#')
+            if not chapter_data:
+                continue
+            group = group_obj.search([('code', '=', chapter_code)], limit=1)
+            if not group:
+                group = group_obj.create({'code': chapter_code, 'name': chapter_data['name']})
+            groups[chapter_code] = group
+
+        # Create/update templates for APU concepts
+        templates = {}  # code -> template record
+        for code in apu_codes:
+            apu_data = concepts[code]
+            uom_id = False
+            if apu_data['uom']:
+                uom_rec = uom_obj.search(
+                    ['|', ('name', 'ilike', apu_data['uom']), ('alt_names', 'ilike', apu_data['uom'])], limit=1)
+                uom_id = uom_rec.id if uom_rec else False
+
+            chapter_code = apu_to_chapter.get(code)
+            group_rec = groups.get(chapter_code) if chapter_code else False
+
+            vals = {
+                'code': code,
+                'name': apu_data['name'],
+                'uom_id': uom_id,
+                'company_id': self.company_id.id,
+            }
+            if group_rec:
+                vals['group_id'] = group_rec.id
+            if code in descriptions:
+                vals['notes'] = descriptions[code]
+
+            template = template_obj.search(
+                [('code', '=', code), ('company_id', '=', self.company_id.id)], limit=1)
+            if not template:
+                template = template_obj.create(vals)
+            else:
+                template.write(vals)
+            templates[code] = template
+
+        # Create template lines
+        for apu_code, children in decompositions.items():
+            if apu_code not in templates:
+                continue
+            template = templates[apu_code]
+            template.template_line_ids.unlink()
+            seq = 10
+            for child_code, qty in children:
+                child_data = concepts.get(child_code)
+                if not child_data:
+                    continue
+                ctype = child_data['ctype']
+                line_type = bc3_to_line_type.get(ctype)
+                if not line_type:
+                    # Porcentajes BC3: %CI, %GG, etc. → tipo A
+                    if child_code.startswith('%'):
+                        line_type = 'A'
+                    else:
+                        continue  # sub-APU u otro; saltar
+
+                # ----- Percentage concepts: no product needed -----
+                if line_type == 'A' and child_code.startswith('%'):
+                    pct_name = child_data.get('name') or ''
+                    if not pct_name or pct_name.strip() == '%':
+                        pct_name = child_code
+                    self.env['bim.concept.template.line'].create({
+                        'template_id': template.id,
+                        'type': 'A',
+                        'code': child_code,
+                        'name': pct_name,
+                        'price': child_data['price'],
+                        'quantity': qty,
+                        'sequence': seq,
+                    })
+                    seq += 10
+                    continue
+
+                # Search by internal reference (default_code)
+                product = product_obj.search([('default_code', '=', child_code)], limit=1)
+
+                # Use exact match (=ilike) to avoid % acting as SQL wildcard
+                child_uom = child_data.get('uom') or ''
+                uom_rec = uom_obj.search(
+                    ['|', ('name', '=ilike', child_uom), ('alt_names', '=ilike', child_uom)],
+                    limit=1) if child_uom else uom_obj.browse()
+
+                if not product:
+                    # Always 'service' — same as BC3 budget wizard;
+                    # resource_type carries the BIM category (H/Q/M)
+                    create_vals = {
+                        'default_code': child_code,
+                        'name': child_data['name'],
+                        'resource_type': line_type,
+                        'type': 'service',
+                    }
+                    if uom_rec:
+                        create_vals['uom_id'] = uom_rec.id
+                    product = product_obj.create(create_vals)
+                    self._write_product_price(child_data['price'], product)
+                else:
+                    # Associate existing; update only if requested
+                    if self.action_type == 'add_update':
+                        write_vals = {
+                            'name': child_data['name'],
+                            'resource_type': line_type,
+                        }
+                        if uom_rec:
+                            write_vals['uom_id'] = uom_rec.id
+                        product.write(write_vals)
+                        self._write_product_price(child_data['price'], product)
+
+                self.env['bim.concept.template.line'].create({
+                    'template_id': template.id,
+                    'type': line_type,
+                    'product_id': product.id,
+                    'code': child_code,
+                    'name': child_data['name'],
+                    'uom_id': uom_rec.id if uom_rec else (product.uom_id.id if product else False),
+                    'price': child_data['price'],
+                    'quantity': qty,
+                    'sequence': seq,
+                })
+                seq += 10
 
 
     def import_product(self):

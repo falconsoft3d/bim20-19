@@ -18,7 +18,8 @@
                         <field name="import_type"/>
                         <field invisible="import_type != 'budget'" name="project_id" options="{'no_create': True}" required="import_type == 'budget'"/>
                         <field invisible="True" name="filename"/>
-                        <field filename="filename" invisible="import_type == 'concept_template'"
+                        <field filename="filename"
+                               invisible="import_type == 'apu_url'"
                                name="csv_file" required="import_type != 'apu_url'"/>
                     </group>
                     <group>
