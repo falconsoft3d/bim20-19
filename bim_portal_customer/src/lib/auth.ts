@@ -3,7 +3,7 @@
  * Todos los endpoints apuntan a /bim_portal/auth/*
  */
 
-const ODOO_BASE_URL = process.env.NEXT_PUBLIC_ODOO_URL || 'http://localhost:8069';
+import { getOdooBaseUrl, setOdooBaseUrl } from '@/lib/odoo';
 
 export interface PartnerProfile {
   id: number;
@@ -70,11 +70,12 @@ function clearSession(): void {
 
 // ── API calls ─────────────────────────────────────────────────────────────────
 
-export async function login(login: string, password: string): Promise<AuthResponse> {
-  const res = await fetch(`${ODOO_BASE_URL}/bim_portal/auth/login`, {
+export async function login(loginStr: string, password: string, odooUrl?: string): Promise<AuthResponse> {
+  if (odooUrl) setOdooBaseUrl(odooUrl);
+  const res = await fetch(`${getOdooBaseUrl()}/bim_portal/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ login: login.trim().toLowerCase(), password }),
+    body: JSON.stringify({ login: loginStr.trim().toLowerCase(), password }),
   });
 
   const data: AuthResponse = await res.json();
@@ -89,7 +90,7 @@ export async function login(login: string, password: string): Promise<AuthRespon
 export async function logout(): Promise<void> {
   const token = getStoredToken();
   if (token) {
-    await fetch(`${ODOO_BASE_URL}/bim_portal/auth/logout`, {
+    await fetch(`${getOdooBaseUrl()}/bim_portal/auth/logout`, {
       method: 'POST',
       headers: getAuthHeaders(),
       keepalive: true,
@@ -102,7 +103,7 @@ export async function getMe(): Promise<PartnerProfile | null> {
   const token = getStoredToken();
   if (!token) return null;
 
-  const res = await fetch(`${ODOO_BASE_URL}/bim_portal/auth/me`, {
+  const res = await fetch(`${getOdooBaseUrl()}/bim_portal/auth/me`, {
     method: 'GET',
     headers: getAuthHeaders(),
   });
@@ -122,4 +123,14 @@ export async function getMe(): Promise<PartnerProfile | null> {
 
 export function isAuthenticated(): boolean {
   return !!getStoredToken();
+}
+
+/** Llama a /me, actualiza localStorage y devuelve el partner fresco */
+export async function refreshPartner(): Promise<PartnerProfile | null> {
+  const partner = await getMe();
+  if (partner) {
+    const token = getStoredToken();
+    if (token) storeSession(token, partner);
+  }
+  return partner;
 }

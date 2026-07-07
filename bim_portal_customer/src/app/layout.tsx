@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "cliente",
-  description: "Portal de clientes BIM - cliente",
+  title: "Portal BIM 2.0",
+  description: "Portal BIM 2.0 - Gestión de obras y proyectos",
 };
 
 export default function RootLayout({

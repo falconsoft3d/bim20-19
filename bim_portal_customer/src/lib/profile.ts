@@ -2,8 +2,7 @@
  * Servicio de perfil de usuario para el Portal BIM.
  */
 import { getStoredPartner, PartnerProfile } from './auth';
-
-const ODOO_BASE_URL = process.env.NEXT_PUBLIC_ODOO_URL || 'http://localhost:8069';
+import { getOdooBaseUrl } from './odoo';
 
 function authHeaders(): HeadersInit {
   const token = typeof window !== 'undefined' ? localStorage.getItem('bim_portal_token') : null;
@@ -34,7 +33,7 @@ export interface ProfileResponse {
 
 export async function fetchProfile(): Promise<PartnerProfile | null> {
   try {
-    const res = await fetch(`${ODOO_BASE_URL}/bim_portal/profile`, {
+    const res = await fetch(`${getOdooBaseUrl()}/bim_portal/profile`, {
       headers: authHeaders(),
     });
     const data = await res.json();
@@ -50,7 +49,7 @@ export async function fetchProfile(): Promise<PartnerProfile | null> {
 }
 
 export async function updateProfile(payload: ProfileUpdatePayload): Promise<ProfileResponse> {
-  const res = await fetch(`${ODOO_BASE_URL}/bim_portal/profile/update`, {
+  const res = await fetch(`${getOdooBaseUrl()}/bim_portal/profile/update`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify(payload),
@@ -63,7 +62,7 @@ export async function updateProfile(payload: ProfileUpdatePayload): Promise<Prof
 }
 
 export async function changePassword(payload: ChangePasswordPayload): Promise<ProfileResponse> {
-  const res = await fetch(`${ODOO_BASE_URL}/bim_portal/profile/change_password`, {
+  const res = await fetch(`${getOdooBaseUrl()}/bim_portal/profile/change_password`, {
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify(payload),
