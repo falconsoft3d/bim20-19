@@ -526,18 +526,17 @@ class BimWorkOrder(models.Model):
         return super(BimWorkOrder, self).name_get()
 
     @api.model
-    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+    def _name_search(self, name, domain=None, operator='ilike', limit=100):
         if self._context.get('sale_show_partner_name'):
             if operator == 'ilike' and not (name or '').strip():
-                domain = []
+                search_domain = []
             elif operator in ('ilike', 'like', '=', '=like', '=ilike'):
-                domain = expression.AND([
-                    args or [],
+                search_domain = expression.AND([
+                    domain or [],
                     ['|', ('name', operator, name), ('partner_id.name', operator, name)]
                 ])
-                order_ids = self._search(domain, limit=limit, access_rights_uid=name_get_uid)
-                return models.lazy_name_get(self.browse(order_ids).with_user(name_get_uid))
-        return super(BimWorkOrder, self)._name_search(name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
+                return self._search(search_domain, limit=limit)
+        return super(BimWorkOrder, self)._name_search(name, domain=domain, operator=operator, limit=limit)
 
     def _prepare_invoice(self):
         """
@@ -1556,13 +1555,13 @@ class BimWorkOrderLine(models.Model):
         return result
 
     @api.model
-    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+    def _name_search(self, name, domain=None, operator='ilike', limit=100):
         if operator in ('ilike', 'like', '=', '=like', '=ilike'):
-            args = expression.AND([
-                args or [],
+            domain = expression.AND([
+                domain or [],
                 ['|', ('order_id.name', operator, name), ('name', operator, name)]
             ])
-        return super(BimWorkOrderLine, self)._name_search(name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
+        return super(BimWorkOrderLine, self)._name_search(name, domain=domain, operator=operator, limit=limit)
 
     def _check_line_unlink(self):
         """

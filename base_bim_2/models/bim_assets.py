@@ -46,13 +46,13 @@ class BimAsset(models.Model):
                 record.display_name = record.name or record.desc
 
     @api.model
-    def name_search(self, name='', args=None, operator='ilike', limit=100):
-        args = list(args or [])
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        domain = list(domain or [])
         if name:
-            records = self.search(args + [('desc', operator, name)], limit=limit)
+            records = self.search(domain + [('desc', operator, name)], limit=limit)
             if records:
                 return [(record.id, record.display_name) for record in records]
-        return super().name_search(name=name, args=args, operator=operator, limit=limit)
+        return super().name_search(name=name, domain=domain, operator=operator, limit=limit)
 
 
 class BimHaberesydescTemplateLine(models.Model):
