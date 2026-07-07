@@ -11,7 +11,6 @@
         <field name="model_id" ref="model_bim_bc3_apu_importer"/>
         <field name="state">code</field>
         <field name="code">model.cron_process_batch()</field>
-        <field name="numbercall">-1</field>
     </record>
 
     <record id="bim_account_move" model="ir.cron">
