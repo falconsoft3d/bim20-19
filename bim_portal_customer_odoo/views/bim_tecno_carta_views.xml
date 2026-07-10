@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════
+         TECNO CARTA CATEGORÍA
+    ══════════════════════════════════════════════════════════ -->
+
+    <record id="view_bim_tecno_carta_categoria_form" model="ir.ui.view">
+        <field name="name">bim.tecno.carta.categoria.form</field>
+        <field name="model">bim.tecno.carta.categoria</field>
+        <field name="arch" type="xml">
+            <form string="Categoría Tecno Carta">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="parent_id"/>
+                    </group>
+                    <field name="child_ids">
+                        <list>
+                            <field name="name"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bim_tecno_carta_categoria_list" model="ir.ui.view">
+        <field name="name">bim.tecno.carta.categoria.list</field>
+        <field name="model">bim.tecno.carta.categoria</field>
+        <field name="arch" type="xml">
+            <list string="Categorías Tecno Carta">
+                <field name="name"/>
+                <field name="parent_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_tecno_carta_categoria" model="ir.actions.act_window">
+        <field name="name">Categorías Tecno Cartas</field>
+        <field name="res_model">bim.tecno.carta.categoria</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         TECNO CARTA
+    ══════════════════════════════════════════════════════════ -->
+
+    <record id="view_bim_tecno_carta_form" model="ir.ui.view">
+        <field name="name">bim.tecno.carta.form</field>
+        <field name="model">bim.tecno.carta</field>
+        <field name="arch" type="xml">
+            <form string="Tecno Carta">
+                <sheet>
+                    <group>
+                        <field name="titulo"/>
+                        <field name="categoria_id"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="texto" widget="html"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bim_tecno_carta_list" model="ir.ui.view">
+        <field name="name">bim.tecno.carta.list</field>
+        <field name="model">bim.tecno.carta</field>
+        <field name="arch" type="xml">
+            <list string="Tecno Cartas">
+                <field name="titulo"/>
+                <field name="categoria_id"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bim_tecno_carta" model="ir.actions.act_window">
+        <field name="name">Tecno Cartas</field>
+        <field name="res_model">bim.tecno.carta</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         MENÚS  (bajo Documentación de BIM)
+    ══════════════════════════════════════════════════════════ -->
+
+    <menuitem
+        id="menu_bim_tecno_cartas_root"
+        name="Tecno Cartas"
+        parent="base_bim_2.menu_bim_documentation_categ"
+        sequence="50"/>
+
+    <menuitem
+        id="menu_bim_tecno_carta_categoria"
+        name="Categorías"
+        parent="menu_bim_tecno_cartas_root"
+        action="action_bim_tecno_carta_categoria"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_bim_tecno_carta"
+        name="Tecno Cartas"
+        parent="menu_bim_tecno_cartas_root"
+        action="action_bim_tecno_carta"
+        sequence="2"/>
+
+</odoo>

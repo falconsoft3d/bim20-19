@@ -12116,6 +12116,9 @@ msgid ""
 "Define a product to invoice the Payment Status directly at the Work. You can"
 " also enter BIM / Configuration / Settings and configure a default one"
 msgstr ""
+"Defina un producto para facturar directamente el Estado de Pago en la Obra,"
+"en BIM → Configuración → Configuración."
+
 
 #. module: base_bim_2
 #. odoo-python

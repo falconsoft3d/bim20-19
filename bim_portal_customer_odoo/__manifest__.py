@@ -9,7 +9,7 @@
 ##############################################################################
 {
     'name': 'BIM Portal Customer Odoo',
-    'version': '19.0.1.0.0',
+    'version': '19.0.2.0.0',
     'author': 'Marlon Falcon Hernandez',
     'maintainer': 'Marlon Falcon Hernandez',
     'website': 'http://www.bim20.com',
@@ -25,12 +25,21 @@
     'depends': [
         'base',
         'mail',
+        'account',
         'base_bim_2',
     ],
     'data': [
         'security/ir.model.access.csv',
         'wizard/bim_portal_password_wizard_views.xml',
         'views/res_partner_views.xml',
+        'views/bim_project_views.xml',
+        'views/bim_tecno_carta_views.xml',
+        'views/bim_avance_obra_views.xml',
+        'views/bim_solicitud_ausencia_views.xml',
+        'views/bim_factura_proveedor_views.xml',
+        'views/bim_especificacion_producto_views.xml',
+        'views/bim_document_categoria_views.xml',
+        'reports/report_bim_especificacion_producto.xml',
     ],
     'auto_install': False,
     'installable': True,

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form view: Supervisor y Project Manager → res.partner -->
+    <record id="view_form_bim_project_partner_users" model="ir.ui.view">
+        <field name="name">bim.project.form.partner.users</field>
+        <field name="model">bim.project</field>
+        <field name="inherit_id" ref="base_bim_2.view_form_bim_project"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="a_user_id" options="{'no_create': True}"/>
+            </field>
+            <field name="project_user_id" position="after">
+                <field name="a_project_user_id" options="{'no_create': True}"/>
+            </field>
+            <!-- Smart button Especificaciones -->
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button"
+                        icon="fa-list-alt"
+                        name="action_view_especificaciones"
+                        type="object"
+                        string="Especificaciones">
+                    <field name="especificacion_count"
+                           string="Especificaciones"
+                           widget="statinfo"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+    <!-- Tree/List view: Supervisor y Project Manager → res.partner -->
+    <record id="view_tree_bim_project_partner_users" model="ir.ui.view">
+        <field name="name">bim.project.tree.partner.users</field>
+        <field name="model">bim.project</field>
+        <field name="inherit_id" ref="base_bim_2.view_tree_bim_project"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="a_user_id" optional="show"/>
+            </field>
+            <field name="project_user_id" position="after">
+                <field name="a_project_user_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

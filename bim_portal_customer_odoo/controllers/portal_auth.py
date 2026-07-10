@@ -229,4 +229,9 @@ def _partner_payload(partner) -> dict:
         'login': partner.portal_login or '',
         'company': partner.parent_id.name if partner.parent_id else '',
         'responsible': partner.portal_responsible_id.name if partner.portal_responsible_id else '',
+        'is_customer': partner.portal_is_customer,
+        'is_employee': partner.portal_is_employee,
+        'is_admin': partner.portal_is_admin,
+        'is_tecno_cartas': partner.portal_is_tecno_cartas,
+        'is_proveedor': partner.portal_is_proveedor,
     }

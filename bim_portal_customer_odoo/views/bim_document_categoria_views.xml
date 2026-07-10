@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Vistas de bim.document.categoria ─────────────────────────── -->
+
+    <record id="view_bim_document_categoria_list" model="ir.ui.view">
+        <field name="name">bim.document.categoria.list</field>
+        <field name="model">bim.document.categoria</field>
+        <field name="arch" type="xml">
+            <list string="Categorías de Documento" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bim_document_categoria_form" model="ir.ui.view">
+        <field name="name">bim.document.categoria.form</field>
+        <field name="model">bim.document.categoria</field>
+        <field name="arch" type="xml">
+            <form string="Categoría de Documento">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bim_document_categoria" model="ir.actions.act_window">
+        <field name="name">Categorías de Documento</field>
+        <field name="res_model">bim.document.categoria</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menú bajo Documentación de base_bim_2 -->
+    <menuitem id="menu_bim_document_categoria"
+              name="Categorías de Documento"
+              parent="base_bim_2.menu_bim_documentation_categ"
+              action="action_bim_document_categoria"
+              sequence="80"/>
+
+    <!-- ── Campo portal_categoria_id en bim.documentation ──────────── -->
+
+    <record id="view_bim_documentation_portal_inherit" model="ir.ui.view">
+        <field name="name">bim.documentation.form.portal.categoria</field>
+        <field name="model">bim.documentation</field>
+        <field name="inherit_id" ref="base_bim_2.view_form_bim_documentation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='desc']" position="after">
+                <field name="portal_categoria_id" string="Categoría Portal"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

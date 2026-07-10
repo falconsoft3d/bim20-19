@@ -16,6 +16,7 @@ import {
   HardHat,
   CalendarOff,
   Receipt,
+  FileText,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getStoredPartner, refreshPartner } from "@/lib/auth";
@@ -177,6 +178,17 @@ export default function Sidebar() {
                 >
                   <Camera size={15} className="shrink-0" />
                   <span>Avances de Obra</span>
+                </Link>
+                <Link
+                  href="/dashboard/cliente/documentos"
+                  className={`flex items-center gap-2 px-2 py-2 rounded-lg text-sm transition-colors ${
+                    pathname.startsWith("/dashboard/cliente/documentos")
+                      ? "bg-[#5c2d5c] text-white"
+                      : "text-white/60 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  <FileText size={15} className="shrink-0" />
+                  <span>Documentos</span>
                 </Link>
               </div>
             )}

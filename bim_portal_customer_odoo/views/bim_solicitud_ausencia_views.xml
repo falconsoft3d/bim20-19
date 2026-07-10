@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECUENCIA
+    ══════════════════════════════════════════════════════════ -->
+    <record id="seq_bim_solicitud_ausencia" model="ir.sequence">
+        <field name="name">Solicitud de Ausencia</field>
+        <field name="code">bim.solicitud.ausencia</field>
+        <field name="prefix">AUS/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         FORM VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_bim_solicitud_ausencia_form" model="ir.ui.view">
+        <field name="name">bim.solicitud.ausencia.form</field>
+        <field name="model">bim.solicitud.ausencia</field>
+        <field name="arch" type="xml">
+            <form string="Solicitud de Ausencia">
+                <header>
+                    <button name="action_submit" string="Enviar"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Autorizar"
+                            type="object" class="oe_highlight"
+                            invisible="state not in ('draft','submitted')"/>
+                    <button name="action_reject" string="Rechazar"
+                            type="object"
+                            invisible="state not in ('draft','submitted')"/>
+                    <button name="action_reset_draft" string="Restablecer a Borrador"
+                            type="object"
+                            invisible="state != 'rejected'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="tipo"/>
+                            <field name="date_create"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <group string="Descripción / Aclaración">
+                        <field name="descripcion" nolabel="1"
+                               placeholder="Escribe una descripción o aclaración sobre la ausencia…"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LIST VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_bim_solicitud_ausencia_list" model="ir.ui.view">
+        <field name="name">bim.solicitud.ausencia.list</field>
+        <field name="model">bim.solicitud.ausencia</field>
+        <field name="arch" type="xml">
+            <list string="Solicitudes de Ausencia"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-info="state == 'submitted'"
+                  decoration-muted="state == 'draft'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="tipo"/>
+                <field name="date_create"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="state"
+                       widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"
+                       decoration-warning="state == 'submitted'"
+                       decoration-muted="state == 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ACTION
+    ══════════════════════════════════════════════════════════ -->
+    <record id="action_bim_solicitud_ausencia" model="ir.actions.act_window">
+        <field name="name">Solicitudes de Ausencia</field>
+        <field name="res_model">bim.solicitud.ausencia</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         MENU
+    ══════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_bim_solicitud_ausencia"
+              name="Solicitudes de Ausencia"
+              parent="base_bim_2.menu_bim_documentation_categ"
+              action="action_bim_solicitud_ausencia"
+              sequence="60"/>
+
+</odoo>

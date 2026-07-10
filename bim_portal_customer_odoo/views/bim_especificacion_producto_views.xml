@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Secuencia -->
+    <record id="seq_bim_especificacion_producto" model="ir.sequence">
+        <field name="name">Especificación de Producto</field>
+        <field name="code">bim.especificacion.producto</field>
+        <field name="prefix">ESP/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_bim_especificacion_producto_form" model="ir.ui.view">
+        <field name="name">bim.especificacion.producto.form</field>
+        <field name="model">bim.especificacion.producto</field>
+        <field name="arch" type="xml">
+            <form string="Especificación de Producto">
+                <header>
+                    <button name="action_en_tramite" string="En Trámite"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'borrador'"/>
+                    <button name="action_cerrar" string="Cerrar"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'en_tramite'"/>
+                    <button name="action_borrador" string="Pasar a Borrador"
+                            type="object"
+                            invisible="state == 'borrador'"/>
+                    <button name="action_print_report"
+                            string="Imprimir"
+                            type="object"
+                            icon="fa-print"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="borrador,en_tramite,cerrada"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Datos principales">
+                            <field name="project_id"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'cerrada'"/>
+                            <field name="product_id"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'cerrada'"/>
+                            <field name="user_id"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'cerrada'"/>
+                            <field name="fecha"
+                                   readonly="state == 'cerrada'"/>
+                        </group>
+                        <group string="Proveedores">
+                            <field name="proveedor1_id"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'cerrada'"/>
+                            <field name="proveedor2_id"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'cerrada'"/>
+                            <field name="proveedor3_id"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'cerrada'"/>
+                            <field name="proveedor_adjudicado_id"
+                                   options="{'no_create': True}"
+                                   readonly="state == 'cerrada'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Características">
+                            <field name="line_ids" widget="one2many"
+                                   readonly="state == 'cerrada'">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="caracteristica"
+                                           string="Característica"
+                                           placeholder="Característica…"/>
+                                    <field name="propuesta1"
+                                           string="Propuesta 1"
+                                           placeholder="Propuesta 1…"/>
+                                    <field name="propuesta2"
+                                           string="Propuesta 2"
+                                           placeholder="Propuesta 2…"/>
+                                    <field name="propuesta3"
+                                           string="Propuesta 3"
+                                           placeholder="Propuesta 3…"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notas">
+                            <field name="notas"
+                                   placeholder="Notas adicionales…"
+                                   readonly="state == 'cerrada'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_bim_especificacion_producto_list" model="ir.ui.view">
+        <field name="name">bim.especificacion.producto.list</field>
+        <field name="model">bim.especificacion.producto</field>
+        <field name="arch" type="xml">
+            <list string="Especificaciones de Producto"
+                  decoration-success="state == 'cerrada'"
+                  decoration-info="state == 'en_tramite'"
+                  decoration-muted="state == 'borrador'">
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="project_id"/>
+                <field name="product_id"/>
+                <field name="user_id" optional="show"/>
+                <field name="proveedor1_id" optional="hide"/>
+                <field name="proveedor2_id" optional="hide"/>
+                <field name="proveedor3_id" optional="hide"/>
+                <field name="proveedor_adjudicado_id" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'cerrada'"
+                       decoration-info="state == 'en_tramite'"
+                       decoration-muted="state == 'borrador'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Reporte PDF -->
+    <record id="action_report_bim_especificacion_producto" model="ir.actions.report">
+        <field name="name">Especificación de Producto</field>
+        <field name="model">bim.especificacion.producto</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bim_portal_customer_odoo.report_bim_especificacion_producto</field>
+        <field name="report_file">bim_portal_customer_odoo.report_bim_especificacion_producto</field>
+        <field name="binding_model_id" ref="model_bim_especificacion_producto"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_bim_especificacion_producto" model="ir.actions.act_window">
+        <field name="name">Especificaciones de Producto</field>
+        <field name="res_model">bim.especificacion.producto</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menú bajo Ejecución -->
+    <menuitem id="menu_bim_especificacion_producto"
+              name="Especificaciones de Producto"
+              parent="base_bim_2.menu_execution_bim"
+              action="action_bim_especificacion_producto"
+              sequence="25"/>
+
+</odoo>

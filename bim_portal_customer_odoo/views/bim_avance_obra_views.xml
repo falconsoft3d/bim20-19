@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECUENCIA
+    ══════════════════════════════════════════════════════════ -->
+    <record id="seq_bim_avance_obra" model="ir.sequence">
+        <field name="name">Avance de Obra</field>
+        <field name="code">bim.avance.obra</field>
+        <field name="prefix">AVO/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         FORM VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_bim_avance_obra_form" model="ir.ui.view">
+        <field name="name">bim.avance.obra.form</field>
+        <field name="model">bim.avance.obra</field>
+        <field name="arch" type="xml">
+            <form string="Avance de Obra">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="fecha"/>
+                            <field name="user_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="project_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <group string="Descripción">
+                        <field name="descripcion" nolabel="1"
+                               placeholder="Describe el avance de obra…"/>
+                    </group>
+                    <separator string="Imágenes"/>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="image" widget="image"
+                                   options="{'size': [64, 64]}" optional="show"/>
+                            <field name="name" placeholder="Descripción de la imagen"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LIST VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_bim_avance_obra_list" model="ir.ui.view">
+        <field name="name">bim.avance.obra.list</field>
+        <field name="model">bim.avance.obra</field>
+        <field name="arch" type="xml">
+            <list string="Avances de Obra" decoration-info="True">
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="project_id"/>
+                <field name="user_id" optional="show"/>
+                <field name="descripcion" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ACTION
+    ══════════════════════════════════════════════════════════ -->
+    <record id="action_bim_avance_obra" model="ir.actions.act_window">
+        <field name="name">Avances de Obra</field>
+        <field name="res_model">bim.avance.obra</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         MENÚ bajo Documentación
+    ══════════════════════════════════════════════════════════ -->
+    <menuitem
+        id="menu_bim_avance_obra"
+        name="Avance de Obra"
+        parent="base_bim_2.menu_bim_documentation_categ"
+        action="action_bim_avance_obra"
+        sequence="40"/>
+
+    <!-- ══════════════════════════════════════════════════════════
+         STAT BUTTON en bim.project
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_bim_project_avance_button" model="ir.ui.view">
+        <field name="name">bim.project.avance.button</field>
+        <field name="model">bim.project</field>
+        <field name="inherit_id" ref="base_bim_2.view_form_bim_project"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_avances_obra"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-camera"
+                        invisible="avance_obra_count == 0">
+                    <field name="avance_obra_count" widget="statinfo"
+                           string="Avances"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+</odoo>

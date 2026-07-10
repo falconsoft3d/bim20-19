@@ -43,7 +43,6 @@
                         <group>
                             <field name="portal_is_customer"/>
                             <field name="portal_is_employee"/>
-                            <field name="portal_is_admin"/>
                         </group>
                         <group>
                             <field name="portal_is_tecno_cartas"/>
