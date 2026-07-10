@@ -33,6 +33,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [isEmployee, setIsEmployee] = useState(false);
   const [isCustomer, setIsCustomer] = useState(false);
+  const [isTecnoCartas, setIsTecnoCartas] = useState(false);
   const [empleadoOpen, setEmpleadoOpen] = useState(false);
   const [clienteOpen, setClienteOpen] = useState(false);
 
@@ -41,11 +42,13 @@ export default function Sidebar() {
     if (cached) {
       setIsEmployee(cached.is_employee ?? false);
       setIsCustomer(cached.is_customer ?? false);
+      setIsTecnoCartas(cached.is_tecno_cartas ?? false);
     }
     refreshPartner().then((fresh) => {
       if (fresh) {
         setIsEmployee(fresh.is_employee ?? false);
         setIsCustomer(fresh.is_customer ?? false);
+        setIsTecnoCartas(fresh.is_tecno_cartas ?? false);
       }
     });
   }, []);
@@ -139,10 +142,12 @@ export default function Sidebar() {
         )}
 
         {/* ── Tecno Cartas (nivel superior) ── */}
-        <Link href="/dashboard/tecno-cartas" className={linkClass("/dashboard/tecno-cartas")}>
-          <BookOpen className="shrink-0" size={18} />
-          {!collapsed && <span>Tecno Cartas</span>}
-        </Link>
+        {isTecnoCartas && (
+          <Link href="/dashboard/tecno-cartas" className={linkClass("/dashboard/tecno-cartas")}>
+            <BookOpen className="shrink-0" size={18} />
+            {!collapsed && <span>Tecno Cartas</span>}
+          </Link>
+        )}
 
         {/* ── Cliente (expandible) ── */}
         {isCustomer && (
