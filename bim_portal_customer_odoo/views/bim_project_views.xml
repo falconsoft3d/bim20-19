@@ -7,8 +7,14 @@
         <field name="model">bim.project</field>
         <field name="inherit_id" ref="base_bim_2.view_form_bim_project"/>
         <field name="arch" type="xml">
+            <field name="user_id" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
             <field name="user_id" position="after">
                 <field name="a_user_id" options="{'no_create': True}"/>
+            </field>
+            <field name="project_user_id" position="attributes">
+                <attribute name="invisible">True</attribute>
             </field>
             <field name="project_user_id" position="after">
                 <field name="a_project_user_id" options="{'no_create': True}"/>
