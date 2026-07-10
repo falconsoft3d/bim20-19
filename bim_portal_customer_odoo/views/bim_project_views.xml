@@ -40,8 +40,16 @@
         <field name="model">bim.project</field>
         <field name="inherit_id" ref="base_bim_2.view_tree_bim_project"/>
         <field name="arch" type="xml">
+            <field name="user_id" position="attributes">
+                <attribute name="optional">hide</attribute>
+                <attribute name="column_invisible">True</attribute>
+            </field>
             <field name="user_id" position="after">
                 <field name="a_user_id" optional="show"/>
+            </field>
+            <field name="project_user_id" position="attributes">
+                <attribute name="optional">hide</attribute>
+                <attribute name="column_invisible">True</attribute>
             </field>
             <field name="project_user_id" position="after">
                 <field name="a_project_user_id" optional="hide"/>
