@@ -42,6 +42,16 @@ class BimConceptTemplate(models.Model):
     performance = fields.Float(string='Performance', digits="BIM Performance")
     user_id = fields.Many2one('res.users', string='User', readonly=True, default=lambda self: self.env.user)
     template_line_ids = fields.One2many('bim.concept.template.line','template_id', copy=True)
+    resource_count = fields.Integer(
+        string='Recursos',
+        compute='_compute_resource_count',
+        store=True,
+    )
+
+    @api.depends('template_line_ids')
+    def _compute_resource_count(self):
+        for rec in self:
+            rec.resource_count = len(rec.template_line_ids)
 
     apu_total_hh = fields.Float("Total APU HH", compute='_compute_apu_total_hh', store=True, digits='BIM price')
     apu_duration = fields.Float("Duration", digits='BIM price', compute='_compute_apu_duration', store=True)
@@ -303,6 +313,226 @@ class BimConceptTemplate(models.Model):
                         break
         return [price_factor, qty_factor, parameters]
 
+    def action_search_bc3_resources(self):
+        """Busca y carga los recursos del importador BC3 asociado al APU."""
+        import json
+        self.ensure_one()
+        if not self.bc3_importer_id:
+            raise UserError(_("Este APU no está vinculado a ningún importador BC3."))
+
+        importer = self.bc3_importer_id
+        # Buscar la línea de staging correspondiente a este APU
+        apu_staging = importer.line_ids.filtered(
+            lambda l: l.code == self.code and l.ctype == 0 and '#' not in (l.code or '')
+        )
+        if not apu_staging:
+            raise UserError(
+                _("No se encontró la línea de staging para el código '%s' en el importador BC3 '%s'.")
+                % (self.code, importer.name)
+            )
+        apu_staging = apu_staging[0]
+
+        try:
+            children = json.loads(apu_staging.decomp_json or '[]')
+        except Exception:
+            children = []
+
+        if not children:
+            raise UserError(
+                _("El importador BC3 no tiene datos de descomposición para el APU '%s'.")
+                % self.code
+            )
+
+        uom_obj = self.env['uom.uom']
+        product_obj = self.env['product.product']
+        line_model = self.env['bim.concept.template.line']
+        bc3_to_line_type = {1: 'H', 2: 'Q', 3: 'M'}
+
+        # Índice de todas las líneas staging por código
+        all_lines_by_code = {l.code: l for l in importer.line_ids}
+
+        # Pre-cargar precios del archivo BC3 para hijos sin staging line
+        missing_codes = {
+            code for code, _qty in children
+            if code not in all_lines_by_code
+        }
+        bc3_prices = {}
+        if missing_codes:
+            bc3_prices = importer.get_resource_prices(missing_codes)
+
+        # Eliminar las líneas existentes antes de recrearlas
+        self.template_line_ids.unlink()
+
+        tpl_seq = 10
+        created = 0
+        skipped = 0
+        for child_code, qty in children:
+            try:
+                child_staging = all_lines_by_code.get(child_code)
+
+                # --- Porcentajes sin staging line ---
+                if not child_staging and child_code.startswith('%'):
+                    bc3_data = bc3_prices.get(child_code, {})
+                    pct_price = bc3_data.get('price') or round(qty * 100, 4)
+                    line_model.create({
+                        'template_id': self.id,
+                        'type': 'A',
+                        'code': child_code,
+                        'name': bc3_data.get('name') or child_code,
+                        'price': pct_price,
+                        'quantity': 0.0,
+                        'sequence': tpl_seq,
+                    })
+                    tpl_seq += 10
+                    created += 1
+                    continue
+
+                # --- Fallback: buscar producto existente o buscarlo en otros importers ---
+                if not child_staging:
+                    bc3_data = bc3_prices.get(child_code, {})
+                    bc3_ctype = bc3_data.get('ctype', 3)
+                    bc3_to_line_fb = {1: 'H', 2: 'Q', 3: 'M'}
+                    default_type = bc3_to_line_fb.get(bc3_ctype, 'M')
+                    # Buscar en staging lines de TODOS los importers
+                    other_staging = self.env['bim.bc3.apu.importer.line'].search(
+                        [('code', '=', child_code)], limit=1)
+                    if other_staging:
+                        child_staging = other_staging
+                    else:
+                        # Sin staging en ningún importador: buscar producto o crear con precio BC3
+                        product = product_obj.search(
+                            [('default_code', '=', child_code)], limit=1)
+                        if not product:
+                            create_vals = {
+                                'default_code': child_code,
+                                'name': bc3_data.get('name') or child_code,
+                                'resource_type': default_type,
+                                'type': 'service',
+                            }
+                            child_uom_str = bc3_data.get('uom', '')
+                            if child_uom_str:
+                                uom_bc3 = uom_obj.search(
+                                    ['|', ('name', '=ilike', child_uom_str),
+                                     ('alt_names', '=ilike', child_uom_str)], limit=1)
+                                if uom_bc3:
+                                    create_vals['uom_id'] = uom_bc3.id
+                            product = product_obj.create(create_vals)
+                        rt_map = {'H': 'H', 'Q': 'Q', 'M': 'M', 'S': 'S', 'A': 'A'}
+                        line_type = rt_map.get(product.resource_type, default_type)
+                        bc3_price = bc3_data.get('price', 0.0)
+                        if bc3_price:
+                            importer._write_product_price(bc3_price, product)
+                        line_model.create({
+                            'template_id': self.id,
+                            'type': line_type,
+                            'product_id': product.id,
+                            'code': child_code,
+                            'name': bc3_data.get('name') or product.name or child_code,
+                            'uom_id': product.uom_id.id if product.uom_id else False,
+                            'price': bc3_price or product.standard_price or product.lst_price,
+                            'quantity': qty,
+                            'sequence': tpl_seq,
+                        })
+                        tpl_seq += 10
+                        created += 1
+                        continue
+
+                ctype = child_staging.ctype
+                line_type = bc3_to_line_type.get(ctype)
+                if not line_type:
+                    if child_code.startswith('%'):
+                        line_type = 'A'
+                    else:
+                        skipped += 1
+                        continue
+
+                # Conceptos de porcentaje (tipo A)
+                if line_type == 'A' and child_code.startswith('%'):
+                    pct_name = child_staging.name or child_code
+                    line_model.create({
+                        'template_id': self.id,
+                        'type': 'A',
+                        'code': child_code,
+                        'name': pct_name,
+                        'price': child_staging.price,
+                        'quantity': qty,
+                        'sequence': tpl_seq,
+                    })
+                    tpl_seq += 10
+                    created += 1
+                    continue
+
+                # Buscar o crear el producto
+                child_uom = child_staging.uom or ''
+                uom_rec = uom_obj.search(
+                    ['|', ('name', '=ilike', child_uom),
+                     ('alt_names', '=ilike', child_uom)],
+                    limit=1) if child_uom else uom_obj.browse()
+
+                product = product_obj.search(
+                    [('default_code', '=', child_code)], limit=1)
+
+                if not product:
+                    create_vals = {
+                        'default_code': child_code,
+                        'name': child_staging.name,
+                        'resource_type': line_type,
+                        'type': 'service',
+                        'bc3_importer_id': importer.id,
+                    }
+                    if uom_rec:
+                        create_vals['uom_id'] = uom_rec.id
+                    product = product_obj.create(create_vals)
+                    importer._write_product_price(child_staging.price, product)
+                else:
+                    if importer.action_type == 'add_update':
+                        write_vals = {'name': child_staging.name, 'resource_type': line_type}
+                        if uom_rec:
+                            write_vals['uom_id'] = uom_rec.id
+                        product.write(write_vals)
+                        importer._write_product_price(child_staging.price, product)
+
+                line_model.create({
+                    'template_id': self.id,
+                    'type': line_type,
+                    'product_id': product.id,
+                    'code': child_code,
+                    'name': child_staging.name,
+                    'uom_id': uom_rec.id if uom_rec else (product.uom_id.id if product else False),
+                    'price': child_staging.price,
+                    'quantity': qty,
+                    'sequence': tpl_seq,
+                })
+                tpl_seq += 10
+                created += 1
+
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).warning(
+                    "BC3 search resources: error en recurso %s para APU %s: %s",
+                    child_code, self.code, e)
+                skipped += 1
+
+        if created == 0:
+            raise UserError(
+                _("No se pudieron cargar recursos para el APU '%s'. "
+                  "Verifique que los datos del importador BC3 estén completos.") % self.code
+            )
+
+        msg = _("Se cargaron %d recursos desde el importador BC3 '%s'.") % (created, importer.name)
+        if skipped:
+            msg += _(" (%d omitidos).") % skipped
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Recursos cargados'),
+                'message': msg,
+                'type': 'success',
+                'sticky': False,
+                'next': {'type': 'ir.actions.client', 'tag': 'reload'},
+            },
+        }
 
 
 class BimConceptTemplateLine(models.Model):

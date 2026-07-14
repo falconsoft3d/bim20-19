@@ -330,11 +330,71 @@ class BimBc3ApuImporter(models.Model):
                 if children:
                     template.template_line_ids.unlink()
                     tpl_seq = 10
+
+                    # Pre-cargar precios del BC3 para recursos sin staging line
+                    missing_child_codes = {
+                        c for c, _q in children if c not in all_lines_by_code
+                    }
+                    bc3_fallback = self.get_resource_prices(missing_child_codes) if missing_child_codes else {}
+
                     for child_code, qty in children:
                         try:
                             child_staging = all_lines_by_code.get(child_code)
+
+                            # ---- Fallback: sin staging line ----
                             if not child_staging:
+                                bc3_data = bc3_fallback.get(child_code, {})
+                                if child_code.startswith('%'):
+                                    pct_name = bc3_data.get('name') or child_code
+                                    pct_price = bc3_data.get('price') or round(qty * 100, 4)
+                                    line_model.create({
+                                        'template_id': template.id,
+                                        'type': 'A',
+                                        'code': child_code,
+                                        'name': pct_name,
+                                        'price': pct_price,
+                                        'quantity': qty,
+                                        'sequence': tpl_seq,
+                                    })
+                                    tpl_seq += 10
+                                elif bc3_data:
+                                    bc3_ctype = bc3_data.get('ctype', 3)
+                                    bc3_to_line_fb = {1: 'H', 2: 'Q', 3: 'M'}
+                                    line_type_fb = bc3_to_line_fb.get(bc3_ctype, 'M')
+                                    product = product_obj.search(
+                                        [('default_code', '=', child_code)], limit=1)
+                                    if not product:
+                                        create_vals = {
+                                            'default_code': child_code,
+                                            'name': bc3_data.get('name') or child_code,
+                                            'resource_type': line_type_fb,
+                                            'type': 'service',
+                                            'bc3_importer_id': self.id,
+                                        }
+                                        child_uom_str = bc3_data.get('uom', '')
+                                        if child_uom_str:
+                                            uom_bc3 = uom_obj.search(
+                                                ['|', ('name', '=ilike', child_uom_str),
+                                                 ('alt_names', '=ilike', child_uom_str)], limit=1)
+                                            if uom_bc3:
+                                                create_vals['uom_id'] = uom_bc3.id
+                                        product = product_obj.create(create_vals)
+                                        self._write_product_price(bc3_data['price'], product)
+                                    line_model.create({
+                                        'template_id': template.id,
+                                        'type': line_type_fb,
+                                        'product_id': product.id,
+                                        'code': child_code,
+                                        'name': bc3_data.get('name') or product.name or child_code,
+                                        'uom_id': product.uom_id.id if product.uom_id else False,
+                                        'price': bc3_data.get('price', 0.0),
+                                        'quantity': qty,
+                                        'sequence': tpl_seq,
+                                    })
+                                    tpl_seq += 10
+                                # Si no hay bc3_data tampoco, simplemente salta
                                 continue
+
                             ctype = child_staging.ctype
                             line_type = bc3_to_line_type.get(ctype)
                             if not line_type:
@@ -452,6 +512,57 @@ class BimBc3ApuImporter(models.Model):
             product.with_company(self.company_id).standard_price = price
         else:
             product.list_price = price
+
+    def get_resource_prices(self, codes):
+        """Parsear el archivo BC3 y devolver {code: {'price': float, 'name': str, 'uom': str, 'ctype': int}}
+        sólo para los códigos en el set `codes`. Útil cuando las staging lines no existen."""
+        self.ensure_one()
+        if not self.bc3_file or not codes:
+            return {}
+        try:
+            data = base64.b64decode(self.bc3_file).decode('latin-1')
+        except Exception:
+            return {}
+
+        result = {}
+        pending = ''
+        rows = data.split('\n')
+        for idx, row in enumerate(rows):
+            row = row.strip()
+            if row and pending:
+                row = pending + row
+                pending = ''
+            next_row = rows[idx + 1].strip() if idx + 1 < len(rows) else ''
+            if row and next_row and next_row[0] != '~':
+                pending = row
+                continue
+            pending = ''
+            if not row or row[0] != '~' or len(row) < 2:
+                continue
+            if row[1] == 'C':
+                datas = row[3:].split('|')
+                if len(datas) < 6:
+                    continue
+                code = datas[0]
+                if code not in codes:
+                    continue
+                try:
+                    price = float(datas[3].replace(',', '.')) if datas[3].strip() else 0.0
+                except (ValueError, AttributeError):
+                    price = 0.0
+                try:
+                    ctype = int(datas[5])
+                except (ValueError, TypeError):
+                    ctype = 0
+                result[code] = {
+                    'price': price,
+                    'name': datas[2] or code,
+                    'uom': datas[1],
+                    'ctype': ctype,
+                }
+                if len(result) == len(codes):
+                    break
+        return result
 
     def action_reset(self):
         """Reset import to draft."""

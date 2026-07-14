@@ -5,7 +5,7 @@
         <field name="name">view.tree.bim.concept.template</field>
         <field name="model">bim.concept.template</field>
         <field name="arch" type="xml">
-            <list>
+            <list decoration-warning="resource_count == 0">
                 <field name="currency_id" optional="hide"/>
                 <field name="code" optional="show"/>
                 <field name="bim_id" optional="show"/>
@@ -18,6 +18,10 @@
                 <field name="quantity"  optional="show"/>
                 <field name="type_calc"  optional="hide"/>
                 <field name="amount_total" class="amount_total" widget="monetary"  optional="show"/>
+                <field name="resource_count" optional="show" string="Recursos"
+                       decoration-danger="resource_count == 0"
+                       decoration-success="resource_count &gt; 0"/>
+                <field name="bc3_importer_id" optional="hide"/>
                 <field name="company_id" groups="base.group_multi_company" optional="show"/>
             </list>
         </field>
@@ -47,6 +51,12 @@
                     <button name="%(action_update_concept_template_wzd)d" type="action" context="{'default_template_id': id}"
                             string="Update Prices"/>
                     <button name="update_all" type="object" string="UPD"/>
+                    <button name="action_search_bc3_resources"
+                            type="object"
+                            string="Buscar recursos BC3"
+                            invisible="not bc3_importer_id"
+                            confirm="¿Desea buscar y cargar los recursos desde el importador BC3? Los recursos actuales serán reemplazados."
+                            class="btn-primary"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -70,6 +80,7 @@
                     </div>
 
                     <group name="budget_concept_template">
+                      <field name="bc3_importer_id" invisible="1"/>
                       <group>
                             <field name="code" placeholder="Code"  required="True"/>
                             <field name="name" placeholder="Description"/>
@@ -202,5 +213,18 @@
         action="action_bim_concept_template"
         sequence="1"/>
 
+    <!-- Acción de servidor: buscar recursos BC3 desde la vista list -->
+    <record id="action_bim_concept_template_search_bc3_resources" model="ir.actions.server">
+        <field name="name">Buscar recursos BC3</field>
+        <field name="model_id" ref="base_bim_2.model_bim_concept_template"/>
+        <field name="binding_model_id" ref="base_bim_2.model_bim_concept_template"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+for record in records:
+    if record.bc3_importer_id:
+        record.action_search_bc3_resources()
+        </field>
+    </record>
 
 </odoo>

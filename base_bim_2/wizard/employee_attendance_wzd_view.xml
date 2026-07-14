@@ -38,15 +38,8 @@
             <field name="view_id" ref="employee_attendance_wzd_from"/>
             <field name="target">new</field>
         </record>
-        <record id="view_employee_form_attendance" model="ir.ui.view">
-            <field name="name">view.employee.form.attendance</field>
-            <field name="model">hr.employee</field>
-            <field name="inherit_id" ref="hr.view_employee_form"/>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <xpath expr="//header" position="inside">
-                    <button name="%(action_employee_attendance)d" string="Register Attendance" type="action"/>
-                </xpath></field>
-        </record>
+        <!-- view_employee_form_attendance removed: causes combined-view validation
+             against stale inherited views already in the DB (version_id, plan_wizard_action).
+             The "Register Attendance" action is accessible directly from the attendance menu. -->
     </data>
 </odoo>
