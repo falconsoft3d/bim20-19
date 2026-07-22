@@ -156,7 +156,7 @@ class BimBudgetCompare(models.TransientModel):
         sheet.write(1, 20, '', separator)
         sheet.write(1, 21, _('Difference'), bold_left)
 
-        types = ['chapter', 'departure'] if self.compare == 'both' else [self.compare]
+        types = ['chapter', 'departure', 'labor', 'equip', 'material', 'aux', 'subcontract'] if self.compare == 'both' else [self.compare]
         row = 2
         # Buscamos códigos de conceptos en común (los repetidos dañan todo)
         for origin_concept in self.origin_budget_id.concept_ids:

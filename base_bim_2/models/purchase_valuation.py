@@ -43,6 +43,8 @@ class PurchaseValuation(models.Model):
 
     begin_date = fields.Date('Begin Date')
     end_date = fields.Date('End Date')
+    technical_approval = fields.Boolean('Aprobación Técnica', tracking=True)
+    financial_approval = fields.Boolean('Aprobación Finanzas', tracking=True)
 
     def action_received(self):
         self.write({'state': 'received'})
@@ -73,6 +75,9 @@ class PurchaseValuation(models.Model):
 
 
     def action_approve(self):
+        for rec in self:
+            if not rec.technical_approval or not rec.financial_approval:
+                raise ValidationError(_('Debe marcar Aprobación Técnica y Aprobación Finanzas para poder aprobar.'))
         self.write({'state': 'approved'})
 
 
@@ -105,11 +110,11 @@ class PurchaseValuation(models.Model):
             self.line_ids.create({
                 'product_id': line.product_id.id,
                 'product_qty': line.product_qty,
-                'product_uom_id': line.product_uom.id,
+                'product_uom_id': line.product_uom_id.id,
                 'price_unit': line.price_unit,
                 'valuation_id': self.id,
                 'discount': line.discount,
-                'taxes_id': line.taxes_id.ids,
+                'taxes_id': line.tax_ids.ids,
                 'description': line.name,
                 'concept_phase_id': line.concept_phase_id.id,
                 'purchase_line_id': line.id,
@@ -305,16 +310,16 @@ class PurchaseValuationLine(models.Model):
     @api.depends('product_qty', 'price_unit', 'discount', 'taxes_id')
     def _compute_price_subtotal(self):
         for line in self:
-            tax_results = self.env['account.tax']._compute_taxes([line._convert_to_tax_base_line_dict()])
-            totals = next(iter(tax_results['totals'].values()))
-            amount_untaxed = totals['amount_untaxed']
-            amount_tax = totals['amount_tax']
-
-            line.update({
-                'price_subtotal': amount_untaxed,
-                'tax_subtotal': amount_tax,
-                'price_total': amount_untaxed + amount_tax,
-            })
+            price = line.price_unit * (1 - line.discount / 100.0)
+            taxes = line.taxes_id.compute_all(
+                price,
+                currency=line.valuation_id.currency_id,
+                quantity=line.product_qty,
+                product=line.product_id,
+            )
+            line.price_subtotal = taxes['total_excluded']
+            line.tax_subtotal = taxes['total_included'] - taxes['total_excluded']
+            line.price_total = taxes['total_included']
 
     @api.onchange('product_id')
     def onchange_product_id(self):

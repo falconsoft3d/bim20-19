@@ -81,6 +81,8 @@
 
                                 <field name="begin_date" />
                                 <field name="end_date" />
+                                <field name="technical_approval" widget="boolean_toggle"/>
+                                <field name="financial_approval" widget="boolean_toggle"/>
 
                             </group>
                             <group>
