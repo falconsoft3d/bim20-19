@@ -629,6 +629,13 @@
               groups="base_bim_2.group_bim_valuation"
               action="purchase_valuation_action" />
 
+        <menuitem id="bim_payment_schedule_menu"
+              name="Programación de Pagos"
+              parent="purchase.menu_procurement_management"
+              sequence="101"
+              groups="base_bim_2.group_bim_valuation"
+              action="bim_payment_schedule_action" />
+
         <menuitem id="bim_purchase_report_menu"
               name="Bim Purchase Report"
               parent="purchase.menu_procurement_management"

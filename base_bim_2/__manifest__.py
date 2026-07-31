@@ -197,6 +197,7 @@ BIM 2.0
         'views/work_breakdown_views.xml',
         'views/daily_part_liquidation_views.xml',
         'views/purchase_valuation_views.xml',
+        'views/bim_payment_schedule_views.xml',
 
 
 

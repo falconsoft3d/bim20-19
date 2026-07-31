@@ -65,6 +65,14 @@
                         </button>
 
                         <button class="oe_stat_button"
+                                groups="base_bim_2.group_bim_valuation"
+                                icon="fa-calendar-check-o"
+                                name="action_view_payment_schedules"
+                                string="Prog. Pagos" type="object">
+                            <field name="payment_schedule_count" string="Prog. Pagos" widget="statinfo"/>
+                        </button>
+
+                        <button class="oe_stat_button"
                                 icon="fa-dollar" name="action_view_bim_cash_flow" string="Cash Flow" type="object">
                             <field name="bim_cash_flow_count" string="Cash Flow" widget="statinfo"/>
                             <field invisible="True" name="bim_cash_flow_ids"/>

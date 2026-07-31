@@ -15,6 +15,22 @@ class BimProject(models.Model):
     project_product_limited = fields.Boolean(default=lambda r: r.env.company.project_product_limited,
                                              string='Purchase limit', tracking=1)
     project_uom_ids = fields.One2many('bim.project.uom','project_id')
+    payment_schedule_count = fields.Integer(
+        'Programaciones de Pago', compute='_compute_payment_schedule_count')
+
+    def _compute_payment_schedule_count(self):
+        PaymentSchedule = self.env['bim.payment.schedule']
+        for project in self:
+            project.payment_schedule_count = PaymentSchedule.search_count([
+                ('project_id', '=', project.id),
+            ])
+
+    def action_view_payment_schedules(self):
+        self.ensure_one()
+        action = self.env.ref('base_bim_2.bim_payment_schedule_action').sudo().read()[0]
+        action['domain'] = [('project_id', '=', self.id)]
+        action['context'] = {'default_project_id': self.id}
+        return action
 
     def get_project_material_total(self):
         total_material = 0

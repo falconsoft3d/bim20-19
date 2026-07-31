@@ -27,6 +27,9 @@ class BimEspecificacionProducto(models.Model):
     ], string='Estado', default='borrador', required=True, tracking=True)
     product_id = fields.Many2one(
         'product.template', string='Producto', tracking=True)
+    purchase_id = fields.Many2one(
+        'purchase.order', string='Orden de Compra',
+        ondelete='set null', tracking=True)
 
     # Proveedores
     proveedor1_id = fields.Many2one(
@@ -64,6 +67,34 @@ class BimEspecificacionProducto(models.Model):
         return self.env.ref(
             'bim_portal_customer_odoo.action_report_bim_especificacion_producto'
         ).report_action(self)
+
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    especificacion_count = fields.Integer(
+        string='Especificaciones', compute='_compute_especificacion_count')
+
+    def _compute_especificacion_count(self):
+        data = self.env['bim.especificacion.producto'].read_group(
+            [('purchase_id', 'in', self.ids)],
+            ['purchase_id'], ['purchase_id'])
+        mapping = {data_item['purchase_id'][0]: data_item['purchase_id_count']
+                   for data_item in data}
+        for purchase in self:
+            purchase.especificacion_count = mapping.get(purchase.id, 0)
+
+    def action_view_especificaciones(self):
+        self.ensure_one()
+        action = self.env.ref(
+            'bim_portal_customer_odoo.action_bim_especificacion_producto'
+        ).sudo().read()[0]
+        action['domain'] = [('purchase_id', '=', self.id)]
+        action['context'] = {
+            'default_purchase_id': self.id,
+            'default_project_id': self.project_id.id,
+        }
+        return action
 
 
 class BimEspecificacionProductoLinea(models.Model):

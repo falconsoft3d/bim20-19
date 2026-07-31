@@ -11,6 +11,8 @@ class ResPartner(models.Model):
 
     project_ids = fields.One2many('bim.project', 'customer_id', 'Projects')
     project_count = fields.Integer('# Projects', compute="_get_project_count")
+    payment_schedule_count = fields.Integer(
+        'Programaciones de Pago', compute='_compute_payment_schedule_count')
     attendance_summary = fields.Boolean(string='Attendance summary', default=True)
     vies_failed_message = fields.Boolean(string='VIES failed message', default=False)
 
@@ -40,6 +42,13 @@ class ResPartner(models.Model):
         for projects in self:
             projects.project_count = len(projects.project_ids)
 
+    def _compute_payment_schedule_count(self):
+        PaymentSchedule = self.env['bim.payment.schedule']
+        for partner in self:
+            partner.payment_schedule_count = PaymentSchedule.search_count([
+                ('partner_id', '=', partner.id),
+            ])
+
     def action_view_projects(self):
         projects = self.mapped('project_ids')
         context = self.env.context.copy()
@@ -52,3 +61,10 @@ class ResPartner(models.Model):
             'domain': [('id', 'in', projects.ids)],
             'context': context
         }
+
+    def action_view_payment_schedules(self):
+        self.ensure_one()
+        action = self.env.ref('base_bim_2.bim_payment_schedule_action').sudo().read()[0]
+        action['domain'] = [('partner_id', '=', self.id)]
+        action['context'] = {'default_partner_id': self.id}
+        return action

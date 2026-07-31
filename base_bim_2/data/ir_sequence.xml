@@ -761,4 +761,13 @@
         <field name="company_id" eval="False"/>
     </record>
 
+    <!-- bim.payment.schedule -->
+    <record id="seq_bim_payment_schedule" model="ir.sequence">
+        <field name="name">Programación de Pagos</field>
+        <field name="code">bim.payment.schedule</field>
+        <field name="prefix">PP</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
 </odoo>

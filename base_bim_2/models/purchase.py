@@ -26,13 +26,47 @@ class PurchaseOrder(models.Model):
     purchase_valuation_ids = fields.One2many('purchase.valuation', 'purchase_id', string='Purchase Valuation')
     purchase_valuation_count = fields.Integer(compute='_compute_purchase_valuation_count', string='Purchase Valuation Count')
 
+    payment_schedule_ids = fields.One2many('bim.payment.schedule', 'purchase_id', string='Programación de Pagos')
+    payment_schedule_count = fields.Integer(compute='_compute_payment_schedule_count', string='Programaciones de Pagos')
+
+    amount_paid = fields.Monetary(
+        'Pagado', compute='_compute_payment_schedule_amounts',
+        currency_field='currency_id',
+        help='Suma de importes de programaciones de pago en estado Hecho')
+    amount_pending = fields.Monetary(
+        'Pendiente', compute='_compute_payment_schedule_amounts',
+        currency_field='currency_id',
+        help='Total pendiente de pago (Total - Pagado)')
+
     @api.depends('purchase_valuation_ids')
     def _compute_purchase_valuation_count(self):
         for purchase in self:
             purchase.purchase_valuation_count = len(purchase.purchase_valuation_ids)
 
+    @api.depends('payment_schedule_ids')
+    def _compute_payment_schedule_count(self):
+        for purchase in self:
+            purchase.payment_schedule_count = len(purchase.payment_schedule_ids)
+
+    @api.depends('payment_schedule_ids.importe_a_pagar', 'payment_schedule_ids.state', 'amount_total')
+    def _compute_payment_schedule_amounts(self):
+        for purchase in self:
+            paid = sum(
+                s.importe_a_pagar
+                for s in purchase.payment_schedule_ids
+                if s.state == 'done'
+            )
+            purchase.amount_paid = paid
+            purchase.amount_pending = purchase.amount_total - paid
+
     def action_view_purchase_valuation(self):
         action = self.env.ref('base_bim_2.purchase_valuation_action').sudo().read()[0]
+        action['domain'] = [('purchase_id', '=', self.id)]
+        action['context'] = {'default_purchase_id': self.id}
+        return action
+
+    def action_view_payment_schedule(self):
+        action = self.env.ref('base_bim_2.bim_payment_schedule_action').sudo().read()[0]
         action['domain'] = [('purchase_id', '=', self.id)]
         action['context'] = {'default_purchase_id': self.id}
         return action

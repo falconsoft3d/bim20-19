@@ -24,6 +24,10 @@
                     <button name="action_view_projects" type="object" class="oe_stat_button" icon="fa-compass" groups="base_bim_2.group_user_bim">
                                 <field name="project_count" widget="statinfo" string="Projects"/>
                     </button>
+              <button name="action_view_payment_schedules" type="object" class="oe_stat_button"
+                  icon="fa-calendar-check-o" groups="base_bim_2.group_bim_valuation">
+                    <field name="payment_schedule_count" widget="statinfo" string="Prog. Pagos"/>
+              </button>
         </div>
 
 

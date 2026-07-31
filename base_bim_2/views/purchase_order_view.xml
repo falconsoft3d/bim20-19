@@ -13,6 +13,12 @@
                             type="object" name="action_view_purchase_valuation">
                       <field widget="statinfo" name="purchase_valuation_count" string="Purchase Valuation"/>
                     </button>
+                    <button class="oe_stat_button" icon="fa-calendar-check-o"
+                            invisible="state == 'draft'"
+                            groups="base_bim_2.group_bim_valuation"
+                            type="object" name="action_view_payment_schedule">
+                      <field widget="statinfo" name="payment_schedule_count" string="Prog. Pagos"/>
+                    </button>
                 </xpath>
 
                 <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='products']/field[@name='order_line']/list[1]/button[@name='action_product_forecast_report']" position="after">
@@ -35,6 +41,17 @@
                 <field name="picking_type_id" position="after">
                     <field name="place_of_delivery_id" options='{"no_create": 1}'/>
                 </field>
+
+                <xpath expr="//field[@name='note']" position="after">
+                    <group name="bim_payment_summary" col="2"
+                           groups="base_bim_2.group_bim_valuation">
+                        <group string="Resumen de Programación de Pagos">
+                            <field name="amount_total" string="Saldo Total" readonly="1"/>
+                            <field name="amount_paid" readonly="1"/>
+                            <field name="amount_pending" readonly="1"/>
+                        </group>
+                    </group>
+                </xpath>
             </field>
         </record>
 

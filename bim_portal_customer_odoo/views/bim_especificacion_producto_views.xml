@@ -46,6 +46,9 @@
                             <field name="product_id"
                                    options="{'no_create': True}"
                                    readonly="state == 'cerrada'"/>
+                            <field name="purchase_id"
+                                options="{'no_create': True}"
+                                readonly="state == 'cerrada'"/>
                             <field name="user_id"
                                    options="{'no_create': True}"
                                    readonly="state == 'cerrada'"/>
@@ -114,6 +117,7 @@
                 <field name="fecha"/>
                 <field name="project_id"/>
                 <field name="product_id"/>
+                <field name="purchase_id" optional="show"/>
                 <field name="user_id" optional="show"/>
                 <field name="proveedor1_id" optional="hide"/>
                 <field name="proveedor2_id" optional="hide"/>
@@ -144,6 +148,21 @@
         <field name="res_model">bim.especificacion.producto</field>
         <field name="view_mode">list,form</field>
     </record>
+
+        <record id="purchase_order_form_especificacion_producto" model="ir.ui.view">
+            <field name="name">purchase.order.form.especificacion.producto</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="base_bim_2.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" icon="fa-list-alt"
+                            name="action_view_especificaciones" type="object">
+                        <field name="especificacion_count" widget="statinfo"
+                               string="Especificaciones"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
 
     <!-- Menú bajo Ejecución -->
     <menuitem id="menu_bim_especificacion_producto"
