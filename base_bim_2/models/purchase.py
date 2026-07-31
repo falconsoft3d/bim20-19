@@ -24,6 +24,8 @@ class PurchaseOrder(models.Model):
     ondelete="restrict", domain="[('budget_id','=',budget_id),('type','=','departure')]")
     margin = fields.Float('Margin (%)', default=0)
     place_of_delivery_id = fields.Many2one('res.partner', 'Place of Delivery')
+    estimated_work_delivery_date = fields.Datetime('Fecha Estimada a Obra')
+    actual_delivery_date = fields.Datetime('Fecha Real Entrega')
     closed_valuation = fields.Boolean('Closed Valuation', default=False)
 
     purchase_valuation_ids = fields.One2many('purchase.valuation', 'purchase_id', string='Purchase Valuation')

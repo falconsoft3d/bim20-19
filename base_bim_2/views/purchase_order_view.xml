@@ -48,6 +48,16 @@
                 <field name="picking_type_id" position="after">
                     <field name="place_of_delivery_id" options='{"no_create": 1}'/>
                 </field>
+                <xpath expr="//div[@name='date_planned_div']" position="after">
+                    <label for="estimated_work_delivery_date"/>
+                    <div class="o_row">
+                        <field name="estimated_work_delivery_date"/>
+                    </div>
+                    <label for="actual_delivery_date"/>
+                    <div class="o_row">
+                        <field name="actual_delivery_date"/>
+                    </div>
+                </xpath>
 
                 <xpath expr="//field[@name='note']" position="after">
                     <group name="bim_payment_summary" col="2"
@@ -71,6 +81,9 @@
                     <field name="project_id" optional="show"/>
                     <field name="budget_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
                     <field name="concept_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
+                    <field name="date_planned" string="Llegada prevista" optional="show"/>
+                    <field name="estimated_work_delivery_date" optional="show"/>
+                    <field name="actual_delivery_date" optional="show"/>
 
                 </field>
             </field>
@@ -85,6 +98,9 @@
                     <field name="project_id" optional="show"/>
                     <field name="budget_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
                     <field name="concept_id" groups="base_bim_2.group_budget_concept_documents" optional="hide"/>
+                    <field name="date_planned" string="Llegada prevista" optional="show"/>
+                    <field name="estimated_work_delivery_date" optional="show"/>
+                    <field name="actual_delivery_date" optional="show"/>
                 </field>
 
 

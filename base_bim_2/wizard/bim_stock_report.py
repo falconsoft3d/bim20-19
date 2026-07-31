@@ -95,6 +95,7 @@ class BimstockReportWizard(models.TransientModel):
             ('categories_product_list', 'Categories and Products List'),
             ('categories', 'Categories'),
             ('comparative_project_hours', 'Comparative Project Hours'),
+            ('purchase_control_list', 'Listado control de compra'),
             ('accumulated_delivery_report', 'Accumulated Delivery Report'),
             ('individual_delivery_report', 'Individual Delivery Report')
         ], string="Printing Type", default='summary',
@@ -185,6 +186,110 @@ class BimstockReportWizard(models.TransientModel):
                 if rec.quantity > 0:
                     total_qty += self.recursive_quantity(rec,rec.parent_id,None)
         return total_qty
+
+    def _get_budget_resource_quantity(self, resource):
+        quantity = resource.quantity
+        parent = resource.parent_id
+        while parent:
+            if parent.type == 'departure':
+                quantity *= parent.quantity
+            parent = parent.parent_id
+        return quantity
+
+    def _resource_is_selected(self, resource):
+        if resource.type == 'material':
+            return self.material
+        if resource.type == 'equip':
+            return self.equipment
+        if resource.type == 'labor':
+            return self.labor
+        return False
+
+    def print_xls_purchase_control_list(self):
+        purchase_lines = self.env['purchase.order.line'].search([
+            ('project_id', '=', self.project_id.id),
+            ('state', 'in', ['purchase', 'done']),
+            ('display_type', '=', False),
+            ('product_id', '!=', False),
+        ])
+
+        budgets = self.env['bim.budget'].search([
+            ('project_id', '=', self.project_id.id),
+        ])
+        budget_quantities = {}
+        budget_amounts = {}
+        for resource in budgets.mapped('concept_ids'):
+            if not resource.product_id or not self._resource_is_selected(resource):
+                continue
+            quantity = self._get_budget_resource_quantity(resource)
+            if quantity > 0:
+                budget_quantities[resource.product_id.id] = (
+                    budget_quantities.get(resource.product_id.id, 0) + quantity
+                )
+                budget_amounts[resource.product_id.id] = (
+                    budget_amounts.get(resource.product_id.id, 0) + resource.amount_fixed * quantity
+                )
+
+        purchase_lines = purchase_lines.filtered(
+            lambda line: line.product_id.id in budget_quantities
+        ).sorted(key=lambda line: (line.order_id.name, line.sequence, line.id))
+        workbook = xlwt.Workbook(encoding='utf-8')
+        worksheet = workbook.add_sheet(_('Listado control de compra'))
+        file_name = '%s_%s_%s' % (
+            self.project_id.name,
+            _('Listado_control_de_compra'),
+            datetime.now().strftime('%d_%m_%Y_%H_%M_%S'),
+        )
+        header_style = xlwt.easyxf(
+            'borders: left thin, right thin, top thin, bottom thin; font: bold on;'
+        )
+        detail_style = xlwt.easyxf('borders: bottom thin;')
+        amount_style = xlwt.easyxf('borders: bottom thin;', num_format_str='#,##0.00')
+        headers = [
+            _('PO'), _('DESCRIPCIÓN'), _('PROVEEDOR'), _('SISTEMA'), _('IMPORTE'),
+            _('IMPORTE ESPERADO'), _('DESVIACIÓN'), _('FECHA PO'),
+            _('FECHA ENTREGA SEGÚN PO'), _('FECHA ESTIMADA ENTREGA A OBRA'),
+            _('FECHA REAL ENTREGA'), _('COMENTARIOS'),
+        ]
+        for column, header in enumerate(headers):
+            worksheet.write(0, column, header, header_style)
+
+        def format_date(value):
+            return fields.Datetime.to_datetime(value).strftime('%d/%m/%Y') if value else ''
+
+        for row, line in enumerate(purchase_lines, start=1):
+            product_id = line.product_id.id
+            expected_amount = budget_amounts[product_id]
+            worksheet.write(row, 0, line.order_id.name or '', detail_style)
+            worksheet.write(row, 1, line.name or line.product_id.display_name, detail_style)
+            worksheet.write(row, 2, line.order_id.partner_id.display_name or '', detail_style)
+            worksheet.write(row, 3, line.product_id.categ_id.display_name or '', detail_style)
+            worksheet.write(row, 4, line.price_subtotal, amount_style)
+            worksheet.write(row, 5, expected_amount, amount_style)
+            worksheet.write(row, 6, line.price_subtotal - expected_amount, amount_style)
+            worksheet.write(row, 7, format_date(line.order_id.date_order), detail_style)
+            worksheet.write(row, 8, format_date(line.date_planned), detail_style)
+            worksheet.write(row, 9, format_date(line.order_id.estimated_work_delivery_date), detail_style)
+            worksheet.write(row, 10, format_date(line.order_id.actual_delivery_date), detail_style)
+            comments = line.order_id.notes if 'notes' in line.order_id._fields else ''
+            worksheet.write(row, 11, comments or '', detail_style)
+
+        for column, width in enumerate([16, 38, 28, 22, 18, 20, 18, 16, 24, 28, 22, 40]):
+            worksheet.col(column).width = width * 256
+
+        buffer = BytesIO()
+        workbook.save(buffer)
+        attachment = self.env['ir.attachment'].create({
+            'name': '%s.xls' % file_name,
+            'datas': base64.encodebytes(buffer.getvalue()),
+        })
+        buffer.close()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': 'web/content/?model=ir.attachment&id=%s&filename_field=name&field=datas&download=true&filename=%s' % (
+                attachment.id, attachment.name),
+            'no_destroy': False,
+        }
 
     def print_report(self):
         if self.display_type == 'detailed':
@@ -1389,6 +1494,8 @@ class BimstockReportWizard(models.TransientModel):
             return self.print_xls_categories()
         elif self.display_type == 'comparative_project_hours':
             return self.print_xls_comparative_project_hours()
+        elif self.display_type == 'purchase_control_list':
+            return self.print_xls_purchase_control_list()
         if self.budget_ids:
             return self.print_xls_from_budget(self.budget_ids)
 
