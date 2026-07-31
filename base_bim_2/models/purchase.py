@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 # Part of Bim20. See LICENSE file for full copyright and licensing details.
+import base64
+import io
+import logging
+from datetime import date, datetime
+
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from datetime import date
-import logging
 _logger = logging.getLogger(__name__)
 
 
@@ -70,6 +73,205 @@ class PurchaseOrder(models.Model):
         action['domain'] = [('purchase_id', '=', self.id)]
         action['context'] = {'default_purchase_id': self.id}
         return action
+
+    def action_open_payment_schedule_wizard(self):
+        self.ensure_one()
+        return {
+            'name': _('Programar pagos'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'purchase.payment.schedule.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'active_id': self.id},
+        }
+
+    def action_export_cash_flow_xlsx(self):
+        if not self:
+            raise UserError(_('Seleccione al menos una orden de compra.'))
+
+        try:
+            import xlsxwriter
+        except ImportError as error:
+            raise UserError(_('No está instalada la librería xlsxwriter.')) from error
+
+        def month_key(value):
+            return value.year, value.month
+
+        def invoice_moves(order):
+            return order.order_line.invoice_lines.mapped('move_id').filtered(
+                lambda move: move.move_type == 'in_invoice' and move.state != 'cancel')
+
+        months = set()
+        order_invoices = {}
+        for order in self:
+            months.update(
+                month_key(schedule.fecha_prevista)
+                for schedule in order.payment_schedule_ids
+                if schedule.fecha_prevista
+            )
+            moves = invoice_moves(order)
+            order_invoices[order.id] = moves
+            months.update(
+                month_key(invoice.invoice_date or invoice.date)
+                for invoice in moves
+                if invoice.invoice_date or invoice.date
+            )
+        months = sorted(months)
+
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        worksheet = workbook.add_worksheet('Flujo de caja')
+        header_format = workbook.add_format({
+            'bold': True, 'border': 1, 'align': 'center', 'valign': 'vcenter',
+            'bg_color': '#FFFFFF',
+        })
+        text_format = workbook.add_format({
+            'border': 1, 'valign': 'vcenter',
+        })
+        money_format = workbook.add_format({
+            'border': 1, 'align': 'right', 'valign': 'vcenter', 'num_format': '#,##0.00',
+        })
+        month_format = workbook.add_format({
+            'border': 1, 'align': 'right', 'valign': 'vcenter', 'text_wrap': True,
+        })
+        percentage_format = workbook.add_format({
+            'border': 1, 'align': 'right', 'valign': 'vcenter', 'num_format': '0.00%',
+        })
+        date_format = workbook.add_format({
+            'border': 1, 'align': 'center', 'valign': 'vcenter', 'num_format': 'dd/mm/yyyy',
+        })
+        total_format = workbook.add_format({
+            'bold': True, 'border': 1, 'align': 'right', 'valign': 'vcenter',
+            'bg_color': '#D9EAD3', 'num_format': '#,##0.00',
+        })
+        total_percentage_format = workbook.add_format({
+            'bold': True, 'border': 1, 'align': 'right', 'valign': 'vcenter',
+            'bg_color': '#D9EAD3', 'num_format': '0.00%',
+        })
+        total_text_format = workbook.add_format({
+            'bold': True, 'border': 1, 'valign': 'vcenter', 'bg_color': '#D9EAD3',
+        })
+        month_names = (
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+        )
+        headers = [
+            'PO', 'Importe', 'Fecha PO', 'Descripción', 'Proveedor',
+            'Fecha entrega según PO', 'Forma de pago', 'Comentarios', 'FACTURA',
+        ]
+        for column, header in enumerate(headers):
+            worksheet.merge_range(0, column, 1, column, header, header_format)
+        month_start_column = len(headers)
+        for offset, (year, month) in enumerate(months):
+            column = month_start_column + offset * 2
+            worksheet.merge_range(
+                0, column, 0, column + 1,
+                '%s %s' % (month_names[month - 1], year), header_format)
+            worksheet.write(1, column, 'Importe', header_format)
+            worksheet.write(1, column + 1, '%', header_format)
+        total_column = month_start_column + len(months) * 2
+        worksheet.merge_range(0, total_column, 1, total_column, 'Total programado', header_format)
+        worksheet.merge_range(0, total_column + 1, 1, total_column + 1, '% programado', header_format)
+        worksheet.set_row(0, 25)
+        worksheet.set_row(1, 20)
+        worksheet.set_column(0, 0, 14)
+        worksheet.set_column(1, 1, 15)
+        worksheet.set_column(2, 2, 14)
+        worksheet.set_column(3, 3, 42)
+        worksheet.set_column(4, 4, 25)
+        worksheet.set_column(5, 5, 20)
+        worksheet.set_column(6, 6, 24)
+        worksheet.set_column(7, 7, 30)
+        worksheet.set_column(8, 8, 24)
+        if months:
+            worksheet.set_column(month_start_column, total_column - 1, 14)
+        worksheet.set_column(total_column, total_column, 17)
+        worksheet.set_column(total_column + 1, total_column + 1, 14)
+        worksheet.freeze_panes(2, 3)
+
+        monthly_totals = {month: 0.0 for month in months}
+        total_order_amount = 0.0
+        total_scheduled_amount = 0.0
+        for row, order in enumerate(self.sorted(lambda purchase: purchase.name), start=2):
+            product_line = order.order_line.filtered(lambda line: not line.display_type)[:1]
+            payment_term = order.partner_id.property_supplier_payment_term_id or order.payment_term_id
+            comments = '\n'.join(filter(None, order.payment_schedule_ids.mapped('notas')))
+            invoices = order_invoices[order.id]
+            invoice_references = ', '.join(
+                filter(None, invoices.mapped('name') or invoices.mapped('ref')))
+            worksheet.write(row, 0, order.name or '', text_format)
+            worksheet.write_number(row, 1, order.amount_total, money_format)
+            worksheet.write_datetime(row, 2, fields.Datetime.to_datetime(order.date_order), date_format)
+            worksheet.write(row, 3, product_line.name if product_line else '', text_format)
+            worksheet.write(row, 4, order.partner_id.display_name or '', text_format)
+            if order.date_planned:
+                worksheet.write_datetime(row, 5, fields.Datetime.to_datetime(order.date_planned), date_format)
+            else:
+                worksheet.write_blank(row, 5, None, date_format)
+            worksheet.write(row, 6, payment_term.display_name if payment_term else '', text_format)
+            worksheet.write(row, 7, comments, text_format)
+            worksheet.write(row, 8, invoice_references, text_format)
+            total_order_amount += order.amount_total
+
+            payments_by_month = {}
+            for schedule in order.payment_schedule_ids.filtered('fecha_prevista'):
+                key = month_key(schedule.fecha_prevista)
+                payment = payments_by_month.setdefault(key, {'amount': 0.0, 'percentage': 0.0})
+                payment['amount'] += schedule.importe_a_pagar
+                payment['percentage'] += (
+                    schedule.importe_a_pagar / order.amount_total * 100.0
+                    if order.amount_total else 0.0
+                )
+            scheduled_amount = sum(payment['amount'] for payment in payments_by_month.values())
+            scheduled_percentage = scheduled_amount / order.amount_total if order.amount_total else 0.0
+            for offset, month in enumerate(months):
+                payment = payments_by_month.get(month)
+                column = month_start_column + offset * 2
+                if payment:
+                    worksheet.write_number(row, column, payment['amount'], money_format)
+                    worksheet.write_number(row, column + 1, payment['percentage'] / 100.0, percentage_format)
+                    monthly_totals[month] += payment['amount']
+                else:
+                    worksheet.write_blank(row, column, None, month_format)
+                    worksheet.write_blank(row, column + 1, None, percentage_format)
+            worksheet.write_number(row, total_column, scheduled_amount, money_format)
+            worksheet.write_number(row, total_column + 1, scheduled_percentage, percentage_format)
+            total_scheduled_amount += scheduled_amount
+
+        total_row = len(self) + 2
+        worksheet.write(total_row, 0, 'TOTALES', total_text_format)
+        worksheet.write_number(total_row, 1, total_order_amount, total_format)
+        for column in range(2, month_start_column):
+            worksheet.write_blank(total_row, column, None, total_text_format)
+        for offset, month in enumerate(months):
+            column = month_start_column + offset * 2
+            monthly_amount = monthly_totals[month]
+            monthly_percentage = monthly_amount / total_order_amount if total_order_amount else 0.0
+            worksheet.write_number(total_row, column, monthly_amount, total_format)
+            worksheet.write_number(total_row, column + 1, monthly_percentage, total_percentage_format)
+        worksheet.write_number(total_row, total_column, total_scheduled_amount, total_format)
+        worksheet.write_number(
+            total_row,
+            total_column + 1,
+            total_scheduled_amount / total_order_amount if total_order_amount else 0.0,
+            total_percentage_format,
+        )
+
+        workbook.close()
+        filename = 'reporte_flujo_de_caja_%s.xlsx' % datetime.now().strftime('%Y%m%d_%H%M%S')
+        attachment = self.env['ir.attachment'].create({
+            'name': filename,
+            'type': 'binary',
+            'datas': base64.b64encode(output.getvalue()),
+            'res_model': self._name,
+            'res_id': self[0].id,
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        })
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/web/content/%s?download=true' % attachment.id,
+            'target': 'new',
+        }
 
 
     def _prepare_picking(self):

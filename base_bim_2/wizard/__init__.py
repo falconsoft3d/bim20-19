@@ -59,3 +59,4 @@ from . import bim_sand_box
 from . import bim_concept_template_copy
 from . import income_statement_import_wizard
 from . import hr_attendance_export_wzd
+from . import purchase_payment_schedule_wizard

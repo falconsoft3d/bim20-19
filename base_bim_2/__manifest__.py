@@ -76,6 +76,7 @@ BIM 2.0
         'wizard/load_week_hours_view.xml',
         'wizard/bim_budget_report.xml',
         'wizard/bim_certification_report.xml',
+        'wizard/purchase_payment_schedule_wizard_views.xml',
         'wizard/bim_resource_report.xml',
         'wizard/bim_clone_budget.xml',
         'wizard/bim_budget_stage_generate.xml',

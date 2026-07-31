@@ -6,6 +6,13 @@
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.purchase_order_form" />
             <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='button_cancel']" position="before">
+                    <button name="action_open_payment_schedule_wizard"
+                            string="Programar pagos"
+                            type="object"
+                            invisible="state != 'purchase' or payment_schedule_count != 0"
+                            groups="base_bim_2.group_bim_valuation"/>
+                </xpath>
                 <xpath expr="//form[1]/sheet[1]/div[@name='button_box']/button[@name='action_view_picking']" position="after">
                     <button class="oe_stat_button" icon="fa-file"
                             invisible="state == 'draft'"
@@ -107,6 +114,15 @@
                     <field name="project_id" widget="many2one"  optional="show"/>
                 </field>
             </field>
+        </record>
+
+        <record id="action_export_purchase_cash_flow_xlsx" model="ir.actions.server">
+            <field name="name">Exportar reporte de flujo de caja</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_export_cash_flow_xlsx()</field>
         </record>
 
 
