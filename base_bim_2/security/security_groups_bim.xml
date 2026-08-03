@@ -148,6 +148,16 @@
             <field name="name">BIM SAT</field>
         </record>
 
+        <record id="group_purchase_technical_approver" model="res.groups">
+            <field name="name">Aprobador Técnico de Compras</field>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="group_purchase_finance_approver" model="res.groups">
+            <field name="name">Aprobador para Pagos</field>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+        </record>
+
         <record id="group_bim_certification" model="res.groups">
             <field name="name">BIM Certification</field>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>

@@ -246,11 +246,11 @@ class CreatePurchaseWizard(models.TransientModel):
         return {
             'name': line.product_id.name,
             'product_id': line.product_id.id,
-            'product_uom': line.um_id.id or line.product_id.uom_id.id,
+            'product_uom_id': line.um_id.id or line.product_id.uom_id.id,
             'product_qty': line.quant,
             'concept_phase_id' : line.concept_phase_id.id,
             'price_unit': line.cost if not req.company_id.purchase_cost_zero else 0.0,
-            'taxes_id': [(6, 0, line.product_id.supplier_taxes_id.ids)],
+            'tax_ids': [(6, 0, line.product_id.supplier_taxes_id.ids)],
             'date_planned': req.date_prevista,
             'bim_req_line_id': line.bim_req_line_id.id,
             'analytic_distribution': {'%s' % (line.analytic_id.id): 100},

@@ -22,8 +22,8 @@ class BimPaymentSchedule(models.Model):
         ('efectivo', 'Efectivo'),
     ], string='Cómo se Paga', tracking=True)
     notas = fields.Text('Notas')
-    aprobado_tecnico = fields.Boolean('Aprobado Técnicamente', tracking=True)
-    aprobado_finanzas = fields.Boolean('Aprobado Finanzas', tracking=True)
+    aprobado_tecnico = fields.Boolean('Aprobado Técnicamente', tracking=True, groups='base_bim_2.group_purchase_technical_approver')
+    aprobado_finanzas = fields.Boolean('Aprobado para Pagos', tracking=True, groups='base_bim_2.group_purchase_finance_approver')
     state = fields.Selection([
         ('draft', 'Borrador'),
         ('planned', 'Planificada'),
@@ -65,7 +65,7 @@ class BimPaymentSchedule(models.Model):
         for rec in self:
             if not rec.aprobado_tecnico or not rec.aprobado_finanzas:
                 raise ValidationError(
-                    _('Debe marcar Aprobado Técnicamente y Aprobado Finanzas para poder aprobar.'))
+                    _('Debe marcar Aprobado Técnicamente y Aprobado para Pagos para poder aprobar.'))
         self.write({'state': 'approved'})
 
     def action_done(self):

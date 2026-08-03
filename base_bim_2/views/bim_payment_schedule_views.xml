@@ -16,8 +16,8 @@
                     <field name="fecha_real" optional="show"/>
                     <field name="importe_a_pagar" optional="show" sum="Total"/>
                     <field name="como_se_paga" optional="show"/>
-                    <field name="aprobado_tecnico" optional="show"/>
-                    <field name="aprobado_finanzas" optional="show"/>
+                    <field name="aprobado_tecnico" optional="show" groups="base_bim_2.group_purchase_technical_approver"/>
+                    <field name="aprobado_finanzas" optional="show" groups="base_bim_2.group_purchase_finance_approver"/>
                     <field name="currency_id" optional="hide"/>
                     <field name="state"
                            widget="badge"
@@ -76,8 +76,8 @@
                         </group>
                         <group>
                             <group string="Aprobaciones">
-                                <field name="aprobado_tecnico" widget="boolean_toggle"/>
-                                <field name="aprobado_finanzas" widget="boolean_toggle"/>
+                                <field name="aprobado_tecnico" widget="boolean_toggle" groups="base_bim_2.group_purchase_technical_approver"/>
+                                <field name="aprobado_finanzas" widget="boolean_toggle" groups="base_bim_2.group_purchase_finance_approver"/>
                             </group>
                             <group string="Empresa">
                                 <field name="company_id" readonly="state != 'draft'"/>
