@@ -106,10 +106,9 @@ export class BimSitemapRenderer extends SitemapRenderer {
      * que el context se destruye antes de que se termine de pegar todo y no da
      * tiempo para actualizar, mejor hacerlo acá mismo.
      * @param {SitemapSidebarItem} SidebarItem
-     * @param {int} uid
      */
-    async pasteItem({ detail: { SidebarItem, uid } }) {
-        await this.orm.call('res.users', 'copy_bim_concept', [uid, SidebarItem.item.id, this.env.model.root.context.default_budget_id]);
+    async pasteItem({ detail: { SidebarItem } }) {
+        await this.orm.call('res.users', 'copy_bim_concept', [SidebarItem.item.id, this.env.model.root.context.default_budget_id]);
         this.reloadsidePanel();
     }
 

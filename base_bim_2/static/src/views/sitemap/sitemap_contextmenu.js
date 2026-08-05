@@ -4,27 +4,18 @@ import { Component, useState } from '@odoo/owl';
 import { ConfirmationDialog } from '@web/core/confirmation_dialog/confirmation_dialog';
 import { _t } from '@web/core/l10n/translation';
 import { useService } from '@web/core/utils/hooks';
-import { session } from '@web/session';
 
 export class BimSitemapContextmenu extends Component {
     setup() {
-        const sessionUid = Array.isArray(session.user_id) ? session.user_id[0] : session.user_id;
-        const fallbackUid = session.uid;
-        const rawUid = sessionUid || fallbackUid;
-        const parsedUid = Number.parseInt(rawUid, 10);
-        this.uid = Number.isInteger(parsedUid) && parsedUid > 0 ? parsedUid : false;
         this.action = useService('action');
         this.orm = useService('orm');
         this.dialog = useService('dialog');
         this.state = useState({
             pastebin: false,
         });
-        if (this.uid) {
-            this.orm.read('res.users', [this.uid], ['copied_bim_concept_id', 'cut_bim_concept_id']).then(result => {
-                const userData = result && result[0] ? result[0] : {};
-                this.state.pastebin = userData.copied_bim_concept_id || userData.cut_bim_concept_id;
-            });
-        }
+        this.orm.call('res.users', 'get_bim_clipboard', []).then(clipboard => {
+            this.state.pastebin = clipboard.copied_bim_concept_id || clipboard.cut_bim_concept_id;
+        });
     }
 
     get item() {
@@ -96,24 +87,17 @@ export class BimSitemapContextmenu extends Component {
     }
 
     async actionDeepCopy() {
-        if (!this.uid) {
-            return;
-        }
-        await this.orm.write('res.users', [this.uid], { copied_bim_concept_id: this.item.id, cut_bim_concept_id: false });
+        this.state.pastebin = this.item.id;
+        await this.orm.call('res.users', 'set_copy_bim_concept', [this.item.id]);
     }
 
     async actionDeepCut() {
-        if (!this.uid) {
-            return;
-        }
-        await this.orm.write('res.users', [this.uid], { copied_bim_concept_id: false, cut_bim_concept_id: this.item.id });
+        this.state.pastebin = this.item.id;
+        await this.orm.call('res.users', 'set_cut_bim_concept', [this.item.id]);
     }
 
     async actionDeepPaste() {
-        if (!this.uid) {
-            return;
-        }
-        this.props.item.env.sitemapBus.trigger('paste-item', { SidebarItem: this.props.item, uid: this.uid });
+        this.props.item.env.sitemapBus.trigger('paste-item', { SidebarItem: this.props.item });
     }
 
     actionMoveUp() {

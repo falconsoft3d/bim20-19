@@ -3488,7 +3488,7 @@ msgstr "Agregar nota de certificación..."
 #. odoo-javascript
 #: code:addons/base_bim_2/static/src/views/sitemap/sitemap_contextmenu.xml:0
 msgid "Add child"
-msgstr ""
+msgstr "Añadir hijo"
 
 #. module: base_bim_2
 #: model_terms:ir.ui.view,arch_db:base_bim_2.bim_rent_view_form
@@ -3521,7 +3521,7 @@ msgstr "Agregar línea"
 #. odoo-javascript
 #: code:addons/base_bim_2/static/src/views/sitemap/sitemap_contextmenu.xml:0
 msgid "Add same level"
-msgstr ""
+msgstr "Añadir mismo nivel"
 
 #. module: base_bim_2
 #. odoo-python
@@ -8111,7 +8111,7 @@ msgstr "Orden de Cambio"
 #. odoo-javascript
 #: code:addons/base_bim_2/static/src/views/sitemap/sitemap_renderer.xml:0
 msgid "Change type"
-msgstr ""
+msgstr "Cambiar tipo"
 
 #. module: base_bim_2
 #: model:ir.model.fields,field_description:base_bim_2.field_product_product__change_ids
@@ -20768,7 +20768,7 @@ msgstr "Modificación masiva"
 #. odoo-javascript
 #: code:addons/base_bim_2/static/src/views/sitemap/sitemap_contextmenu.xml:0
 msgid "Massive Cert"
-msgstr ""
+msgstr "Cert. masiva"
 
 #. module: base_bim_2
 #: model:ir.model,name:base_bim_2.model_bim_massive_certification_by_line
