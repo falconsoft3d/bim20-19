@@ -17,7 +17,7 @@
             <field name="model">crm.stage</field>
             <field name="inherit_id" ref="crm.crm_stage_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='team_id']" position="after">
+                <xpath expr="//field[@name='team_ids']" position="after">
                     <field name="bim_project_state_id"/>
                 </xpath>
             </field>
