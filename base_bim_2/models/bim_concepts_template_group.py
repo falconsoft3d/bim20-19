@@ -18,6 +18,17 @@ class BimConceptTemplateGroup(models.Model):
     user_id = fields.Many2one('res.users', string='User', readonly=True, default=lambda self: self.env.user)
     parent_id = fields.Many2one('bim.concept.template.group', domain="[('id','!=',id),('parent_id','=',False)]")
 
+    def _compute_display_name(self):
+        for rec in self:
+            rec.display_name = '[%s] %s' % (rec.code, rec.name) if rec.code else rec.name
+
+    @api.model
+    def _name_search(self, name='', domain=None, operator='ilike', limit=100, order=None):
+        domain = domain or []
+        if name:
+            domain = ['|', ('code', operator, name), ('name', operator, name)] + domain
+        return self._search(domain, limit=limit, order=order)
+
     @api.onchange('parent_id')
     def onchange_groups(self):
         self.code = self.parent_id.code or ''

@@ -16,9 +16,9 @@ class BimConceptTemplateWizard(models.TransientModel):
 
     code = fields.Char()
     name = fields.Char()
-    concept_template_id = fields.Many2one('bim.concept.template', required=True, domain="[('id','in',available_template_ids)]")
+    concept_template_ids = fields.Many2many('bim.concept.template', 'wzd_concept_template_rel', 'wizard_id', 'template_id', string='Precios unitarios', domain="[('id','in',available_template_ids)]")
     concept_id = fields.Many2one('bim.concepts', required=True, readonly=True)
-    available_template_ids = fields.Many2many('bim.concept.template')
+    available_template_ids = fields.Many2many('bim.concept.template', 'wzd_available_template_rel', 'wizard_id', 'template_id')
     group_id = fields.Many2one('bim.concept.template.group', ondelete='restrict', string='Group',
                                domain="[('parent_id','=',False)]")
     sub_group_id = fields.Many2one('bim.concept.template.group', ondelete='restrict', string='Sub Group',
@@ -26,22 +26,7 @@ class BimConceptTemplateWizard(models.TransientModel):
     attribute_line_ids = fields.One2many('bim.concept.template.attribute','wizard_id')
     parameter_ids = fields.Many2many('bim.parameter', string="Parameters")
     exchange_rate = fields.Float(string="Tasa Cambio")
-
-    @api.onchange('concept_template_id')
-    def onchange_template_id(self):
-        if self.concept_template_id:
-            self.exchange_rate = self.concept_id.budget_id.exchange_rate
-            self.parameter_ids = self.concept_template_id.parameter_ids.ids or []
-            self.attribute_line_ids = False
-            attr_lines = []
-            for parameter in self.concept_template_id.parameter_ids:
-                attr_lines.append((0,0,{
-                    'parameter_id': parameter.id,
-                    'parameter_value_id': parameter.value_ids[0].id if parameter.value_ids else False,
-                }))
-            self.attribute_line_ids = attr_lines
-        else:
-            self.parameter_ids = False
+    insert_as_chapter = fields.Boolean(string="Insertar grupo y subgrupo como capítulo")
 
     @api.onchange('code','name','group_id','sub_group_id')
     def _compute_available_template_ids(self):
@@ -56,35 +41,43 @@ class BimConceptTemplateWizard(models.TransientModel):
         if self.sub_group_id:
             domain.append(('sub_group_id', '=', self.sub_group_id.id))
         templates = self.env['bim.concept.template'].search(domain, order='id desc')
-        if templates:
-            templates = templates.ids
-            template = templates[0]
-        self.concept_template_id = template
-        self.available_template_ids = templates
+        self.available_template_ids = templates.ids if templates else []
 
-    def action_apply_template(self):
-        attachments = []
-        for attachment in self.concept_template_id.attachment_ids:
-            attachments.append(attachment.copy().id)
-        departure = self.concept_id.child_ids.create({
-                'budget_id': self.concept_id.budget_id.id,
-                'parent_id': self.concept_id.id,
-                'name': self.concept_template_id.name,
-                'code': self.concept_template_id.code,
-                'type': 'departure',
-                'quantity': self.concept_template_id.quantity,
-                'uom_id': self.concept_template_id.uom_id.id if self.concept_template_id.uom_id else False,
-                'performance_type': self.concept_template_id.performance_type,
-                'hours_day': self.concept_template_id.hours_day,
-                'performance': self.concept_template_id.performance,
-                'note': self.concept_template_id.notes,
-                'attachment_ids': attachments,
-                'concept_phase_id' : self.concept_template_id.concept_phase_id.id,
-                'sub_phase_id' : self.concept_template_id.sub_phase_id.id,
-                'concept_specialty_id' : self.concept_template_id.concept_specialty_id.id,
-                'concept_template_id': self.concept_template_id.id,
+    def _get_or_create_chapter(self, parent, code, name):
+        """Busca un capítulo con el código dado entre los hijos de parent.
+        Si no existe lo crea y lo devuelve."""
+        chapter = parent.child_ids.filtered(lambda c: c.code == code and c.type == 'chapter')
+        if chapter:
+            return chapter[0]
+        return parent.child_ids.create({
+            'budget_id': parent.budget_id.id,
+            'parent_id': parent.id,
+            'code': code,
+            'name': name,
+            'type': 'chapter',
         })
-        for line in self.concept_template_id.template_line_ids:
+
+    def _apply_single_template(self, template, parent):
+        attachments = [attachment.copy().id for attachment in template.attachment_ids]
+        departure = parent.child_ids.create({
+                'budget_id': parent.budget_id.id,
+                'parent_id': parent.id,
+                'name': template.name,
+                'code': template.code,
+                'type': 'departure',
+                'quantity': template.quantity,
+                'uom_id': template.uom_id.id if template.uom_id else False,
+                'performance_type': template.performance_type,
+                'hours_day': template.hours_day,
+                'performance': template.performance,
+                'note': template.notes,
+                'attachment_ids': attachments,
+                'concept_phase_id': template.concept_phase_id.id,
+                'sub_phase_id': template.sub_phase_id.id,
+                'concept_specialty_id': template.concept_specialty_id.id,
+                'concept_template_id': template.id,
+        })
+        for line in template.template_line_ids:
             price_factor, qty_factor, para_attributes = self._find_product_factor(line.product_id)
             vals = {
                 'budget_id': departure.budget_id.id,
@@ -104,10 +97,21 @@ class BimConceptTemplateWizard(models.TransientModel):
                 rec_.waste = line.dep
             elif rec_.type == 'equip':
                 rec_.depreciation = line.dep
-
-
             departure.write({'param_attribute_ids': para_attributes})
-        departure.budget_id.update_amount()
+        return departure
+
+    def action_apply_template(self):
+        # Determinar el padre real donde se insertarán las partidas
+        parent = self.concept_id
+        if self.insert_as_chapter and self.group_id:
+            parent = self._get_or_create_chapter(parent, self.group_id.code, self.group_id.name)
+            if self.sub_group_id:
+                parent = self._get_or_create_chapter(parent, self.sub_group_id.code, self.sub_group_id.name)
+
+        for template in self.concept_template_ids:
+            self._apply_single_template(template, parent)
+
+        parent.budget_id.update_amount()
         return self.concept_id.action_view_concept()
 
     def _find_product_factor(self, product_id):

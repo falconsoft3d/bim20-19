@@ -7,17 +7,18 @@
             <form string="Insert ITEs">
                 <group name="main">
                     <group name="left">
-                        <field name="code"/>
                         <field name="group_id" options="{'no_create': True}"/>
+                        <field name="sub_group_id" options="{'no_create': True}"/>
+                        <field name="concept_template_ids" widget="many2many_tags" options="{'no_create': True}"/>
                         <field name="concept_id" force_save="1"/>
                         <field name="exchange_rate"/>
                     </group>
                     <group>
+                        <field name="code"/>
                         <field name="name"/>
-                        <field name="sub_group_id" options="{'no_create': True}"/>
-                        <field name="concept_template_id" options="{'no_create': True}"/>
                         <field name="available_template_ids" invisible="True"/>
                         <field name="parameter_ids" invisible="True"/>
+                        <field name="insert_as_chapter" widget="boolean_toggle"/>
                     </group>
                 </group>
                 <separator string="Parameters"/>
